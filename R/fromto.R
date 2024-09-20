@@ -19,6 +19,9 @@ fromto <- function(genes,from,to){
   Gene_intersect = intersect(genes,Gene_all[,from])
   Gene_subset = Gene_all[which(Gene_all[,from] %in% Gene_intersect),]
   Gene_output = Gene_subset[,c(from,to)]
+  if(from != "Synonyms_GeneID" & to != "Synonyms_GeneID"){
+    Gene_output = Gene_output[!duplicated(Gene_output[,"from"]),]
+  }
   return(Gene_output)
 }
 colnames(Gene_all)
