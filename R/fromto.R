@@ -24,4 +24,4 @@ fromto <- function(genes,from,to){
   }
   return(Gene_output)
 }
-colnames(Gene_all)
+
