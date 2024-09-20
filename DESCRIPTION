@@ -1,0 +1,21 @@
+Package: fromto
+Type: Package
+Title: Tools for Bioinformatics Data
+Version: 0.1.0
+Authors@R: c( person(given = "Yuyao", family = "Liu", email = "ahmulyy@163.com",      role  = c("aut", "cre"), comment = c(website = "https://grswsci.top/")),
+              person(given = "Haoxue", family = "Zhang",email = "215672062@qq.com",         role = "ctb"),
+              person(given = "Shengxiu", family = "Liu",email = "liushengxiu@ahmu.edu.cn",         role = "ctb")
+	    )
+Maintainer: The package main <ahmulyy@163.com>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Depends: R (>= 4.2.2)
+Imports: 
+NeedsCompilation: no
+Packaged: 2024-06-18 18:21:26 UTC; ahmulyy
+Author: Yuyao Liu [aut, cre] (https://grswsci.top/),
+  Haoxue Zhang [ctb],
+  Shengxiu Liu [ctb]
