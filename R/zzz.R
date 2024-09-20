@@ -12,7 +12,7 @@
                       "Proteins_GeneID","\n",
                       "Description_GeneID","\n",
                       "Transcripts_GeneID","\n",
-                      "Gene_Group_Identifier_GeneID""\n",
+                      "Gene_Group_Identifier_GeneID","\n",
                       "Synonyms_GeneID")
   packageStartupMessage(paste0(msg, citation))
 }
