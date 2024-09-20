@@ -32,6 +32,7 @@ fromtoupdate <- function(gene_matrix) {
   new_rownames = rownames(gene_matrix)
   idx = match(rownames(gene_matrix), synonyms_df$Synonyms_GeneID)
   new_rownames[!is.na(idx)] = synonyms_df$Symbol[idx[!is.na(idx)]]
+  gene_matrix = as.matrix(gene_matrix)
   rownames(gene_matrix) <- new_rownames
   return(gene_matrix)
 }
