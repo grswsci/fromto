@@ -25,14 +25,34 @@ fromto <- function(genes,from,to){
   return(Gene_output)
 }
 
+
 fromtoupdate <- function(gene_matrix) {
   data_file = system.file("data", "trans2gene.RDS", package = "fromto")
   synonyms_df = readRDS(data_file)
   synonyms_df$Synonyms_GeneID = as.character(synonyms_df$Synonyms_GeneID)
+
   new_rownames = rownames(gene_matrix)
-  idx = match(rownames(gene_matrix), synonyms_df$Synonyms_GeneID)
-  new_rownames[!is.na(idx)] = synonyms_df$Symbol[idx[!is.na(idx)]]
+  updated_indices = integer(0)  # 用于存储已更新行名的索引
+  # 遍历gene_matrix的行名
+  for (i in seq_along(new_rownames)) {
+    gene_id = new_rownames[i]
+    if(gene_id %in% synonyms_df$Symbol){
+      new_rownames[i] = gene_id
+    }else{
+    # 尝试在synonyms_df中找到匹配项
+    match_idx = match(gene_id, synonyms_df$Synonyms_GeneID)
+    if (!is.na(match_idx)) {
+      # 如果找到匹配项，则更新行名
+      new_rownames[i] = synonyms_df$Symbol[match_idx]
+      updated_indices = c(updated_indices, i)  # 记录已更新的索引（可选）
+    }
+    }
+    # 注意：这里没有处理未找到匹配项的情况，因为原函数也是直接忽略它们
+  }
+  # 更新gene_matrix的行名
   gene_matrix = as.matrix(gene_matrix)
-  rownames(gene_matrix) <- new_rownames
+  rownames(gene_matrix) = new_rownames
+
   return(gene_matrix)
 }
+
