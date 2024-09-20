@@ -27,6 +27,7 @@ fromto <- function(genes,from,to){
 
 fromtoupdate <- function(gene_matrix) {
   synonyms_df = system.file("data", "trans2gene.RDS", package = "fromto")
+  synonyms_df = as.data.frame(synonyms_df)
   synonyms_df$Synonyms_GeneID = as.character(synonyms_df$Synonyms_GeneID)
   new_rownames = rownames(gene_matrix)
   idx = match(rownames(gene_matrix), synonyms_df$Synonyms_GeneID)
