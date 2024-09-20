@@ -25,3 +25,12 @@ fromto <- function(genes,from,to){
   return(Gene_output)
 }
 
+fromtoupdate <- function(gene_matrix) {
+  synonyms_df = system.file("data", "trans2gene.RDS", package = "fromto")
+  synonyms_df$Synonyms_GeneID = as.character(synonyms_df$Synonyms_GeneID)
+  new_rownames = rownames(gene_matrix)
+  idx = match(rownames(gene_matrix), synonyms_df$Synonyms_GeneID)
+  new_rownames[!is.na(idx)] = synonyms_df$Symbol[idx[!is.na(idx)]]
+  rownames(gene_matrix) <- new_rownames
+  return(gene_matrix)
+}
