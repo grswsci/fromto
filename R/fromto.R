@@ -15,7 +15,7 @@
 
 fromto <- function(genes,from,to){
   data_file = system.file("data", "trans2gene.RDS", package = "fromto")
-  Gene_all = readRDS("/fromto/data/trans2gene.RDS")
+  Gene_all = readRDS(data_file)
   Gene_intersect = intersect(genes,Gene_all[,from])
   Gene_subset = Gene_all[which(Gene_all[,from] %in% Gene_intersect),]
   Gene_output = Gene_subset[,c(from,to)]
