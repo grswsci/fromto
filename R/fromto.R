@@ -12,7 +12,6 @@
 #   Install Package:           'Ctrl + Shift + B'
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
-
 fromto <- function(genes,from,to){
   data_file = system.file("data", "trans2gene.RDS", package = "fromto")
   Gene_all = readRDS(data_file)
@@ -25,9 +24,21 @@ fromto <- function(genes,from,to){
   return(Gene_output)
 }
 
+fromto2 <- function(genes,from,to){
+  data_file = system.file("data", "trans2gene_unique.RDS", package = "fromto")
+  Gene_all = readRDS(data_file)
+  Gene_intersect = intersect(genes,Gene_all[,from])
+  Gene_subset = Gene_all[which(Gene_all[,from] %in% Gene_intersect),]
+  Gene_output = Gene_subset[,c(from,to)]
+  if(from != "Synonyms_GeneID" & to != "Synonyms_GeneID"){
+    Gene_output = Gene_output[!duplicated(Gene_output[,from]),]
+  }
+  return(Gene_output)
+}
+
 
 fromtoupdate <- function(gene_matrix) {
-  data_file = system.file("data", "trans2gene.RDS", package = "fromto")
+  data_file = system.file("data", "trans2gene_unique.RDS", package = "fromto")
   synonyms_df = readRDS(data_file)
   synonyms_df$Synonyms_GeneID = as.character(synonyms_df$Synonyms_GeneID)
 

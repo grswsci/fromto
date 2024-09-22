@@ -1,4 +1,5 @@
 exportPattern("^[[:alpha:]]+")
 export(.onLoad)
 export(fromto)
+export(fromto2)
 export(fromtoupdate)
