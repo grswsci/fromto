@@ -27,8 +27,14 @@ fromto <- function(genes,from,to){
 fromto2 <- function(genes,from,to){
   data_file = system.file("data", "trans2gene_unique.RDS", package = "fromto")
   Gene_all = readRDS(data_file)
+  if(from == "Synonyms_GeneID"){
+    Gene_all$Synonyms_GeneID2 = gsub("_non-unique","",Gene_all$Synonyms_GeneID)
+    Gene_intersect = intersect(genes,Gene_all[,"Synonyms_GeneID2"])
+    Gene_subset = Gene_all[which(Gene_all[,"Synonyms_GeneID2"] %in% Gene_intersect),]
+  }else{
   Gene_intersect = intersect(genes,Gene_all[,from])
   Gene_subset = Gene_all[which(Gene_all[,from] %in% Gene_intersect),]
+  }
   Gene_output = Gene_subset[,c(from,to)]
   if(from != "Synonyms_GeneID" & to != "Synonyms_GeneID"){
     Gene_output = Gene_output[!duplicated(Gene_output[,from]),]
@@ -58,7 +64,7 @@ fromtoupdate <- function(gene_matrix) {
       updated_indices = c(updated_indices, i)  # 记录已更新的索引（可选）
     }
     }
-    # 注意：这里没有处理未找到匹配项的情况，因为原函数也是直接忽略它们
+    # 注意：这里没有处理未找到匹配项的情况
   }
   # 更新gene_matrix的行名
   gene_matrix = as.matrix(gene_matrix)
