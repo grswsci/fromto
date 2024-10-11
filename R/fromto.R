@@ -15,7 +15,8 @@
 fromto <- function(genes,from,to){
   data_file = system.file("data", "trans2gene.RDS", package = "fromto")
   Gene_all = readRDS(data_file)
-  Gene_intersect = intersect(genes,Gene_all[,from])
+  Gene_all = data.frame(lapply(Gene_all, as.character))
+  Gene_intersect = intersect(genes,as.vector(Gene_all[,from]))
   Gene_subset = Gene_all[which(Gene_all[,from] %in% Gene_intersect),]
   Gene_output = Gene_subset[,c(from,to)]
   if(from != "Synonyms_GeneID" & to != "Synonyms_GeneID"){
@@ -27,12 +28,13 @@ fromto <- function(genes,from,to){
 fromto2 <- function(genes,from,to){
   data_file = system.file("data", "trans2gene_unique.RDS", package = "fromto")
   Gene_all = readRDS(data_file)
+  Gene_all = data.frame(lapply(Gene_all, as.character))
   if(from == "Synonyms_GeneID"){
     Gene_all$Synonyms_GeneID2 = gsub("_non-unique","",Gene_all$Synonyms_GeneID)
     Gene_intersect = intersect(genes,Gene_all[,"Synonyms_GeneID2"])
     Gene_subset = Gene_all[which(Gene_all[,"Synonyms_GeneID2"] %in% Gene_intersect),]
   }else{
-  Gene_intersect = intersect(genes,Gene_all[,from])
+  Gene_intersect = intersect(genes,as.vector(Gene_all[,from]))
   Gene_subset = Gene_all[which(Gene_all[,from] %in% Gene_intersect),]
   }
   Gene_output = Gene_subset[,c(from,to)]
