@@ -5,7 +5,7 @@ geocli <- function(GEO_ID){
     any(grepl(": ", as.character(column)))
   }
   clinicallines_filtered_with_colon_index = which(sapply(clinicallines_filtered, contains_colon))
-  clinicallines_filtered =  clinicallines_filtered[clinicallines_filtered_with_colon_index]
+  clinicallines_filtered =  clinicallines_filtered[c(1,2,clinicallines_filtered_with_colon_index)]
   clinicaldata = read.table(textConnection(paste(clinicallines_filtered, collapse="\n")), header=TRUE)
   clinical = t(clinicaldata)
 
