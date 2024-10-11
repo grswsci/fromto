@@ -11,13 +11,15 @@ counts2tpm <- function(counts){
   Gene_length_counts = as.matrix(Gene_length_counts)
   class(Gene_length_counts) = "numeric"
   Gene_length_counts = as.data.frame(Gene_length_counts)
+  Gene_counts = Gene_length_counts[,c(2:ncol(Gene_length_counts))]
 
   kb = Gene_length_counts$Length / 1000
-  kb
-  Gene_counts = Gene_length_counts[,2:ncol(Gene_length_counts)]
   rpk = Gene_counts / kb
-  rpk
-  tpm = t(t(rpk)/colSums(rpk) * 1000000)
+  sample_rpk_sums = colSums(rpk)
+  sample_rpk_sums[sample_rpk_sums == 0] = 1
+  tpm = t(t(rpk) / sample_rpk_sums * 1000000)
+
   print(paste0("sum(as.numeric(tpm[,1])): ",sum(as.numeric(tpm[,1]))))
   return(tpm)
 }
+
