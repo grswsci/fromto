@@ -12,7 +12,7 @@ counts2tpm <- function(counts){
   class(Gene_length_counts) = "numeric"
   Gene_length_counts = as.data.frame(Gene_length_counts)
 
-  kb = mycounts$Length / 1000
+  kb = Gene_length_counts$Length / 1000
   kb
   Gene_counts = Gene_length_counts[,2:ncol(Gene_length_counts)]
   rpk = Gene_counts / kb
