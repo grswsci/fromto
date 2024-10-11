@@ -7,6 +7,7 @@ geocli <- function(GEO_ID){
   clinicallines_filtered_with_colon_index = which(sapply(clinicallines_filtered, contains_colon))
   clinicallines_filtered =  clinicallines_filtered[c(1,2,clinicallines_filtered_with_colon_index)]
   clinicaldata = read.table(textConnection(paste(clinicallines_filtered, collapse="\n")), header=TRUE)
+  clinicaldata["Samples_Original",] = colnames(clinicaldata)
   clinical = t(clinicaldata)
 
   rownames(clinical) = clinical[,1]
@@ -14,10 +15,11 @@ geocli <- function(GEO_ID){
   clinical = as.data.frame(clinical[-1,-1])
 
   cols_with_colon_index = which(sapply(clinical, contains_colon))
-  clinical = clinical[,cols_with_colon_index]
+  clinical = clinical[,c(cols_with_colon_index,ncol(clinical))]
+  colnames(clinical)[ncol(clinical)] = "Samples_Original"
 
   colnames(clinical) = NULL
-  for (col in 1:ncol(clinical)) {
+  for (col in 1:(ncol(clinical)-1)) {
     split_names = unique(sapply(strsplit(clinical[,col], ": ", fixed = TRUE), function(x) c(x[1])))
     print(split_names)
     split_data = sapply(strsplit(clinical[,col], ": ", fixed = TRUE), function(x) c(x[2]))
