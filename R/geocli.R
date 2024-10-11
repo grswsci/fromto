@@ -16,7 +16,6 @@ geocli <- function(GEO_ID){
 
   cols_with_colon_index = which(sapply(clinical, contains_colon))
   clinical = clinical[,c(cols_with_colon_index,ncol(clinical))]
-  colnames(clinical)[ncol(clinical)] = "Samples_Original"
 
   colnames(clinical) = NULL
   for (col in 1:(ncol(clinical)-1)) {
@@ -26,6 +25,6 @@ geocli <- function(GEO_ID){
     colnames(clinical)[col] = split_names
     clinical[,col] = split_data
   }
-
+  colnames(clinical)[ncol(clinical)] = "Samples_Original"
   return(clinical)
 }
