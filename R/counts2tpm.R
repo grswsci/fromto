@@ -18,6 +18,6 @@ counts2tpm <- function(counts){
   rpk = Gene_counts / kb
   rpk
   tpm = t(t(rpk)/colSums(rpk) * 1000000)
-  print("sum(as.numeric(tpm[,1])): ",sum(as.numeric(tpm[,1])))
+  print(paste0("sum(as.numeric(tpm[,1])): ",sum(as.numeric(tpm[,1]))))
   return(tpm)
 }
