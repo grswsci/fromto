@@ -328,7 +328,7 @@ dplot4 <- function(data,
   yMax = max(box_plot$stats/5 + box_plot$stats)
   n = ncol(box_plot$stats)
   pdf(file = paste0(DatasetName,"_",variable,"_",Type,"_beeswarmplot.pdf"), width = width, height = height)
-  par(mar = c(2,2,2,2))
+  par(mar = c(2,4,2,1))
   boxplot(expression ~ Type,
           data = data,
           ylab = variable,
