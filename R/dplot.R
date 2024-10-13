@@ -153,3 +153,116 @@ dplot2 <- function(data,
   print(plot)
   dev.off()
 }
+
+dplot3 <- function(data,
+                   Type = "Type",
+                   variable,
+                   levels = NULL,
+                   test.methods = "wilcox.test",
+                   DatasetName = "DatasetName",
+                   width = 6,
+                   height = 3,
+                   alphas = 0.5,
+                   title = "",
+                   mycolor = c("#BC3C29FF","#0072B5FF","#E18727FF",
+                               "#20854EFF","#7876B1FF","#6F99ADFF",
+                               "#FFDC91FF","#EE4C97FF","#E64B35FF",
+                               "#4DBBD5FF","#00A087FF","#3C5488FF",
+                               "#F39B7FFF","#8491B4FF","#91D1C2FF",
+                               "#DC0000FF","#7E6148FF","#B09C85FF",
+                               "#3B4992FF","#EE0000FF","#008B45FF",
+                               "#631879FF","#008280FF","#BB0021FF",
+                               "#5F559BFF","#A20056FF","#808180FF",
+                               "#00468BFF","#ED0000FF","#42B540FF",
+                               "#0099B4FF","#925E9FFF","#FDAF91FF",
+                               "#AD002AFF","#ADB6B6FF","#374E55FF",
+                               "#DF8F44FF","#00A1D5FF","#B24745FF",
+                               "#79AF97FF","#6A6599FF","#80796BFF",
+                               "#1f77b4",  "#ff7f0e",  "#279e68",
+                               "#d62728",  "#aa40fc",  "#8c564b",
+                               "#e377c2",  "#b5bd61",  "#17becf","#aec7e8")){
+  suppressPackageStartupMessages(library(ggplot2,quietly = TRUE))
+  suppressPackageStartupMessages(library(ggpubr,quietly = TRUE))
+  suppressPackageStartupMessages(library(ggExtra,quietly = TRUE))
+  suppressPackageStartupMessages(library(aplot,quietly = TRUE))
+  suppressPackageStartupMessages(library(tidyverse,quietly = TRUE))
+
+  data[,variable] = unlist(as.numeric(data[,variable]))
+  data[,"expression"] = data[,variable]
+  colnames(data)[colnames(data) == Type] = "Type"
+
+  if(test.methods == "wilcox.test"){
+    p.val = wilcox.test(expression ~ Type, data = data)
+  }else if(test.methods == "kruskal.test"){
+    p.val = kruskal.test(expression ~ Type, data = data)
+  }
+  p.lab = paste0("P",ifelse(p.val$p.value < 0.001,
+                            " < 0.001",paste0(" = ",round(p.val$p.value, 3))
+                            )
+                 )
+
+  if(is.null(levels)){
+    data[,"Type"] = factor(data[,"Type"], levels = unique(data[,"Type"]))
+  }else{
+    data[,"Type"] = factor(data[,"Type"], levels = levels)
+  }
+
+  p_top = ggplot(data,
+                  aes(x = expression,
+                      color = Type,
+                      fill = Type)
+  ) +
+    geom_density() +
+    scale_color_manual(values = alpha(mycolor,alphas)) +
+    scale_fill_manual(values = alpha(mycolor,alphas)) +
+    theme_classic() +
+    xlab(paste0("Estimated Expression of ", variable)) +
+    ylab(NULL) +
+    theme(legend.position = "none",
+          legend.title = element_blank(),
+          axis.text.x = element_text(size = 12,color = "black"),
+          axis.text.y = element_blank(),
+          axis.ticks.y = element_blank(),
+          axis.line.y = element_blank(),
+          panel.background = element_blank(),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank()
+    ) +
+    geom_rug()
+
+  p_bot = ggplot(data, aes(Type, expression, fill = Type)) +
+    geom_boxplot(aes(col = Type)) +
+    scale_color_manual(values = alpha(mycolor,alphas)) +
+    scale_fill_manual(values = alpha(mycolor,alphas)) +
+    xlab(NULL) +
+    ylab("Estimated Expression") +
+    theme_void() +
+    theme(legend.position = "right",
+          legend.title = element_blank(),
+          axis.text.x = element_blank(),
+          axis.text.y = element_text(size = 11,color = "black"),
+          panel.background = element_blank(),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank()
+    ) +
+    annotate(geom="text",x = 0.2,
+             hjust = 1,
+             y = max(data[,"expression"])*1,
+             size = 4,
+             angle = 270,
+             fontface = "bold",
+             label = p.lab) +
+    coord_flip()
+  dat = ggplot_build(p_bot)$data[[1]]
+  p_bot = p_bot +
+    geom_segment(data = dat,
+                 aes(x = xmin,xend = xmax,
+                     y = middle,yend = middle),
+                 color="white",
+                 inherit.aes = F)
+  p_bot
+  p = p_top %>% insert_bottom(p_bot, height = 0.4)
+  pdf(paste0(DatasetName,"_",variable,"_",Type,"_densityplot.pdf"), width = width,height = height)
+  print(p)
+  invisible(dev.off())
+}
