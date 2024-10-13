@@ -135,7 +135,7 @@ dplot2 <- function(data,
     xlab("") +
     coord_flip() +
     labs(title = title,
-         subtitle = paste0(ifelse(test.methods == "wilcox.test","Wilcoxon Rank Sum Test ","Kruskal-Wallis Rank Sum Test ","P Value "),ifelse(p<0.001, "< 0.001", paste0("= ",round(p,3))))
+         subtitle = paste0(ifelse(test.methods == "wilcox.test","Wilcoxon Rank Sum Test ","Kruskal-Wallis Rank Sum Test "),"P Value ",ifelse(p<0.001, "< 0.001", paste0("= ",round(p,3))))
     ) +
     theme_classic() +
     theme(panel.border = element_rect(colour = "black", fill=NA, size=0.4),
