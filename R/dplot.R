@@ -294,6 +294,7 @@ dplot4 <- function(data,
                                "#1f77b4",  "#ff7f0e",  "#279e68",
                                "#d62728",  "#aa40fc",  "#8c564b",
                                "#e377c2",  "#b5bd61",  "#17becf","#aec7e8")){
+  suppressPackageStartupMessages(library(ggplot2,quietly = TRUE))
   suppressPackageStartupMessages(library(beeswarm,quietly = TRUE))
   data[,variable] = unlist(as.numeric(data[,variable]))
   data[,"expression"] = data[,variable]
@@ -327,7 +328,7 @@ dplot4 <- function(data,
   yMax = max(box_plot$stats/5 + box_plot$stats)
   n = ncol(box_plot$stats)
   pdf(file = paste0(DatasetName,"_",variable,"_",Type,"_beeswarmplot.pdf"), width = width, height = height)
-  par(mar = c(4.5,6,3,3))
+  par(mar = c(0.5,0.5,0.5,0.5))
   boxplot(expression ~ Type,
           data = data,
           ylab = variable,
