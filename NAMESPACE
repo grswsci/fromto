@@ -21,3 +21,14 @@ export(merge_col)
 export(numericize_by_column)
 export(zscore_row)
 export(zscore_col)
+export(list2df)
+export(not_in)
+export(quantiles_df)
+export(quantiles)
+export(strsplit_fromto)
+export(files_in_path)
+export(files_be_filtered)
+
+
+
+
