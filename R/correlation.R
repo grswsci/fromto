@@ -10,7 +10,8 @@ for (varible_another in varible_others) {
   outTab = rbind(outTab,
                  data.frame(varible = varible,varible_others = varible_another,cor = cor,pvalue = pvalue)
   )
-  }
+}
+ return(outTab)
 }
 
 cor_test_row <- function(df, varible, methods = "pearson"){
@@ -26,4 +27,19 @@ cor_test_row <- function(df, varible, methods = "pearson"){
                    data.frame(varible = varible,varible_others = varible_another,cor = cor,pvalue = pvalue)
     )
   }
+  return(outTab)
 }
+
+cor_test_col_apply <- function(df, varible, methods = "pearson"){
+  x = as.numeric(df[,varible])
+  varible_others = colnames(df)[colnames(df)!= varible]
+  y_matrix <- as.matrix(df[,varible_others])
+  cor_matrix <- cor(x, y_matrix, method = methods)
+  pvalue_matrix <- apply(y_matrix, 2, function(y) cor.test(x, y, method = methods)$p.value)
+  outTab <- data.frame(varible = varible,
+                       varible_others = varible_others,
+                       cor = t(cor_matrix),
+                       pvalue = pvalue_matrix)
+  return(outTab)
+}
+
