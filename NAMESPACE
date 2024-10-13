@@ -33,5 +33,4 @@ export(files_in_path)
 export(files_be_filtered)
 export(cor_test_col)
 export(cor_test_row)
-
-
+export(exp_fromto)
