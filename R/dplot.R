@@ -266,3 +266,85 @@ dplot3 <- function(data,
   print(p)
   invisible(dev.off())
 }
+
+dplot4 <- function(data,
+                   Type = "Type",
+                   variable,
+                   levels = NULL,
+                   test.methods = "wilcox.test",
+                   DatasetName = "DatasetName",
+                   width = 6,
+                   height = 3,
+                   alphas = 0.5,
+                   title = "",
+                   mycolor = c("#BC3C29FF","#0072B5FF","#E18727FF",
+                               "#20854EFF","#7876B1FF","#6F99ADFF",
+                               "#FFDC91FF","#EE4C97FF","#E64B35FF",
+                               "#4DBBD5FF","#00A087FF","#3C5488FF",
+                               "#F39B7FFF","#8491B4FF","#91D1C2FF",
+                               "#DC0000FF","#7E6148FF","#B09C85FF",
+                               "#3B4992FF","#EE0000FF","#008B45FF",
+                               "#631879FF","#008280FF","#BB0021FF",
+                               "#5F559BFF","#A20056FF","#808180FF",
+                               "#00468BFF","#ED0000FF","#42B540FF",
+                               "#0099B4FF","#925E9FFF","#FDAF91FF",
+                               "#AD002AFF","#ADB6B6FF","#374E55FF",
+                               "#DF8F44FF","#00A1D5FF","#B24745FF",
+                               "#79AF97FF","#6A6599FF","#80796BFF",
+                               "#1f77b4",  "#ff7f0e",  "#279e68",
+                               "#d62728",  "#aa40fc",  "#8c564b",
+                               "#e377c2",  "#b5bd61",  "#17becf","#aec7e8")){
+  suppressPackageStartupMessages(library(beeswarm,quietly = TRUE))
+  data[,variable] = unlist(as.numeric(data[,variable]))
+  data[,"expression"] = data[,variable]
+  colnames(data)[colnames(data) == Type] = "Type"
+
+  if(test.methods == "wilcox.test"){
+    p = wilcox.test(expression ~ Type, data = data)$p.value
+  }else if(test.methods == "kruskal.test"){
+    p = kruskal.test(expression ~ Type, data = data)$p.value
+  }
+
+  if(p < 0.001){
+    pval = signif(p,4)
+    pval = format(pval, scientific = TRUE)
+  }else{
+    pval = sprintf("%.03f",p)
+  }
+
+  if(is.null(levels)){
+    data[,"Type"] = factor(data[,"Type"], levels = unique(data[,"Type"]))
+  }else{
+    data[,"Type"] = factor(data[,"Type"], levels = levels)
+  }
+  if(is.null(levels)){
+  data[,"Type"] = factor(data[,"Type"], levels = unique(data[,"Type"]))
+  }else{
+  data[,"Type"] = factor(data[,"Type"], levels = levels)
+  }
+  box_plot = boxplot(expression ~ Type, data = data,outline = FALSE, plot=F)
+  yMin = min(box_plot$stats)
+  yMax = max(box_plot$stats/5 + box_plot$stats)
+  n = ncol(box_plot$stats)
+  pdf(file = paste0(leadin,"_",CancerName,"_",variable,"_wilcoxon.pdf"), width = width, height = height)
+  par(mar = c(4.5,6,3,3))
+  boxplot(expression ~ Type,
+          data = data,
+          ylab = variable,
+          xlab = "",
+          main = paste0(ifelse(test.methods == "wilcox.test","Wilcoxon Rank Sum Test ",
+                               "Kruskal-Wallis Rank Sum Test "), "(p = ",pval,")"),
+          cex.main = 1.4,
+          cex.lab = 1.4,
+          cex.axis = 1.3,
+          ylim = c(yMin,yMax),
+          outline = FALSE)
+  beeswarm(expression ~ Type,
+         data = data,
+         col = alpha(mycolor,alphas),
+         lwd = 0.1,
+         pch = 16,
+         add = TRUE,
+         corral="wrap")
+  dev.off()
+}
