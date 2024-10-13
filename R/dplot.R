@@ -6,7 +6,7 @@ dplot1 <- function(data,
                    DatasetName = "DatasetName",
                    width = 4.5,
                    height = 4,
-                   alpha = 0.5,
+                   alphas = 0.5,
                    mycolor = c("#BC3C29FF","#0072B5FF","#E18727FF",
                                "#20854EFF","#7876B1FF","#6F99ADFF",
                                "#FFDC91FF","#EE4C97FF","#E64B35FF",
@@ -44,8 +44,8 @@ dplot1 <- function(data,
   }
 
   plot = ggplot(data = data,aes(x = Type,y = expression, fill = Type)) +
-    scale_color_manual(values = alpha(mycolor,alpha)) +
-    scale_fill_manual(values = alpha(mycolor,alpha)) +
+    scale_color_manual(values = alpha(mycolor,alphas)) +
+    scale_fill_manual(values = alpha(mycolor,alphas)) +
     geom_violin(alpha = 0.4, position = position_dodge(width = .75), size=0.8, color="black") +
     geom_boxplot(notch = TRUE, outlier.size = -1, color="black", lwd=0.8, alpha = 0.5) +
     geom_point(shape = 21, size = 2, position = position_jitterdodge(), color="black", alpha=0.3) +
@@ -78,7 +78,7 @@ dplot2 <- function(data,
                    DatasetName = "DatasetName",
                    width = 6,
                    height = 4,
-                   alpha = 0.5,
+                   alphas = 0.5,
                    mycolor = c("#BC3C29FF","#0072B5FF","#E18727FF",
                                "#20854EFF","#7876B1FF","#6F99ADFF",
                                "#FFDC91FF","#EE4C97FF","#E64B35FF",
@@ -120,8 +120,8 @@ dplot2 <- function(data,
   }
 
   pdf(paste0(DatasetName,"_",variable,"_",Type,"_cloudrainplot.pdf"), width = width, height = height)
-  plot = ggplot(data, aes(x = Type,y =data[,variable])) +
-    ggdist::stat_halfeye(aes(color=Type,fill=Type),
+  plot = ggplot(data, aes(x = Type,y = expression)) +
+    ggdist::stat_halfeye(aes(color = Type, fill = Type),
                          adjust = .5,
                          width = .7,
                          .width = 0,
@@ -129,13 +129,18 @@ dplot2 <- function(data,
                          point_colour = NA) +
     geom_boxplot(aes(color = Type),width = .2, outlier.shape = NA) +
     geom_jitter(aes(color = Type),width = .05, alpha = .3) +
-    scale_color_manual(values = alpha(mycolor,alpha)) +
-    scale_fill_manual(values = alpha(mycolor,alpha)) +
+    scale_color_manual(values = alpha(mycolor,alphas)) +
+    scale_fill_manual(values = alpha(mycolor,alphas)) +
     ylab(variable) +
     xlab("") +
     coord_flip() +
     labs(title = title,
-         subtitle = paste0(ifelse(test.methods == "wilcox.test","Wilcoxon Rank Sum Test ","Kruskal-Wallis Rank Sum Test "),"P Value ",ifelse(p<0.001, "< 0.001", paste0("= ",round(p,3))))
+         subtitle = paste0(ifelse(test.methods == "wilcox.test","Wilcoxon Rank Sum Test ",
+                                  "Kruskal-Wallis Rank Sum Test "),
+                           "P Value ",ifelse(p<0.001, "< 0.001",
+                                             paste0("= ",round(p,3))
+                                             )
+                           )
     ) +
     theme_classic() +
     theme(panel.border = element_rect(colour = "black", fill=NA, size=0.4),
