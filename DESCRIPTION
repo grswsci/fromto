@@ -13,7 +13,7 @@ License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 4.2.2)
-Imports: tidyverse (>= 2.0.0), limma (>= 3.60.2)
+Imports: tidyverse (>= 2.0.0), limma (>= 3.60.2), ggplot2 (>= 3.5.1), ggrepel (>= 0.9.5), ggpubr (>= 0.6.0), ggExtra (>= 0.10.1)
 NeedsCompilation: no
 Packaged: 2024-06-18 18:21:26 UTC; ahmulyy
 Author: Yuyao Liu [aut, cre] (https://grswsci.top/),
