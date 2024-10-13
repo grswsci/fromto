@@ -273,8 +273,8 @@ dplot4 <- function(data,
                    levels = NULL,
                    test.methods = "wilcox.test",
                    DatasetName = "DatasetName",
-                   width = 6,
-                   height = 3,
+                   width = 4.5,
+                   height = 4,
                    alphas = 0.5,
                    title = "",
                    mycolor = c("#BC3C29FF","#0072B5FF","#E18727FF",
@@ -326,7 +326,7 @@ dplot4 <- function(data,
   yMin = min(box_plot$stats)
   yMax = max(box_plot$stats/5 + box_plot$stats)
   n = ncol(box_plot$stats)
-  pdf(file = paste0(leadin,"_",CancerName,"_",variable,"_wilcoxon.pdf"), width = width, height = height)
+  pdf(file = paste0(DatasetName,"_",variable,"_",Type,"_beeswarmplot.pdf"), width = width, height = height)
   par(mar = c(4.5,6,3,3))
   boxplot(expression ~ Type,
           data = data,
