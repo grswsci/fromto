@@ -16,3 +16,4 @@ export(dplot2)
 export(dplot3)
 export(dplot4)
 export(capitalize_first_letter)
+
