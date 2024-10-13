@@ -274,7 +274,7 @@ dplot4 <- function(data,
                    test.methods = "wilcox.test",
                    DatasetName = "DatasetName",
                    width = 4.5,
-                   height = 4,
+                   height = 4.5,
                    alphas = 0.5,
                    title = "",
                    mycolor = c("#BC3C29FF","#0072B5FF","#E18727FF",
@@ -328,16 +328,16 @@ dplot4 <- function(data,
   yMax = max(box_plot$stats/5 + box_plot$stats)
   n = ncol(box_plot$stats)
   pdf(file = paste0(DatasetName,"_",variable,"_",Type,"_beeswarmplot.pdf"), width = width, height = height)
-  par(mar = c(0.5,0.5,0.5,0.5))
+  par(mar = c(2,2,2,2))
   boxplot(expression ~ Type,
           data = data,
           ylab = variable,
           xlab = "",
           main = paste0(ifelse(test.methods == "wilcox.test","Wilcoxon Rank Sum Test ",
                                "Kruskal-Wallis Rank Sum Test "), "(p = ",pval,")"),
-          cex.main = 1.4,
-          cex.lab = 1.4,
-          cex.axis = 1.3,
+          cex.main = 1,
+          cex.lab = 1,
+          cex.axis = 1,
           ylim = c(yMin,yMax),
           outline = FALSE)
   beeswarm(expression ~ Type,
