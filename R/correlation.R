@@ -1,3 +1,21 @@
+#' @title cor_test_row
+#' @description Calculate the correlation between one gene and all genes (every row)
+#' @param df data frame
+#' @param varible Gene Name
+#' @param methods pearson or spearman
+#' @return data frame
+#' @examples
+#' # examples
+#' set.seed(123)
+#' n_rows = 100
+#' n_cols = 100
+#' df = data.frame(matrix(rnorm(n_rows * n_cols), nrow = n_rows))
+#' rownames(df) = paste0("row", 1:n_rows)
+#' colnames(df) = paste0("col", 1:n_cols)
+#' result = cor_test_row(df, "col1", methods = "pearson")
+#' print(result)
+
+
 cor_test_row <- function(df, varible, methods = "pearson"){
   x = as.numeric(df[varible,])
   varible_others = rownames(df)[rownames(df) != varible]
@@ -14,6 +32,23 @@ cor_test_row <- function(df, varible, methods = "pearson"){
   return(outTab)
 }
 
+#' @title cor_test_row_apply
+#' @description Calculate the correlation between one gene and all genes (every row)
+#' @param df data frame
+#' @param varible Gene Name
+#' @param methods pearson or spearman
+#' @return data frame
+#' @examples
+#' # examples
+#' set.seed(123)
+#' n_rows = 100
+#' n_cols = 100
+#' df = data.frame(matrix(rnorm(n_rows * n_cols), nrow = n_rows))
+#' rownames(df) = paste0("row", 1:n_rows)
+#' colnames(df) = paste0("col", 1:n_cols)
+#' result = cor_test_row_apply(df, "col1", methods = "pearson")
+#' print(result)
+
 cor_test_row_apply <- function(df, varible, methods = "pearson"){
   suppressPackageStartupMessages(library(tidyverse))
   x = as.numeric(df[varible,])
@@ -28,11 +63,45 @@ cor_test_row_apply <- function(df, varible, methods = "pearson"){
   return(outTab)
 }
 
+#' @title cor_test_row_apply_all
+#' @description Calculate the correlation between every gene and other genes (every row)
+#' @param df data frame
+#' @param varible Gene Name
+#' @param methods pearson or spearman
+#' @return data frame
+#' @examples
+#' # examples
+#' set.seed(123)
+#' n_rows = 100
+#' n_cols = 100
+#' df = data.frame(matrix(rnorm(n_rows * n_cols), nrow = n_rows))
+#' rownames(df) = paste0("row", 1:n_rows)
+#' colnames(df) = paste0("col", 1:n_cols)
+#' result = cor_test_row_apply_all(df, "col1", methods = "pearson")
+#' print(result)
+
 cor_test_row_apply_all <- function(df, varible, methods = "pearson"){
   result = lapply(rownames(df), function(x) cor_test_row_apply(df, varible = x, methods = methods))
   outTab = do.call(rbind, result)
   return(outTab)
 }
+
+#' @title cor_test_col
+#' @description Calculate the correlation between one gene and other genes (every col)
+#' @param df data frame
+#' @param varible Gene Name
+#' @param methods pearson or spearman
+#' @return data frame
+#' @examples
+#' # examples
+#' set.seed(123)
+#' n_rows = 100
+#' n_cols = 100
+#' df = data.frame(matrix(rnorm(n_rows * n_cols), nrow = n_rows))
+#' rownames(df) = paste0("row", 1:n_rows)
+#' colnames(df) = paste0("col", 1:n_cols)
+#' result = cor_test_col(df, "col1", methods = "pearson")
+#' print(result)
 
 cor_test_col <- function(df, varible, methods = "pearson"){
 x = as.numeric(df[,varible])
@@ -50,6 +119,22 @@ for (varible_another in varible_others) {
  return(outTab)
 }
 
+#' @title cor_test_col_apply
+#' @description Calculate the correlation between one gene and other genes (every col)
+#' @param df data frame
+#' @param varible Gene Name
+#' @param methods pearson or spearman
+#' @return data frame
+#' @examples
+#' # examples
+#' set.seed(123)
+#' n_rows = 100
+#' n_cols = 100
+#' df = data.frame(matrix(rnorm(n_rows * n_cols), nrow = n_rows))
+#' rownames(df) = paste0("row", 1:n_rows)
+#' colnames(df) = paste0("col", 1:n_cols)
+#' result = cor_test_col_apply(df, "col1", methods = "pearson")
+#' print(result)
 
 cor_test_col_apply <- function(df, varible, methods = "pearson"){
   suppressPackageStartupMessages(library(tidyverse))
@@ -64,6 +149,23 @@ cor_test_col_apply <- function(df, varible, methods = "pearson"){
                        pvalue = pvalue_df)
   return(outTab)
 }
+
+#' @title cor_test_col_apply_all
+#' @description Calculate the correlation between every gene and other genes (every col)
+#' @param df data frame
+#' @param varible Gene Name
+#' @param methods pearson or spearman
+#' @return data frame
+#' @examples
+#' # examples
+#' set.seed(123)
+#' n_rows = 100
+#' n_cols = 100
+#' df = data.frame(matrix(rnorm(n_rows * n_cols), nrow = n_rows))
+#' rownames(df) = paste0("row", 1:n_rows)
+#' colnames(df) = paste0("col", 1:n_cols)
+#' result = cor_test_col_apply_all(df, "col1", methods = "pearson")
+#' print(result)
 
 cor_test_col_apply_all <- function(df, varible, methods = "pearson"){
   result = lapply(colnames(df), function(x) cor_test_col_apply(df, varible = x, methods = methods))
