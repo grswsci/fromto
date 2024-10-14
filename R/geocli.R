@@ -1,3 +1,16 @@
+#' @title geocli
+#' @description Organizing GEO Clinical Documents
+#' @param GEO_ID GEO ID
+#' @return data frame
+#' @examples
+#' # examples
+#' geoget(GEO_IDs = "GSE103668")
+#' library(tidyverse)
+#' library(R.utils)
+#' list.files() %>% grepl(".txt.gz$", ., fixed = FALSE) %>% which() %>% list.files()[.] %>% gunzip(., remove = FALSE, overwrite = TRUE)
+#' clinical = geocli(GEO_ID = "GSE103668")
+#' print(clinical)
+
 geocli <- function(GEO_ID){
   clinicallines = readLines(paste0(GEO_ID,"_series_matrix.txt"))
   clinicallines_filtered = clinicallines[substr(clinicallines,1,7)=="!Sample"]
