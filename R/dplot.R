@@ -1,3 +1,32 @@
+#' @title dplot1
+#' @description Differentially expression analysis
+#' @param data data frame
+#' @param Type data group
+#' @param variable Variables or gene names analyzed
+#' @param levels The order of arrangement in grouping visualization
+#' @param test.methods The method of difference analysis "wilcox.test" or "kruskal.test"
+#' @param DatasetName The Dataset Name of the data
+#' @param width Width of pdf plot
+#' @param height height of pdf plot
+#' @param alphas Transparency of color matching
+#' @param mycolor my color
+#' @return pdf plot
+#' @examples
+#' # examples
+#' set.seed(123)
+#' n = 150
+#' data = data.frame(Type = sample(c("A", "B", "C"), n, replace = TRUE),
+#'                   variable1 = rnorm(n)
+#'                   )
+#'    dplot1(data,
+#'           Type = "Type",
+#'           variable = "variable1",
+#'           test.methods = "kruskal.test",
+#'           DatasetName = "MyDataset",
+#'           levels = c("C","B","A"),
+#'           width = 6,
+#'           height = 5)
+
 dplot1 <- function(data,
                    Type = "Type",
                    variable,
@@ -69,6 +98,35 @@ dplot1 <- function(data,
       axis.text = element_text(size = 10))
   ggsave(paste0(DatasetName,"_",variable,"_",Type,"_boxplot.pdf"), plot = plot, width = width, height = height)
 }
+
+#' @title dplot2
+#' @description Differentially expression analysis
+#' @param data data frame
+#' @param Type data group
+#' @param variable Variables or gene names analyzed
+#' @param levels The order of arrangement in grouping visualization
+#' @param test.methods The method of difference analysis "wilcox.test" or "kruskal.test"
+#' @param DatasetName The Dataset Name of the data
+#' @param width Width of pdf plot
+#' @param height height of pdf plot
+#' @param alphas Transparency of color matching
+#' @param mycolor my color
+#' @return pdf plot
+#' @examples
+#' # examples
+#' set.seed(123)
+#' n = 150
+#' data = data.frame(Type = sample(c("A", "B", "C"), n, replace = TRUE),
+#'                   variable1 = rnorm(n)
+#'                   )
+#'    dplot2(data,
+#'           Type = "Type",
+#'           variable = "variable1",
+#'           test.methods = "kruskal.test",
+#'           DatasetName = "MyDataset",
+#'           levels = c("C","B","A"),
+#'           width = 6,
+#'           height = 5)
 
 dplot2 <- function(data,
                    Type = "Type",
@@ -153,6 +211,35 @@ dplot2 <- function(data,
   print(plot)
   dev.off()
 }
+
+#' @title dplot3
+#' @description Differentially expression analysis
+#' @param data data frame
+#' @param Type data group
+#' @param variable Variables or gene names analyzed
+#' @param levels The order of arrangement in grouping visualization
+#' @param test.methods The method of difference analysis "wilcox.test" or "kruskal.test"
+#' @param DatasetName The Dataset Name of the data
+#' @param width Width of pdf plot
+#' @param height height of pdf plot
+#' @param alphas Transparency of color matching
+#' @param mycolor my color
+#' @return pdf plot
+#' @examples
+#' # examples
+#' set.seed(123)
+#' n = 150
+#' data = data.frame(Type = sample(c("A", "B", "C"), n, replace = TRUE),
+#'                   variable1 = rnorm(n)
+#'                   )
+#'    dplot3(data,
+#'           Type = "Type",
+#'           variable = "variable1",
+#'           test.methods = "kruskal.test",
+#'           DatasetName = "MyDataset",
+#'           levels = c("C","B","A"),
+#'           width = 6,
+#'           height = 5)
 
 dplot3 <- function(data,
                    Type = "Type",
@@ -266,6 +353,35 @@ dplot3 <- function(data,
   print(p)
   invisible(dev.off())
 }
+
+#' @title dplot4
+#' @description Differentially expression analysis
+#' @param data data frame
+#' @param Type data group
+#' @param variable Variables or gene names analyzed
+#' @param levels The order of arrangement in grouping visualization
+#' @param test.methods The method of difference analysis "wilcox.test" or "kruskal.test"
+#' @param DatasetName The Dataset Name of the data
+#' @param width Width of pdf plot
+#' @param height height of pdf plot
+#' @param alphas Transparency of color matching
+#' @param mycolor my color
+#' @return pdf plot
+#' @examples
+#' # examples
+#' set.seed(123)
+#' n = 150
+#' data = data.frame(Type = sample(c("A", "B", "C"), n, replace = TRUE),
+#'                   variable1 = rnorm(n)
+#'                   )
+#'    dplot4(data,
+#'           Type = "Type",
+#'           variable = "variable1",
+#'           test.methods = "kruskal.test",
+#'           DatasetName = "MyDataset",
+#'           levels = c("C","B","A"),
+#'           width = 6,
+#'           height = 5)
 
 dplot4 <- function(data,
                    Type = "Type",
