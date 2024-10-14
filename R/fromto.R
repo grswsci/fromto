@@ -1,17 +1,27 @@
-# Hello, world!
-#
-# This is an example function named 'hello'
-# which prints 'Hello, world!'.
-#
-# You can learn more about package authoring with RStudio at:
-#
-#   http://r-pkgs.had.co.nz/
-#
-# Some useful keyboard shortcuts for package authoring:
-#
-#   Install Package:           'Ctrl + Shift + B'
-#   Check Package:             'Ctrl + Shift + E'
-#   Test Package:              'Ctrl + Shift + T'
+#' @title fromto
+#' @description Converted gene names
+#' @param genes gene names
+#' @param from one type of gene name
+#' @param to another type of gene name
+#' @param You can freely convert the following GeneIDs!
+#' Symbol
+#' NCBI_GeneID
+#' HGNC_GeneID
+#' SwissProt_GeneID
+#' Ensembl_GeneID
+#' OMIM_GeneID
+#' Proteins_GeneID
+#' Description_GeneID
+#' Transcripts_GeneID
+#' Gene_Group_Identifier_GeneID
+#' Synonyms_GeneID
+#' @return data frame
+#' @examples
+#' # examples
+#' GeneNames = c("PDCD1","CD274","MKI67")
+#' df = fromto(genes = GeneNames, from = "Symbol",to = "NCBI_GeneID")
+#' print(df)
+#'
 fromto <- function(genes,from,to){
   data_file = system.file("data", "trans2gene.RDS", package = "fromto")
   Gene_all = readRDS(data_file)
@@ -24,6 +34,30 @@ fromto <- function(genes,from,to){
   }
   return(Gene_output)
 }
+
+#' @title fromto2
+#' @description Converted gene names
+#' @param genes gene names
+#' @param from one type of gene name
+#' @param to another type of gene name
+#' @param You can freely convert the following GeneIDs!
+#' Symbol
+#' NCBI_GeneID
+#' HGNC_GeneID
+#' SwissProt_GeneID
+#' Ensembl_GeneID
+#' OMIM_GeneID
+#' Proteins_GeneID
+#' Description_GeneID
+#' Transcripts_GeneID
+#' Gene_Group_Identifier_GeneID
+#' Synonyms_GeneID
+#' @return data frame
+#' @examples
+#' # examples
+#' GeneNames = c("PDCD1","CD274","MKI67")
+#' df = fromto2(genes = GeneNames, from = "Symbol",to = "NCBI_GeneID")
+#' print(df)
 
 fromto2 <- function(genes,from,to){
   data_file = system.file("data", "trans2gene_unique.RDS", package = "fromto")
@@ -44,6 +78,18 @@ fromto2 <- function(genes,from,to){
   return(Gene_output)
 }
 
+#' @title fromtoupdate
+#' @description Update gene names
+#' @param gene_matrix gene_matrix
+#' @return data frame
+#' @examples
+#' # examples
+#' set.seed(123)
+#' Oldname_matrix = matrix(rpois(500, lambda = 10), nrow = 3, ncol = 50)
+#' colnames(Oldname_matrix) = paste0("sample", 1:ncol(Oldname_matrix))
+#' rownames(Oldname_matrix) = c("hPD-1","PDL1","MIB-1")
+#' Newname_matrix = fromtoupdate(Oldname_matrix)
+#' print(Newname_matrix)
 
 fromtoupdate <- function(gene_matrix) {
   data_file = system.file("data", "trans2gene_unique.RDS", package = "fromto")

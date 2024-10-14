@@ -1,3 +1,17 @@
+#' @title geoann
+#' @description The probe name was annotated as gene name.
+#' @param GPL_ID GPL ID
+#' @param GEO_ID GEO ID
+#' @return data frame
+#' @examples
+#' # examples
+#' geoget(GEO_IDs = "GSE103668")
+#' library(tidyverse)
+#' library(R.utils)
+#' list.files() %>% grepl(".txt.gz$", ., fixed = FALSE) %>% which() %>% list.files()[.] %>% gunzip(., remove = FALSE, overwrite = TRUE)
+#' data = geoann(GPL_ID = "GPL570",GEO_ID = "GSE103668")
+#' print(data)
+
 geoann = function (GPL_ID,GEO_ID) {
   suppressPackageStartupMessages(library(tidyverse))
   suppressPackageStartupMessages(library(limma))
