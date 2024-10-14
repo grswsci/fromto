@@ -43,7 +43,7 @@ export(order_fromto)
 export(read_fromto)
 export(list2df_rbind)
 export(list2df_cbind)
-
+export(scmarkers)
 
 
 
