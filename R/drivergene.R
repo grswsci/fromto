@@ -1,6 +1,6 @@
 drivergene <- function(GeneName,
-                       path = "/Program Files/Mozilla Firefox",
-                       binary = paste0(path,'/firefox.exe')
+                       binary = "/Program Files/Mozilla Firefox/firefox.exe",
+                       neverAsk.saveToDisk = "application/octet-stream"
                        ){
   data_file = system.file("data", "trans2gene.RDS", package = "fromto")
   GeneID_data = readRDS(data_file)
@@ -44,7 +44,7 @@ drivergene <- function(GeneName,
                                          args = list("--headless")),
                                          browser.startup.homepage = "about:blank",
                                          browser.privatebrowsing.autostart = TRUE, browser.download.manager.showWhenStarting = FALSE,
-                                         browser.helperApps.neverAsk.saveToDisk = "application/octet-stream"),
+                                         browser.helperApps.neverAsk.saveToDisk = neverAsk.saveToDisk ),
                 check = F, verbose = F)
 
   driver = rD$client
