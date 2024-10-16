@@ -22,15 +22,18 @@ drivergene <- function(GeneName,path = "/Program Files/Mozilla Firefox",binary =
     install.packages(system.file("extdata/binman_seleniumserver/", "wdman_0.2.6.tar.gz", package = "fromto"), repos = NULL, type = "source")
   }
 
-  library(httr)
-  library(tidyverse)
-  library(rvest)
-  library(RSelenium)
-  library(wdman)
-  library(DT)
-  library(htmlwidgets)
+  suppressPackageStartupMessages(library(httr))
+  suppressPackageStartupMessages(library(tidyverse))
+  suppressPackageStartupMessages(library(rvest))
+  suppressPackageStartupMessages(library(RSelenium))
+  suppressPackageStartupMessages(library(wdman))
+  suppressPackageStartupMessages(library(DT))
+  suppressPackageStartupMessages(library(htmlwidgets))
+  options(warn = -1)
+  options(timeout = 100000000000000000)
   wdman::gecko(port = 4567L,version = "0.33.0")
   wdman::phantomjs(port = 4567L,version = "2.1.1")
+
   rD = rsDriver(browser = "firefox", version = "4.0.0-alpha-2",port = random_ints, chromever = NULL,
                 geckover = "0.33.0", extraCapabilities = list(`moz:firefoxOptions` = list(binary = binary,
                                                                                           args = list("--headless")), browser.startup.homepage = "about:blank",
