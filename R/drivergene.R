@@ -1,4 +1,7 @@
-drivergene <- function(GeneName,path = "/Program Files/Mozilla Firefox",binary = paste0(path,'/firefox.exe')){
+drivergene <- function(GeneName,
+                       path = "/Program Files/Mozilla Firefox",
+                       binary = paste0(path,'/firefox.exe')
+                       ){
   data_file = system.file("data", "trans2gene.RDS", package = "fromto")
   GeneID_data = readRDS(data_file)
   GeneID_data = GeneID_data[which(GeneID_data$Symbol == GeneName),
@@ -31,14 +34,19 @@ drivergene <- function(GeneName,path = "/Program Files/Mozilla Firefox",binary =
   suppressPackageStartupMessages(library(htmlwidgets))
   options(warn = -1)
   options(timeout = 100000000000000000)
-  wdman::gecko(port = 4567L,version = "0.33.0")
-  wdman::phantomjs(port = 4567L,version = "2.1.1")
+  wdman::gecko(port = 4567L,version = "lastet")
+  wdman::phantomjs(port = 4567L,version = "latest")
 
-  rD = rsDriver(browser = "firefox", version = "4.0.0-alpha-2",port = random_ints, chromever = NULL,
-                geckover = "0.33.0", extraCapabilities = list(`moz:firefoxOptions` = list(binary = binary,
-                                                                                          args = list("--headless")), browser.startup.homepage = "about:blank",
-                                                              browser.privatebrowsing.autostart = TRUE, browser.download.manager.showWhenStarting = FALSE,
-                                                              browser.helperApps.neverAsk.saveToDisk = "application/octet-stream"),
+  rD = rsDriver(browser = "firefox",
+                version = "4.0.0-alpha-2",
+                port = random_ints,
+                chromever = NULL,
+                geckover = "latest",
+                extraCapabilities = list(`moz:firefoxOptions` = list(binary = binary,
+                                         args = list("--headless")),
+                                         browser.startup.homepage = "about:blank",
+                                         browser.privatebrowsing.autostart = TRUE, browser.download.manager.showWhenStarting = FALSE,
+                                         browser.helperApps.neverAsk.saveToDisk = "application/octet-stream"),
                 check = F, verbose = F)
 
   driver = rD$client
