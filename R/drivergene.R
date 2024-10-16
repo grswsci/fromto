@@ -34,14 +34,14 @@ drivergene <- function(GeneName,
   suppressPackageStartupMessages(library(htmlwidgets))
   options(warn = -1)
   options(timeout = 100000000000000000)
-  wdman::gecko(port = 4567L,version = "lastet")
-  wdman::phantomjs(port = 4567L,version = "latest")
+  wdman::gecko(port = 4567L,version = "0.35.0")
+  wdman::phantomjs(port = 4567L,version = "2.1.1")
 
   rD = rsDriver(browser = "firefox",
                 version = "4.0.0-alpha-2",
                 port = random_ints,
                 chromever = NULL,
-                geckover = "latest",
+                geckover = "0.35.0",
                 extraCapabilities = list(`moz:firefoxOptions` = list(binary = binary,
                                          args = list("--headless")),
                                          browser.startup.homepage = "about:blank",
