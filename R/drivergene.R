@@ -33,8 +33,6 @@ drivergene <- function(GeneName,
   suppressPackageStartupMessages(library(htmlwidgets))
   options(warn = -1)
   options(timeout = 100000000000000000)
-  wdman::gecko(port = 4567L,version = "0.35.0")
-  wdman::phantomjs(port = 4567L,version = "2.1.1")
 
   rD = rsDriver(browser = "firefox",
                 version = "4.0.0-alpha-2",
