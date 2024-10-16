@@ -7,7 +7,6 @@ drivergene <- function(GeneName,
   GeneID_data = GeneID_data[which(GeneID_data$Symbol == GeneName),
   ]
   GeneID_NCBI = GeneID_data$NCBI_GeneID[1]
-  random_ints = sample(1:10000, 1, replace = TRUE)
 
   add_strings = function(strings) {
     result = character()
@@ -39,9 +38,10 @@ drivergene <- function(GeneName,
 
   rD = rsDriver(browser = "firefox",
                 version = "4.0.0-alpha-2",
-                port = random_ints,
+                geckover = "0.33.0",
+                phantomver = "2.1.1",
                 chromever = NULL,
-                geckover = "0.35.0",
+                port = sample(1:10000, 1, replace = TRUE),
                 extraCapabilities = list(`moz:firefoxOptions` = list(binary = binary,
                                          args = list("--headless")),
                                          browser.startup.homepage = "about:blank",
