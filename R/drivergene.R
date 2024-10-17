@@ -1,6 +1,7 @@
 drivergene <- function(GeneName,
-                       binary = "/Program Files/Mozilla Firefox/firefox.exe",
-                       neverAsk.saveToDisk = "application/octet-stream"
+                       binary = "C:\\Program Files\\Mozilla Firefox\\firefox.exe",
+                       neverAsk.saveToDisk = "application\\octet-stream",
+                       myport = sample(1:10000, 1, replace = TRUE)
                        ){
   data_file = system.file("data", "trans2gene.RDS", package = "fromto")
   GeneID_data = readRDS(data_file)
@@ -39,7 +40,7 @@ drivergene <- function(GeneName,
                 geckover = "0.33.0",
                 phantomver = "2.1.1",
                 chromever = NULL,
-                port = sample(1:10000, 1, replace = TRUE),
+                port = myport,
                 extraCapabilities = list(`moz:firefoxOptions` = list(binary = binary,
                                          args = list("--headless")),
                                          browser.startup.homepage = "about:blank",
