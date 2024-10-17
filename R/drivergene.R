@@ -4,13 +4,13 @@
 #' @param myport port
 #' @param neverAsk.saveToDisk just for fun
 #' @return html
-#' @note
-#'if (.Platform$OS.type == "windows") {
+#' @examples
+#'if(.Platform$OS.type == "windows"){
 #'username <- Sys.getenv("USERNAME")
-#'} else {
-#' username <- system("whoami", intern = TRUE)
-#'  username <- trimws(username)
-#'  }
+#'}else{
+#'username <- system("whoami", intern = TRUE)
+#'username <- trimws(username)
+#'}
 #'
 #'file.copy(from = paste0("C:\\Users\\",username,"\\Desktop\\fromto_java\\binman.7z"),
 #'to = paste0("C:\\Users\\",username,"\\AppData\\Local\\binman.7z"))
@@ -18,9 +18,11 @@
 #'if(!require("devtools",quietly = TRUE)){
 #'install.packages("devtools")
 #'}
+#'
 #'if(!require("BiocManager",quietly = TRUE)){
-#' install.packages("BiocManager")
-#' }
+#'install.packages("BiocManager")
+#'}
+#'
 #' BiocManager::install("limma")
 #' BiocManager::install("magick")
 #' devtools::install_github("grswsci/fromto")
