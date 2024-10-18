@@ -45,7 +45,7 @@ export(list2df_rbind)
 export(list2df_cbind)
 export(scmarkers)
 export(drivergene)
-
+export(driverpubmed)
 
 
 
