@@ -122,7 +122,7 @@ drivergene <- function(GeneName,
       df_all = rbind(df_all, df_pre)
     }
     df_all = df_all[df_all$trText_split3!= "Not find",]
-
+    df_all = data.frame(df_all, hrefs)
 
   }else{
     df_all = data.frame()
