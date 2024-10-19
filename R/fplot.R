@@ -1,3 +1,12 @@
+#' @title fplot1
+#' @description forest plot
+#' @param data data frame
+#' @param nameplot plot name
+#' @param height pdf height
+#' @return forest plot
+
+
+
 fplot1 = function(data,nameplot,height = 10){
   suppressPackageStartupMessages(library(grid))
   suppressPackageStartupMessages(library(readr))
@@ -72,8 +81,13 @@ fplot1 = function(data,nameplot,height = 10){
   print(plot)
   dev.off()
 }
-
-fplot2 = function(data,nameplot,heigh = 10){
+#' @title fplot2
+#' @description forest plot
+#' @param data data frame
+#' @param nameplot plot name
+#' @param height pdf height
+#' @return forest plot
+fplot2 = function(data,nameplot,height = 10){
   suppressPackageStartupMessages(library(grid))
   suppressPackageStartupMessages(library(readr))
   suppressPackageStartupMessages(library(forestploter))

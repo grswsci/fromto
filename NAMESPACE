@@ -74,4 +74,6 @@ export(sparkle_start_time)
 export(zscore_col_genename)
 export(survival_filter_year)
 export(survival_filter_month)
+export(cplot1)
+export(cplot2)
 
