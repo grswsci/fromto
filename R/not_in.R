@@ -13,4 +13,15 @@
 not_in <- function(x, y) {
   !x %in% y
 }
+#' @title is_integer
+#' @description Is it integer
+#' @param x number
+#' @return TRUE or FALSE
+#' @examples
+#' # examples
+#' is_integer(5)
+#' is_integer(5.5)
 
+is_integer <- function(x) {
+  return(x %% 1 == 0)
+}

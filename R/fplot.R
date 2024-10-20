@@ -4,9 +4,6 @@
 #' @param nameplot plot name
 #' @param height pdf height
 #' @return forest plot
-
-
-
 fplot1 = function(data,nameplot,height = 10){
   suppressPackageStartupMessages(library(grid))
   suppressPackageStartupMessages(library(readr))
