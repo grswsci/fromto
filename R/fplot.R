@@ -17,7 +17,23 @@ fplot1 = function(data,nameplot,height = 10){
   data$pvalue = ifelse(data$pvalue < 0.001,"<0.001", data$pvalue)
   lineVec = nrow(data) + 1
   data$' ' = paste(rep(" ", 10), collapse = " ")
-
+  if(nrow(data) <= 10){
+  list_color = list(fill = c(alpha(c("#e41a1c",
+                            "#377eb8",
+                            "#4daf4a",
+                            "#984ea3",
+                            "#ff7f00",
+                            "#ffff33",
+                            "#7E6148",
+                            "#a65628",
+                            "#f781bf",
+                            "#999999")[1:nrow(data)],0.05))))
+  }else{
+    list_color = list(fill = c(rep(alpha(c("white",0.05)
+                                   ,100)
+    )
+    )
+  }
   tm = forest_theme(base_size = 18,
                     ci_pch = 16,
                     ci_lty = 1,
@@ -28,11 +44,10 @@ fplot1 = function(data,nameplot,height = 10){
                     refline_lwd = 1,
                     refline_col="grey20",
                     xaxis_cex = 0.8,
-                    core = list(bg_params = list(fill = c(rep(alpha(c("#e41a1c", "#377eb8", "#4daf4a", "#984ea3",
-                                                          "#ff7f00"),0.05),100)))),
+                    core = list(bg_params = list_color),
                     footnote_cex = 0.6,
                     footnote_col = "blue")
-
+trace(forestploter::forest_theme,edit = TRUE)
   if(max(data$HR.95H) < 1){
     xlim = c(min(data$HR.95L),1.2)
   }else if(max(data$HR.95H) < 2){
@@ -97,8 +112,23 @@ fplot2 = function(data,nameplot,height = 10){
   data$pvalue = ifelse(data$pvalue<0.001,"<0.001",data$pvalue)
   lineVec = nrow(data)+1
   data$' ' = paste(rep(" ", 10), collapse = " ")
-
-  tm <- forest_theme(base_size = 18,
+  list_color = list(fill = c(alpha(c("#e41a1c",
+                                     "#377eb8",
+                                     "#4daf4a",
+                                     "#984ea3",
+                                     "#ff7f00",
+                                     "#ffff33",
+                                     "#7E6148",
+                                     "#a65628",
+                                     "#f781bf",
+                                     "#999999")[1:nrow(data)],0.05))))
+    }else{
+      list_color = list(fill = c(rep(alpha(c("white",0.05)
+                                       ,100)
+                                     )
+      )
+                        }
+  tm = forest_theme(base_size = 18,
                      ci_pch = 16,
                      ci_lty = 1,
                      ci_lwd = 1.5,
@@ -108,8 +138,7 @@ fplot2 = function(data,nameplot,height = 10){
                      refline_lwd = 1,
                      refline_col = "grey20",
                      xaxis_cex = 0.8,
-                     core = list(bg_params = list(fill = c(rep(alpha(c("#e41a1c", "#377eb8", "#4daf4a", "#984ea3",
-                                                                       "#ff7f00"),0.05),100)))),
+                     core = list(bg_params = list_color),
                      footnote_cex = 0.6,
                      footnote_col = "blue")
   if(max(data$HR.95H) < 1){
