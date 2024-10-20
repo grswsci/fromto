@@ -27,12 +27,12 @@ fplot1 = function(data,nameplot,height = 10){
                             "#7E6148",
                             "#a65628",
                             "#f781bf",
-                            "#999999")[1:nrow(data)],0.05))))
+                            "#999999")[1:nrow(data)],0.05)))
   }else{
     list_color = list(fill = c(rep(alpha(c("white",0.05)
                                    ,100)
     )
-    )
+    ))
   }
   tm = forest_theme(base_size = 18,
                     ci_pch = 16,
@@ -112,6 +112,7 @@ fplot2 = function(data,nameplot,height = 10){
   data$pvalue = ifelse(data$pvalue<0.001,"<0.001",data$pvalue)
   lineVec = nrow(data)+1
   data$' ' = paste(rep(" ", 10), collapse = " ")
+  if(nrow(data) <= 10){
   list_color = list(fill = c(alpha(c("#e41a1c",
                                      "#377eb8",
                                      "#4daf4a",
@@ -121,12 +122,12 @@ fplot2 = function(data,nameplot,height = 10){
                                      "#7E6148",
                                      "#a65628",
                                      "#f781bf",
-                                     "#999999")[1:nrow(data)],0.05))))
+                                     "#999999")[1:nrow(data)],0.05)))
     }else{
       list_color = list(fill = c(rep(alpha(c("white",0.05)
                                        ,100)
                                      )
-      )
+      ))
                         }
   tm = forest_theme(base_size = 18,
                      ci_pch = 16,
