@@ -9,7 +9,7 @@ authors: Yuyao Liu, Haoxue Zhang, Zhenyu Song, Shengxiu Liu
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## 安装R包
 
 ```{r}
 #安装R包
