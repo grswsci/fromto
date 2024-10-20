@@ -2,18 +2,20 @@
 % Please edit documentation in R/not_in.R
 \name{is_in}
 \alias{is_in}
-\title{is_integer}
+\title{is_in}
 \usage{
-is_in(x, y)
+is_in(x, ys)
 }
 \arguments{
-\item{x}{number}
+\item{x}{character}
+
+\item{ys}{character}
 }
 \value{
 TRUE or FALSE
 }
 \description{
-Is it integer
+Is it in
 }
 \examples{
 # examples
