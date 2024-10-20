@@ -47,7 +47,7 @@ fplot1 = function(data,nameplot,height = 10){
                     core = list(bg_params = list_color),
                     footnote_cex = 0.6,
                     footnote_col = "blue")
-trace(forestploter::forest_theme,edit = TRUE)
+
   if(max(data$HR.95H) < 1){
     xlim = c(min(data$HR.95L),1.2)
   }else if(max(data$HR.95H) < 2){

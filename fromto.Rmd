@@ -1,0 +1,249 @@
+---
+title: "fromto"
+output: html_document
+date: "2024-10-20"
+authors: Yuyao Liu, Haoxue Zhang, Zhenyu Song, Shengxiu Liu
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+#安装R包
+#devtools::install_github("grswsci/fromto")
+```
+
+## library
+
+```{r}
+library(fromto)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+##R语言爬虫-ncbi-gene
+
+```{r}
+drivergene(GeneName = "CDC20",
+           binary = "C:\\Program Files\\Mozilla Firefox\\firefox.exe",
+           neverAsk.saveToDisk = "application\\octet-stream",
+           myport = sample(1:10000, 1, replace = TRUE))
+```
+
+##R语言爬虫-gsea-genest
+
+```{r}
+drivergsea(GeneSet = "Ferroptosis", 
+           binary = "C:\\Program Files\\Mozilla Firefox\\firefox.exe", 
+           neverAsk.saveToDisk = "application\\octet-stream", 
+           myport = sample(1:10000, 1, replace = TRUE))
+
+```
+
+##R语言爬虫-ncbi-pubmed
+
+```{r}
+driverpubmed(term = "Melanoma OR SKCM",
+             term_AND_1 = "TCGA",
+             term_AND_2 = "Signature",
+             year_start = "2024",
+             year_end = "2024")
+```
+
+##准备生存示例数据
+
+```{r}
+# 设置随机种子以便结果可重复  
+set.seed(123)  
+  
+# 创建示例数据  
+n_samples = 100  
+data = data.frame(  
+  time = sample(1:500, n_samples, replace = TRUE),  # 生存时间  
+  status = sample(0:1, n_samples, replace = TRUE),  # 生存状态（0=事件未发生，1=事件发生）  
+  gene1 = rnorm(n_samples),  # 基因1的表达水平  
+  gene2 = rnorm(n_samples),  # 基因2的表达水平  
+  gene3 = rnorm(n_samples),  # 基因3的表达水平  
+  gene4 = rnorm(n_samples),  # 基因4的表达水平  
+  gene5 = rnorm(n_samples),  # 基因5的表达水平  
+  gene6 = rnorm(n_samples),  # 基因6的表达水平  
+  gene7 = rnorm(n_samples),  # 基因7的表达水平  
+  gene8 = rnorm(n_samples),  # 基因8的表达水平  
+  gene9 = rnorm(n_samples),  # 基因9的表达水平  
+  gene10 = rnorm(n_samples), # 基因10的表达水平  
+  gene11 = rnorm(n_samples)  # 基因11的表达水平  
+)  
+  
+# 查看前几行数据  
+head(data)
+```
+
+##计算单因素cox生存分析
+
+```{r}
+res_unicox = survival_unicox(data)
+```
+
+##计算多因素cox生存分析
+
+```{r}
+res_multicox = survival_multicox(data)
+```
+
+##森林图-forestplot
+
+```{r}
+fplot1(res_unicox,nameplot = "res_unicox", height = 10)
+res_multicox$dataset = "TCGA"
+fplot2(res_multicox,nameplot = "mutli_unicox", height = 10)
+```
+
+##KM plot
+
+```{r}
+kmplot1(data, 
+        minprop = 0.3, 
+        GeneName = "gene3", 
+        CancerType = "unknown", 
+        Timeunit = "day")
+```
+
+##计算相关性分析-可视化1
+
+```{r}
+cplot1(data = data,
+       GeneName1 = "gene1", 
+       GeneName2 = "gene2", 
+       DatasetName = "custom", 
+       method = "pearson")
+```
+
+##计算相关性分析-可视化2
+
+```{r}
+cplot2(data = data,
+       GeneName1 = "gene1", 
+       GeneName2 = "gene2", 
+       DatasetName = "custom", 
+       method = "pearson")
+```
+
+##数据过滤-按索引过滤-寻找死亡患者
+
+```{r}
+res_index = find_index(x = 1,ys = data$status)
+print(res_index)
+data_dead = data[res_index,]
+```
+
+##数据过滤-按指定字符过滤
+
+```{r}
+ys = c("This is a sample text where we have a note saying 'replaced by ID12345'.",
+      "This is a sample text where we have a note saying 'replaced by ID12346'.",
+      "This is a sample text where we have a note saying 'replaced nby ID12345'.",
+      "This is a sample text where we have a note saying 'replaced nby ID12346'.")
+x = "replaced by ID"
+res_name = find_name(x = x,ys = ys)
+print(res_name)
+```
+
+##数据过滤-按指定字符过滤-寻找目标文件
+
+```{r}
+getwd()
+res_file = list.files("C:\\Users\\21567\\Desktop\\fromto_java")
+res_name = find_name(x = "html", ys = res_file)
+print(res_name)
+```
+
+##数据过滤-按指定索引过滤-寻找目标文件
+
+```{r}
+res_file = list.files("C:\\Users\\21567\\Desktop\\fromto_java")
+print(res_file)
+res_index = find_index(x = "html",ys= res_file)
+print(res_index)
+res_file[res_index]
+```
+
+##差异分析-gene1与gene2在不同status里面表达差异
+
+```{r}
+dplot1(data = data,
+       Type = "status",
+       variable = "gene1",
+       levels = c(0,1),
+       test.methods = "wilcox.test",
+       DatasetName = "custom",
+       width = 4.5,
+       height = 4,
+       alphas = 0.5)
+dplot2(data = data,
+       Type = "status",
+       variable = "gene1",
+       levels = c(0,1),
+       test.methods = "wilcox.test",
+       DatasetName = "custom",
+       width = 4.5,
+       height = 4,
+       alphas = 0.5)
+dplot3(data = data,
+       Type = "status",
+       variable = "gene1",
+       levels = c(0,1),
+       test.methods = "wilcox.test",
+       DatasetName = "custom",
+       width = 4.5,
+       height = 4,
+       alphas = 0.5)
+dplot4(data = data,
+       Type = "status",
+       variable = "gene1",
+       levels = c(0,1),
+       test.methods = "wilcox.test",
+       DatasetName = "custom",
+       width = 4.5,
+       height = 4,
+       alphas = 0.5)
+```
+
+##判断在或不在
+
+```{r}
+str = c("aaa","bBB","CcC","dDd")
+res_not_in = not_in("PDCD1",str)
+print(res_not_in)
+res_in = "PDCD1" %in% str
+print(res_in )
+```
+
+##geo数据库下载
+
+```{r}
+geoget(GEO_IDs = "GSE103668")
+#geoget2(GEO_IDs = "GSE103668")
+```
+
+##读取临床数据
+
+```{r}
+cli = geocli(GEO_ID = "GSE103668")
+```
+
+##将探针名注释为基因名
+
+```{r}
+exp = geoann(GPL_ID = "GPL570",GEO_ID = "GSE103668")
+```
+
+##更新geo基因名防止富集分析出错
+
+```{r}
+exp_new = fromtoupdate(exp)
+```
+
+
