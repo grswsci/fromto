@@ -142,14 +142,40 @@ elocationid = res$elocationid
 elocationid = gsub("doi: ","",elocationid)
 
 abstract_text_all = c()
-for (variable in url) {
-  message(paste0("we are getting ",variable," abstact..."))
-  webpage = read_html(variable)
-  abstract_div = webpage %>%
-    html_nodes("#abstract")
-  abstract_text = abstract_div %>%
-    html_text(trim = TRUE)
-  abstract_text_all = c(abstract_text_all,abstract_text)
+for (var_url in url) {
+  message(paste0("we are getting ", var_url, " abstract..."))
+
+  # 尝试读取网页并提取摘要
+  webpage <- tryCatch({
+    read_html(var_url)
+  }, error = function(e) {
+    message(paste0("Error reading webpage: ", e$message))
+    return(NULL)
+  })
+
+  if (is.null(webpage)) {
+    abstract_text <- ""
+  } else {
+    abstract_div <- tryCatch({
+      webpage %>% html_nodes("#abstract")
+    }, error = function(e) {
+      message(paste0("Error finding abstract div: ", e$message))
+      return(html_nodes(webpage, "div"))
+    })
+
+    if (abstract_div %>% length() == 0) {
+      abstract_text <- ""
+    } else {
+      abstract_text <- tryCatch({
+        abstract_div %>% html_text(trim = TRUE)
+      }, error = function(e) {
+        message(paste0("Error extracting abstract text: ", e$message))
+        return("")
+      })
+    }
+  }
+
+  abstract_text_all <- c(abstract_text_all, abstract_text)
 }
 
 res = data.frame(uid = createLink(paste0("https://www.ncbi.nlm.nih.gov/pubmed/?term=",uid),uid),
