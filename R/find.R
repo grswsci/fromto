@@ -43,3 +43,20 @@ find_indexs = function(xs,ys){
    }
   }
 }
+#' @title find_name
+#' @description Is it name
+#' @param x character
+#' @param ys characters
+#' @return index
+#' @examples
+#' # examples
+#' ys = c("This is a sample text where we have a note saying 'replaced by ID12345'.",
+#'       "This is a sample text where we have a note saying 'replaced by ID12346'.",
+#'       "This is a sample text where we have a note saying 'replaced nby ID12345'.",
+#'       "This is a sample text where we have a note saying 'replaced nby ID12346'.")
+#' x = "replaced by ID"
+#' find_name(x = x,ys = ys)
+find_name = function(x,ys){
+  file_names = grep(x,ys,value=T)
+  return(file_names)
+}
