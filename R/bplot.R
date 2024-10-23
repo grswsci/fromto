@@ -1,6 +1,7 @@
 #' @title bplot_scmarkers
 #' @description bplot scmarkers
 #' @param scRNA Seurat object
+#' @param label celltype or seurat_clusters or others
 #' @param width pdf width
 #' @param height pdfheight
 #' @param mycolor mycolor

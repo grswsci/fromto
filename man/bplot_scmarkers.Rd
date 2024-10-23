@@ -6,6 +6,7 @@
 \usage{
 bplot_scmarkers(
   scRNA,
+  label = "seurat_clusters",
   width = 20,
   height = 8,
   Neutrophils = NA,
@@ -48,6 +49,8 @@ bplot_scmarkers(
 }
 \arguments{
 \item{scRNA}{Seurat object}
+
+\item{label}{celltype or seurat_clusters or others}
 
 \item{width}{pdf width}
 
