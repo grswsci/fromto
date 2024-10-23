@@ -13,7 +13,7 @@ License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 4.2.2)
-Imports: tidyverse (>= 2.0.0), limma (>= 3.60.2), ggplot2 (>= 3.5.1), ggrepel (>= 0.9.5), ggpubr (>= 0.6.0), ggExtra (>= 0.10.1), aplot (>= 0.2.3), hrbrthemes(>= 0.8.7), ggtext (>= 0.1.2), beeswarm (>= 0.4.0), ggplotify (>= 0.1.2), cowplot (>= 1.1.3), magick (>= 2.8.3), pdftools (>= 3.4.0), data.table (>= 1.15.4), reshape2 (>= 1.4.4), ggdist (>= 3.3.2), roxygen2 (>= 7.3.2), httr (>= 1.4.7), tidyverse (>= 2.0.0), rvest (>= 1.0.4), RSelenium (>= 1.7.9), DT (>= 0.3.3), htmlwidgets (>= 1.6.4), XML (>= 3.99-0.17), magrittr (>= 2.0.3), stringr (>= 1.5.1), rentrez (>= 1.2.3), survminer (>= 0.4.9), forestploter (>= 1.1.2), readtext (>= 0.91)
+Imports: tidyverse (>= 2.0.0), limma (>= 3.60.2), ggplot2 (>= 3.5.1), ggrepel (>= 0.9.5), ggpubr (>= 0.6.0), ggExtra (>= 0.10.1), aplot (>= 0.2.3), hrbrthemes(>= 0.8.7), ggtext (>= 0.1.2), beeswarm (>= 0.4.0), ggplotify (>= 0.1.2), cowplot (>= 1.1.3), magick (>= 2.8.3), pdftools (>= 3.4.0), data.table (>= 1.15.4), reshape2 (>= 1.4.4), ggdist (>= 3.3.2), roxygen2 (>= 7.3.2), httr (>= 1.4.7), tidyverse (>= 2.0.0), rvest (>= 1.0.4), RSelenium (>= 1.7.9), DT (>= 0.3.3), htmlwidgets (>= 1.6.4), XML (>= 3.99-0.17), magrittr (>= 2.0.3), stringr (>= 1.5.1), rentrez (>= 1.2.3), survminer (>= 0.4.9), forestploter (>= 1.1.2), readtext (>= 0.91), plyr (>= 1.8.9), rlang (>= 1.0.0)
 NeedsCompilation: no
 Packaged: 2024-06-18 18:21:26 UTC; ahmulyy
 Author: Yuyao Liu [aut, cre] (https://grswsci.top/),
