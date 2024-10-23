@@ -6,6 +6,7 @@
 #' @param mycolor mycolor
 #' @return pdf and ggplot object
 bplot_scmarkers = function(scRNA,
+                           label = "seurat_clusters",
                             width = 20,
                            height = 8,
                       Neutrophils = NA,
@@ -320,7 +321,7 @@ bplot_scmarkers = function(scRNA,
   selected_markers = selected_markers[selected_markers != ""]
   selected_labels = selected_labels[selected_labels != ""]
 
-  data.usage = DotPlot(scRNA,features = selected_markers, group.by = "seurat_clusters")$data
+  data.usage = DotPlot(scRNA,features = selected_markers, group.by = label)$data
   data.anno = data.frame(features.plot = unique(data.usage$features.plot),label = selected_labels)
   df.plot = plyr::join(data.usage,data.anno)
 
