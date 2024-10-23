@@ -45,6 +45,7 @@ export(list2df_rbind)
 export(list2df_cbind)
 export(scmarkers)
 export(drivergene)
+export(drivergsea)
 export(driverpubmed)
 export(kmplot1)
 export(survival_unicox)
@@ -82,3 +83,18 @@ export(is_ins)
 export(find_index)
 export(find_indexs)
 export(find_name)
+export(journal_abstract)
+export(journal_text)
+export(journal_reference_numbers_no)
+export(journal_reference_numbers_yes)
+export(journal_figure_legends_jpg)
+export(journal_figure_legends_png)
+export(journal_table_jpg)
+
+
+
+
+
+
+
+
