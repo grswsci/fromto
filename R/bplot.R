@@ -52,8 +52,8 @@ bplot_scmarkers = function(scRNA,
                                "#1f77b4",  "#ff7f0e",  "#279e68",
                                "#d62728",  "#aa40fc",  "#8c564b",
                                "#e377c2",  "#b5bd61",  "#17becf","#aec7e8")){
-  library(ggplot2)
-
+ suppressPackageStartupMessages(library(ggplot2))
+ suppressPackageStartupMessages(library(tidyverse))
   if(length(intersect(row.names(scRNA),Neutrophils)) == 0){
     Neutrophil = ""
     Neutrophil_rep = ""
