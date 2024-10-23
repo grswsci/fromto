@@ -179,7 +179,7 @@ bplot_scmarkers = function(scRNA,
     Tn_rep = ""
   }else{
     Tn = c(intersect(row.names(scRNA),Tns))
-    Tn_rep = rep("Treg",length(Tn))
+    Tn_rep = rep("Tn",length(Tn))
   }
 
   if(length(intersect(row.names(scRNA),Teffs)) == 0){
