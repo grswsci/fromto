@@ -90,7 +90,7 @@ export(journal_reference_numbers_yes)
 export(journal_figure_legends_jpg)
 export(journal_figure_legends_png)
 export(journal_table_jpg)
-
+export(uplot_cell)
 
 
 
