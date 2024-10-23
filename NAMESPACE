@@ -91,7 +91,7 @@ export(journal_figure_legends_jpg)
 export(journal_figure_legends_png)
 export(journal_table_jpg)
 export(uplot_cell)
-
+export(bplot_scmarkers)
 
 
 
