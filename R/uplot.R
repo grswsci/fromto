@@ -28,10 +28,13 @@ uplot_cell = function(scRNA, plotname = "CellType", reduction = "umap", label = 
   library(tidyverse)
   library(ggrepel)
   umap = scRNA@reductions[[reduction]]@cell.embeddings %>% as.data.frame() %>% cbind(Cluster = scRNA@meta.data[,label])
+  colnames(umap) = c("UMAP_1","UMAP_2","Cluster")
+
   cell_type_med = umap %>% group_by(Cluster) %>% summarise(UMAP_1 = median(UMAP_1),UMAP_2 = median(UMAP_2))
+
   UMAP_1_min = min(umap$UMAP_1)
   UMAP_2_min = min(umap$UMAP_2)
-  colnames(umap) = c("UMAP_1","UMAP_2","Cluster")
+
   p = ggplot(umap,aes(x= UMAP_1 , y = UMAP_2 ,color = Cluster)) +
     geom_point(size = 0.1 , alpha = alphas)  +
     scale_color_manual(values = mycolor) +
