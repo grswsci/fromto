@@ -26,6 +26,7 @@ uplot_cell = function(scRNA, plotname = "CellType", reduction = "umap", label = 
                                                                                  "#e377c2",  "#b5bd61",  "#17becf","#aec7e8")){
   library(ggplot2)
   library(tidyverse)
+  library(ggrepel)
   umap = scRNA@reductions[[reduction]]@cell.embeddings %>% as.data.frame() %>% cbind(Cluster = scRNA@meta.data[,label])
   colnames(umap) = c("UMAP_1","UMAP_2","Cluster")
   p = ggplot(umap,aes(x= UMAP_1 , y = UMAP_2 ,color = Cluster)) +
@@ -44,25 +45,27 @@ uplot_cell = function(scRNA, plotname = "CellType", reduction = "umap", label = 
                 legend.text = element_text(size=20),
                 legend.key.size=unit(1,'cm') ) +
   guides(color = guide_legend(override.aes = list(size=5)))
-  p4 = p3 + geom_segment(aes(x = min(umap$UMAP_1) , y = min(umap$UMAP_2),
-                         xend = min(umap$UMAP_1) +3,
-                         yend = min(umap$UMAP_2) ),
+  p4 = p3 + geom_segment(aes(x = min(UMAP_1) , y = min(UMAP_2),
+                         xend = min(UMAP_1) +3,
+                         yend = min(UMAP_2) ),
                          colour = "black", size=1,
                          arrow = arrow(length = unit(0.3,"cm")))+
-  geom_segment(aes(x = min(umap$UMAP_1)  ,
-                   y = min(umap$UMAP_2),
-                   xend = min(umap$UMAP_1) ,
-                   yend = min(umap$UMAP_2) + 3),
+  geom_segment(aes(x = min(UMAP_1)  ,
+                   y = min(UMAP_2),
+                   xend = min(UMAP_1) ,
+                   yend = min(UMAP_2) + 3),
                colour = "black", size=1,
                arrow = arrow(length = unit(0.3,"cm"))) +
-  annotate("text",x = min(umap$UMAP_1) + 1.5,
-           y = min(umap$UMAP_2) -1,
+  annotate("text",
+           x = min(UMAP_1) + 1.5,
+           y = min(UMAP_2) -1,
            label = "UMAP_1",
            color = "black",
            size = 3,
            fontface = "bold" ) +
-  annotate("text",x = min(umap$UMAP_1) - 1,
-           y = min(umap$UMAP_2) + 1.5,
+  annotate("text",
+           x = min(UMAP_1) - 1,
+           y = min(UMAP_2) + 1.5,
            label = "UMAP_2",
            color = "black",size = 3,
            fontface = "bold" ,angle = 90)
