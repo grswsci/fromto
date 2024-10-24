@@ -36,6 +36,7 @@ bplot_scmarkers = function(scRNA,
                      Mesothelials = c('MSLN','UPK3B','CALB2','WT1'),
                              SMCs = c('ACTA2','TAGLN'),
                       Epithelials = c('EPCAM','KRT19','CDH1','KRT18'),
+                          Prolifs = c('MKI67'),
                    mycolor = c("#BC3C29FF","#0072B5FF","#E18727FF",
                                "#20854EFF","#7876B1FF","#6F99ADFF",
                                "#FFDC91FF","#EE4C97FF","#E64B35FF",
@@ -263,6 +264,14 @@ bplot_scmarkers = function(scRNA,
     Epithelial_rep = rep("Epi",length(Epithelial))
   }
 
+ if(length(intersect(row.names(scRNA),Prolifs)) == 0){
+   Prolif = ""
+   Prolif_rep = ""
+ }else{
+   Prolif = c(intersect(row.names(scRNA),Prolifs))
+   Prolif_rep = rep("Prolif",length(Prolif))
+ }
+
   selected_markers = c(Neutrophil,
                        Basophil,
                        Eosinophil,
@@ -288,7 +297,8 @@ bplot_scmarkers = function(scRNA,
                        Endothelial,
                        Mesothelial,
                        SMC,
-                       Epithelial
+                       Epithelial,
+                       Prolif
   )
 
   selected_labels = c(Neutrophil_rep,
@@ -316,7 +326,8 @@ bplot_scmarkers = function(scRNA,
                    Endothelial_rep,
                    Mesothelial_rep,
                    SMC_rep,
-                   Epithelial_rep
+                   Epithelial_rep,
+                   Prolif_rep
   )
 
   selected_markers = selected_markers[selected_markers != ""]
