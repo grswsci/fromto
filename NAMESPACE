@@ -97,4 +97,8 @@ export(sc_10x_seurat)
 export(sc_qc_mouse)
 export(sc_qc_human)
 export(sc_cellcycle_adjust)
+export(sc_scale)
+export(sc_select_pc)
+
+
 

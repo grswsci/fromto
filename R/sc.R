@@ -268,6 +268,8 @@ sc_cellcycle_adjust = function(scRNA,
                                         "#1f77b4",  "#ff7f0e",  "#279e68",
                                         "#d62728",  "#aa40fc",  "#8c564b",
                                         "#e377c2",  "#b5bd61",  "#17becf","#aec7e8")){
+  library(ggplot2)
+  library(patchwork)
   if(is_v5 == TRUE){
   scRNA[["RNA"]] = as(scRNA[["RNA"]], "Assay")
   }
@@ -310,4 +312,100 @@ sc_cellcycle_adjust = function(scRNA,
   }
   return(scRNA)
 }
+#' @title sc_scale
+#' @description Seurat Object
+#' @param scRNA Seurat Object
+#' @param methods_my methods_my default = NA, or set as "sct"
+#' @param if_vars_to_regress if_vars_to_regress default = "TRUE", or set as "FALSE"
+sc_scale = function(scRNA,
+                    methods_my = NA,
+                    if_vars_to_regress = "TRUE") {
+  if(is.na(methods_my)){
+    scRNA = NormalizeData(object = scRNA,
+                          normalization.method = "LogNormalize",
+                          scale.factor = 10000)
+    scRNA = FindVariableFeatures(object = scRNA,
+                                 selection.method = "vst",
+                                 nfeatures = 2000)
+    if(if_vars_to_regress == FALSE){
+      scRNA = ScaleData(scRNA)
+    }else{
+      scRNA = ScaleData(scRNA,vars.to.regress = c("S.Score", "G2M.Score"))
+    }
 
+  }else if(methods_my == "sct"){
+    if(if_vars_to_regress == FALSE){
+      scRNA = SCTransform(scRNA)
+    }else{
+      scRNA = SCTransform(scRNA,vars.to.regress = c("S.Score", "G2M.Score"))
+    }
+  }
+  return(scRNA)
+}
+
+#' @title sc_select_pc
+#' @description Seurat Object
+#' @param scRNA Seurat Object
+#' @param npcs npcs default = 20
+#' @param width width default = 8
+#' @param height height default = 2
+sc_select_pc = function(scRNA,
+                        npcs = 30,
+                        width = 12,
+                        height = 3,
+                        alphas = 0.8,
+                        mycolor = c("#BC3C29FF","#0072B5FF","#E18727FF",
+                                    "#20854EFF","#7876B1FF","#6F99ADFF",
+                                    "#FFDC91FF","#EE4C97FF","#E64B35FF",
+                                    "#4DBBD5FF","#00A087FF","#3C5488FF",
+                                    "#F39B7FFF","#8491B4FF","#91D1C2FF",
+                                    "#DC0000FF","#7E6148FF","#B09C85FF",
+                                    "#3B4992FF","#EE0000FF","#008B45FF",
+                                    "#631879FF","#008280FF","#BB0021FF",
+                                    "#5F559BFF","#A20056FF","#808180FF",
+                                    "#00468BFF","#ED0000FF","#42B540FF",
+                                    "#0099B4FF","#925E9FFF","#FDAF91FF",
+                                    "#AD002AFF","#ADB6B6FF","#374E55FF",
+                                    "#DF8F44FF","#00A1D5FF","#B24745FF",
+                                    "#79AF97FF","#6A6599FF","#80796BFF",
+                                    "#1f77b4",  "#ff7f0e",  "#279e68",
+                                    "#d62728",  "#aa40fc",  "#8c564b",
+                                    "#e377c2",  "#b5bd61",  "#17becf","#aec7e8")) {
+  library(ggplot2)
+  library(patchwork)
+  scRNA = RunPCA(scRNA,
+                 npcs = npcs,
+                 pc.genes = VariableFeatures(object = scRNA),
+                 verbose = FALSE)
+  plot_Variable = VariableFeaturePlot(object = scRNA)+ NoLegend()
+  plot_Variable_top = LabelPoints(plot = plot_Variable,
+                       points = head(x = VariableFeatures(object = scRNA), 3),
+                       repel = TRUE) + NoLegend()
+  plot_DimPlot = DimPlot(object = scRNA, reduction = "pca",cols = alpha(mycolor,alphas))
+  plot_ElbowPlot = ElbowPlot(scRNA,ndims = npcs)
+
+  plot_RunPCA = wrap_plots(plots = list(plot_Variable,
+                                        plot_Variable_top,
+                                        plot_DimPlot,
+                                        plot_ElbowPlot), nrow = 1)
+  pdf(file = "sc_RunPCA.pdf", width = width, height = height)
+  print(plot_RunPCA)
+  dev.off()
+  # Determine percent of variation associated with each PC
+  pct = scRNA[["pca"]]@stdev / sum(scRNA[["pca"]]@stdev) * 100
+  # Calculate cumulative percents for each PC
+  cumu = cumsum(pct)
+  # Determine which PC exhibits cumulative percent greater than 90% and % variation associated with the PC as less than 5
+  co1 = which(cumu > 90 & pct < 5)[1]
+  # Determine the difference between variation of PC and subsequent PC，last point where change of % of variation is more than 0.1
+  co2 = sort(which((pct[1:length(pct) - 1] - pct[2:length(pct)]) > 0.1), decreasing = T)[1] + 1
+  # Max of the two calculation
+  pc_select = max(co1, co2)
+  print(pc_select)
+
+  scRNA = RunPCA(scRNA,
+                 npcs = pc_select,
+                 pc.genes = VariableFeatures(object = scRNA),
+                 verbose = FALSE)
+  return(scRNA)
+}
