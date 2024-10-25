@@ -148,3 +148,85 @@ sc_qc_mouse = function(scRNA,
 
   return(scRNA)
 }
+#' @title sc_qc_human
+#' @description Seurat Object
+#' @param scRNA working directory
+#' @param min_Gene min_Gene default = 500
+#' @param max_Gene max_Gene default = 4000
+#' @param max_UMI max_UMI default = 15000
+#' @param pct_mt pct_mt default = 10
+#' @param pct_rb pct_rb default = 1
+#' @param plot_featrures plot_featrures default = c("nFeature_RNA","nCount_RNA","percent.MT","percent.RB")
+#' @param group group default = "orig.ident"
+#' @param width width = 28
+#' @param height height = 8
+#' @param mycolor mycolor
+#' @return Seurat Object
+
+sc_qc_human = function(scRNA,
+                       min_Gene = 500,
+                       max_Gene = 4000,
+                       max_UMI = 15000,
+                       pct_MT = 10,
+                       pct_RB = 1,
+                       plot_featrures = c("nFeature_RNA","nCount_RNA","percent.MT","percent.RB"),
+                       group = "orig.ident",
+                       width = 28,
+                       height = 8,
+                       mycolor = c("#BC3C29FF","#0072B5FF","#E18727FF",
+                                   "#20854EFF","#7876B1FF","#6F99ADFF",
+                                   "#FFDC91FF","#EE4C97FF","#E64B35FF",
+                                   "#4DBBD5FF","#00A087FF","#3C5488FF",
+                                   "#F39B7FFF","#8491B4FF","#91D1C2FF",
+                                   "#DC0000FF","#7E6148FF","#B09C85FF",
+                                   "#3B4992FF","#EE0000FF","#008B45FF",
+                                   "#631879FF","#008280FF","#BB0021FF",
+                                   "#5F559BFF","#A20056FF","#808180FF",
+                                   "#00468BFF","#ED0000FF","#42B540FF",
+                                   "#0099B4FF","#925E9FFF","#FDAF91FF",
+                                   "#AD002AFF","#ADB6B6FF","#374E55FF",
+                                   "#DF8F44FF","#00A1D5FF","#B24745FF",
+                                   "#79AF97FF","#6A6599FF","#80796BFF",
+                                   "#1f77b4",  "#ff7f0e",  "#279e68",
+                                   "#d62728",  "#aa40fc",  "#8c564b",
+                                   "#e377c2",  "#b5bd61",  "#17becf","#aec7e8")){
+  scRNA[["percent.MT"]] = PercentageFeatureSet(scRNA, pattern = "^MT-")
+  scRNA[["percent.RB"]] = PercentageFeatureSet(scRNA, pattern = "^RP[SL]")
+
+  plots_before_qc = list()
+  for(i in seq_along(plot_featrures)){
+    plots[[i]] = VlnPlot(scRNA,
+                         cols = mycolor,
+                         group.by = group,
+                         pt.size = 0,
+                         features = plot_featrures[i]) +
+      theme.set2 +
+      NoLegend()
+  }
+  violin_before_qc = wrap_plots(plots = plots_before_qc, nrow=1)
+
+  scRNA = subset(scRNA,
+                 subset = percent.mt < pct_MT &
+                   nCount_RNA < max_UMI &
+                   nFeature_RNA > min_Gene &
+                   nFeature_RNA < max_Gene &
+                   percent.rb < pct_RB)
+  plots_after_qc = list()
+  for(i in seq_along(plot_featrures)){
+    plots[[i]] = VlnPlot(scRNA,
+                         cols = mycolor,
+                         group.by = group,
+                         pt.size = 0,
+                         features = plot_featrures[i]) +
+      theme.set2 +
+      NoLegend()
+  }
+  violin_after_qc = wrap_plots(plots = plots_before_qc, nrow=1)
+
+  qcplot = CombinePlots(plots = list(violin_before_qc,plots_after_qc),ncol =1)
+  pdf(file = "qc_before_and_after.pdf", width = width, height = height)
+  print(qcplot)
+  dev.off()
+
+  return(scRNA)
+}
