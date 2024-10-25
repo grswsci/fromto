@@ -35,4 +35,25 @@ sc_10x = function(path,
   }
 }
 }
-
+#' @title sc_10x_seurat
+#' @description One key to Create Seurat Object
+#' @param path working directory
+#' @param if_join if Join Layers
+#' @return Seurat Object
+sc_10x_seurat = function(path,if_join = FALSE){
+  library(Seurat)
+  samples = list.dirs(path)[2:length(list.dirs(path))]
+  samples = gsub(paste0(path,"/"),"",samples,fixed = TRUE)
+  scRNAlist = lapply(samples,function(samples){
+    folder = file.path(path,samples)
+    sce = CreateSeuratObject(counts = Read10X(folder),project = samples)
+    return(sce)
+  })
+  scRNA = merge(scRNAlist[[1]], scRNAlist[2:length(scRNAlist)])
+  if(if_join == FALSE){
+    return(scRNA)
+  }else{
+    scRNA_combined = JoinLayers(scRNA)
+    return(scRNA_combined)
+  }
+}

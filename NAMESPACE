@@ -93,7 +93,7 @@ export(journal_table_jpg)
 export(uplot_cell)
 export(bplot_scmarkers)
 export(sc_10x)
-
+export(sc_10x_seurat)
 
 
 
