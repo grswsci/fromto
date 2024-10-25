@@ -14,6 +14,7 @@ export(dplot1)
 export(dplot2)
 export(dplot3)
 export(dplot4)
+export(dplot5)
 export(capitalize_first_letter)
 export(merge_row)
 export(merge_col)
@@ -103,3 +104,8 @@ export(sc_run_harmony)
 export(sc_run_umap_tsne)
 export(sc_run_DoubletFinder)
 export(sc_run_clustree)
+
+
+
+
+
