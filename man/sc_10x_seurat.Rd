@@ -4,12 +4,16 @@
 \alias{sc_10x_seurat}
 \title{sc_10x_seurat}
 \usage{
-sc_10x_seurat(path, if_join = FALSE)
+sc_10x_seurat(path, if_join = TRUE, min.cells = 3, min.features = 200)
 }
 \arguments{
 \item{path}{working directory}
 
-\item{if_join}{if Join Layers}
+\item{if_join}{if Join Layers default = TRUE}
+
+\item{min.cells}{min.cells default = 3}
+
+\item{min.features}{min.features default = 200}
 }
 \value{
 Seurat Object
