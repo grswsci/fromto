@@ -10,11 +10,12 @@ sc_qc_human(
   max_Gene = 4000,
   max_UMI = 15000,
   pct_MT = 10,
-  pct_RB = 1,
-  plot_featrures = c("nFeature_RNA", "nCount_RNA", "percent.MT", "percent.RB"),
+  pct_RB = 100,
+  plot_featrures = c("nFeature_RNA", "nCount_RNA", "percent.MT"),
   group = "orig.ident",
   width = 28,
   height = 8,
+  alphas = 0.8,
   mycolor = c("#BC3C29FF", "#0072B5FF", "#E18727FF", "#20854EFF", "#7876B1FF",
     "#6F99ADFF", "#FFDC91FF", "#EE4C97FF", "#E64B35FF", "#4DBBD5FF", "#00A087FF",
     "#3C5488FF", "#F39B7FFF", "#8491B4FF", "#91D1C2FF", "#DC0000FF", "#7E6148FF",
@@ -28,7 +29,7 @@ sc_qc_human(
 )
 }
 \arguments{
-\item{scRNA}{working directory}
+\item{scRNA}{Seurat Object}
 
 \item{min_Gene}{min_Gene default = 500}
 
@@ -43,6 +44,8 @@ sc_qc_human(
 \item{width}{width = 28}
 
 \item{height}{height = 8}
+
+\item{alphas}{alphas default = 0.8}
 
 \item{mycolor}{mycolor}
 
