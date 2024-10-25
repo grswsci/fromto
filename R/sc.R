@@ -55,7 +55,7 @@ sc_10x_seurat = function(path,
                              project = samples,
                              min.cells = min.cells,
                              min.features = min.features)
-    rownames(sce) = paste0(samples,"_",rownames(sce))
+    colnames(sce) = paste0(samples,"_",colnames(sce))
     return(sce)
   })
   scRNA = merge(scRNAlist[[1]], scRNAlist[2:length(scRNAlist)])
