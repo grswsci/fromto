@@ -409,3 +409,119 @@ sc_select_pc = function(scRNA,
                  verbose = FALSE)
   return(scRNA)
 }
+
+#' @title sc_run_harmony
+#' @description Seurat Object
+#' @param scRNA Seurat Object
+#' @param group_by_vars default = "orig.ident"
+#' @param reduction_use default = "pca"
+#' @param assay_use default = "RNA"
+#' @param max_iter_harmony default = 30
+#' @param width width default = 6
+#' @param height height default = 3
+sc_run_harmony = function(scRNA,
+                        group_by_vars = "orig.ident",
+                        reduction_use = "pca",
+                        assay_use = "RNA",
+                        max_iter_harmony = 30,
+                        width = 6,
+                        height = 3,
+                        alphas = 0.8,
+                        mycolor = c("#BC3C29FF","#0072B5FF","#E18727FF",
+                                    "#20854EFF","#7876B1FF","#6F99ADFF",
+                                    "#FFDC91FF","#EE4C97FF","#E64B35FF",
+                                    "#4DBBD5FF","#00A087FF","#3C5488FF",
+                                    "#F39B7FFF","#8491B4FF","#91D1C2FF",
+                                    "#DC0000FF","#7E6148FF","#B09C85FF",
+                                    "#3B4992FF","#EE0000FF","#008B45FF",
+                                    "#631879FF","#008280FF","#BB0021FF",
+                                    "#5F559BFF","#A20056FF","#808180FF",
+                                    "#00468BFF","#ED0000FF","#42B540FF",
+                                    "#0099B4FF","#925E9FFF","#FDAF91FF",
+                                    "#AD002AFF","#ADB6B6FF","#374E55FF",
+                                    "#DF8F44FF","#00A1D5FF","#B24745FF",
+                                    "#79AF97FF","#6A6599FF","#80796BFF",
+                                    "#1f77b4",  "#ff7f0e",  "#279e68",
+                                    "#d62728",  "#aa40fc",  "#8c564b",
+                                    "#e377c2",  "#b5bd61",  "#17becf","#aec7e8")) {
+  library(ggplot2)
+  library(patchwork)
+  library(harmony)
+  scRNA = RunHarmony(object = scRNA,
+                     group.by.vars = group_by_vars,
+                     reduction.use = reduction_use,
+                     assay.use = assay_use,
+                     max.iter.harmony = max_iter_harmony)
+  plot_Dim = DimPlot(object = scRNA,
+                     reduction = "harmony",
+                     cols = alpha(mycolor,alphas)) + NoLegend()
+  plot_Elbow = ElbowPlot(scRNA, reduction = "harmony",ndims = ncol(scRNA_use@reductions[["pca"]]@cell.embeddings))
+  plot_RunHarmony = wrap_plots(plots = list(plot_Dim,plot_Elbow), nrow = 1)
+  pdf(file = "sc_RunHarmony.pdf", width = width, height = height)
+  print(plot_RunHarmony)
+  dev.off()
+  return(scRNA)
+}
+#' @title sc_run_umap_tsne
+#' @description Seurat Object
+#' @param scRNA Seurat Object
+#' @param resolution default = 0.8
+#' @param reduction_use default = "pca"
+sc_run_umap_tsne = function(scRNA,
+                            reduction_use = "harmony",
+                            resolution = 0.8) {
+  scRNA = FindNeighbors(object = scRNA, reduction.use = reduction_use)
+  scRNA = FindClusters(object = scRNA, resolution = resolution)
+  scRNA = RunUMAP(object = scRNA, dims = 1:ncol(scRNA@reductions[[reduction_use]]),reduction = reduction_use)
+  scRNA = RunTSNE(object = scRNA, reduction = reduction_use)
+  return(scRNA)
+}
+#' @title sc_run_DoubletFinder
+#' @description Seurat Object
+#' @param scRNA Seurat Object
+#' @param if_sct default = FALSE
+sc_run_DoubletFinder = function(scRNA,if_sct = FALSE){
+  library(DoubletFinder)
+  sweep.res.list = paramSweep(scRNA, PCs = 1:ncol(scRNA@reductions[["pca"]]), sct = if_sct)
+  sweep.stats = summarizeSweep(sweep.res.list, GT = FALSE)
+  sweep.stats[order(sweep.stats$BCreal),]
+  bcmvn = find.pK(sweep.stats)
+  pK_bcmvn = as.numeric(as.vector(bcmvn$pK[which.max(bcmvn$BCmetric)]))
+  DoubletRate = ncol(scRNA)*8*1e-6
+  homotypic.prop = modelHomotypic(scRNA$seurat_clusters)
+  nExp_poi = round(DoubletRate*nrow(scRNA@meta.data))
+  nExp_poi.adj = round(nExp_poi*(1-homotypic.prop))
+  scRNA = doubletFinder(seu = scRNA,
+                        PCs = 1:ncol(scRNA@reductions[["pca"]]),
+                        pN = 0.25,
+                        pK = pK_bcmvn,
+                        nExp = nExp_poi.adj,
+                        reuse.pANN = FALSE,
+                        sct = if_sct)
+  return(scRNA)
+}
+#' @title sc_run_clustree
+#' @description sc_run_clustree
+#' @param scRNA Seurat Object
+#' @param from default = 0.1
+#' @param to default = 1
+#' @param seqs default = 0.1
+#' @param reduction_use default = 0.1
+#' @param height default = 15
+#' @param width default = 10
+sc_run_clustree = function(scRNA,
+                           from = 0.1,
+                           to = 1,
+                           seqs = 0.1,
+                           reduction_use = "harmony",
+                           height = 15,
+                           width = 10) {
+  library(clustree)
+  scRNA = FindNeighbors(scRNA, reduction = reduction_use,dims = 1:ncol(scRNA@reductions[[reduction_use]]))
+  scRNA = FindClusters(object = scRNA,resolution = c(seq(from,to,seqs)))
+  plot_clustree = clustree(scRNA@meta.data,prefix = "RNA_snn_res.")
+  pdf(file="sc_clustree.pdf",height = height, width = width)
+  print(plot_clustree)
+  dev.off()
+  return(scRNA)
+}

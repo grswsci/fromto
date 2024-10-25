@@ -99,6 +99,7 @@ export(sc_qc_human)
 export(sc_cellcycle_adjust)
 export(sc_scale)
 export(sc_select_pc)
-
-
-
+export(sc_run_harmony)
+export(sc_run_umap_tsne)
+export(sc_run_DoubletFinder)
+export(sc_run_clustree)
