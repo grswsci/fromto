@@ -108,6 +108,8 @@ sc_qc_mouse = function(scRNA,
                                    "#1f77b4",  "#ff7f0e",  "#279e68",
                                    "#d62728",  "#aa40fc",  "#8c564b",
                                    "#e377c2",  "#b5bd61",  "#17becf","#aec7e8")){
+  library(ggplot2)
+  library(patchwork)
   scRNA[["percent.MT"]] = PercentageFeatureSet(scRNA, pattern = "^mt-")
   scRNA[["percent.RB"]] = PercentageFeatureSet(scRNA, pattern = "^Rp[sl]")
 
@@ -118,7 +120,7 @@ sc_qc_mouse = function(scRNA,
                          group.by = group,
                          pt.size = 0,
                          features = plot_featrures[i]) +
-      theme.set2 +
+      theme(axis.title.x=element_blank()) +
       NoLegend()
   }
   violin_before_qc = wrap_plots(plots = plots_before_qc, nrow=1)
@@ -136,7 +138,7 @@ sc_qc_mouse = function(scRNA,
                          group.by = group,
                          pt.size = 0,
                          features = plot_featrures[i]) +
-      theme.set2 +
+      theme(axis.title.x=element_blank()) +
       NoLegend()
   }
   violin_after_qc = wrap_plots(plots = plots_before_qc, nrow=1)
@@ -190,6 +192,8 @@ sc_qc_human = function(scRNA,
                                    "#1f77b4",  "#ff7f0e",  "#279e68",
                                    "#d62728",  "#aa40fc",  "#8c564b",
                                    "#e377c2",  "#b5bd61",  "#17becf","#aec7e8")){
+  library(ggplot2)
+  library(patchwork)
   scRNA[["percent.MT"]] = PercentageFeatureSet(scRNA, pattern = "^MT-")
   scRNA[["percent.RB"]] = PercentageFeatureSet(scRNA, pattern = "^RP[SL]")
 
@@ -200,7 +204,7 @@ sc_qc_human = function(scRNA,
                          group.by = group,
                          pt.size = 0,
                          features = plot_featrures[i]) +
-      theme.set2 +
+      theme(axis.title.x=element_blank()) +
       NoLegend()
   }
   violin_before_qc = wrap_plots(plots = plots_before_qc, nrow=1)
@@ -218,7 +222,7 @@ sc_qc_human = function(scRNA,
                          group.by = group,
                          pt.size = 0,
                          features = plot_featrures[i]) +
-      theme.set2 +
+      theme(axis.title.x=element_blank()) +
       NoLegend()
   }
   violin_after_qc = wrap_plots(plots = plots_before_qc, nrow=1)
