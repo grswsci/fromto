@@ -554,7 +554,7 @@ dplot5 = function(data,
                         ymax = mean_expression + se_expression),
                     width = 0.2,
                     position = position_dodge(width = 0.9)) +
-      ylim(ifelse(min(data_summary$mean_expression) * 1.1 < 0 , min(data_summary$mean_expression) * 1.1,0),max(data_summary$mean_expression) * 1.1) +
+      ylim(min(data_summary$mean_expression),max(data_summary$mean_expression) * 1.1) +
       xlab(DatasetName) +
       ylab(paste0(variable," Mean Expression")) +
       labs(fill = "Group") +
@@ -563,7 +563,7 @@ dplot5 = function(data,
       scale_fill_manual(values = alpha(mycolor,alphas))+
       geom_segment(data = p_wilcox_df,
                    aes(x = x_mid1, xend = x_mid2, y = y_value, yend = y_value),
-                   colour = "black", size = 0.5, linetype = "dashed", check_overlap = TRUE, inherit.aes = FALSE) +
+                   colour = "black", size = 0.5, linetype = "dashed", inherit.aes = FALSE) +
       geom_text(data = p_wilcox_df,
                 aes(x = (x_mid1 + x_mid2) / 2, y = y_value, label = p_value),
                 vjust = -0.5, size = 3.5, check_overlap = TRUE, inherit.aes = FALSE)
@@ -607,7 +607,7 @@ dplot5 = function(data,
                         ymax = mean_expression + se_expression),
                     width = 0.2,
                     position = position_dodge(width = 0.9)) +
-      ylim(ifelse(min(data_summary$mean_expression) * 1.1 < 0 , min(data_summary$mean_expression) * 1.1,0), max(data_summary$mean_expression) * 1.35) +
+      ylim(min(data_summary$mean_expression), max(data_summary$mean_expression) * 1.35) +
       xlab(DatasetName) +
       ylab(paste0(variable," Mean Expression")) +
       labs(fill = "Group") +
@@ -616,7 +616,7 @@ dplot5 = function(data,
       scale_fill_manual(values = alpha(mycolor,alphas))+
       geom_segment(data = p_wilcox_df,
                    aes(x = x_mid1, xend = x_mid2, y = y_value, yend = y_value),
-                   colour = "black", size = 0.5, linetype = "dashed", check_overlap = TRUE, inherit.aes = FALSE) +
+                   colour = "black", size = 0.5, linetype = "dashed", inherit.aes = FALSE) +
       geom_text(data = p_wilcox_df,
                 aes(x = (x_mid1 + x_mid2) / 2,
                     y = y_value,
@@ -642,7 +642,7 @@ dplot5 = function(data,
                         ymax = mean_expression + se_expression),
                     width = 0.2,
                     position = position_dodge(width = 0.9)) +
-      ylim(ifelse(min(data_summary$mean_expression) * 1.1 < 0 , min(data_summary$mean_expression) * 1.1,0), max(data_summary$mean_expression) * 1.1) +
+      ylim(min(data_summary$mean_expression), max(data_summary$mean_expression) * 1.1) +
       xlab(DatasetName) +
       ylab(paste0(variable," Mean Expression")) +
       labs(fill = "Group") +
