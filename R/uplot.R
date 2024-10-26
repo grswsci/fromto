@@ -105,11 +105,12 @@ uplot_gene1  = function(scRNA,
                         marker,
                         dim = "umap",
                         size = 0.8,
+                        slot_use = "counts",
                         ncol = NULL){
   require(ggplot2)
   require(ggrastr)
   require(Seurat)
-
+  require(patchwork)
   cold = colorRampPalette(c('#f7fcf0','#41b6c4','#253494'))
   warm = colorRampPalette(c('#ffffb2','#fecc5c','#e31a1c'))
   mypalette = c(rev(cold(11)), warm(10))
@@ -126,7 +127,7 @@ uplot_gene1  = function(scRNA,
   }
 
   if(length(marker) == 1){
-    plot = FeaturePlot(scRNA, features = marker,slot = "count",raster=FALSE)
+    plot = FeaturePlot(scRNA, features = marker,slot = slot_use,raster = FALSE)
     data = plot$data
 
     if(dim=="umap"){
@@ -160,7 +161,7 @@ uplot_gene1  = function(scRNA,
   }else{
     gene_list = list()
     for (i in 1:length(marker)) {
-      plot = FeaturePlot(scRNA, features = marker[i])
+      plot = FeaturePlot(scRNA, features = marker[i],slot = slot_use,raster = FALSE)
       data = plot$data
 
       if(dim == "tsne"){
@@ -200,7 +201,7 @@ uplot_gene1  = function(scRNA,
         )
       plot_list[[i]] <- p
     }
-    Seurat::CombinePlots(plot_list, ncol = ncol)
+    wrap_plots(plots = plot_list, ncol = ncol)
   }
 }
 
@@ -215,6 +216,7 @@ uplot_gene1  = function(scRNA,
 uplot_gene2  = function(scRNA,
                         marker,
                         dim = "umap",
+                        slot_use = "counts",
                         size = 0.8,
                         ncol = NULL){
   require(ggplot2)
@@ -237,7 +239,7 @@ uplot_gene2  = function(scRNA,
   }
 
   if(length(marker) == 1){
-    plot = FeaturePlot(scRNA, features = marker,slot = "count",raster=FALSE)
+    plot = FeaturePlot(scRNA, features = marker,slot = slot_use,raster = FALSE)
     data = plot$data
 
     if(dim=="tsne"){
@@ -274,7 +276,7 @@ uplot_gene2  = function(scRNA,
   }else{
     gene_list = list()
     for (i in 1:length(marker)) {
-      plot = FeaturePlot(scRNA, features = marker[i])
+      plot = FeaturePlot(scRNA, features = marker[i],slot = slot_use,raster = FALSE)
       data = plot$data
 
       if(dim == "tsne"){
@@ -306,10 +308,10 @@ uplot_gene2  = function(scRNA,
         ggtitle(marker[i]) +
         labs(x = xtitle, y = ytitle) +
         theme(
-          plot.title = element_text(size=12, face="bold.italic", hjust = 0),
-          axis.text = element_text(size=8, colour = "black"),
-          axis.title = element_text(size=12),
-          legend.text = element_text(size =10),
+          plot.title = element_text(size = 12, face="bold.italic", hjust = 0),
+          axis.text = element_text(size = 8, colour = "black"),
+          axis.title = element_text(size = 12),
+          legend.text = element_text(size = 10),
           legend.title = element_blank(),
           aspect.ratio = 1,
           panel.grid.major = element_blank(),
@@ -332,7 +334,7 @@ uplot_gene2  = function(scRNA,
 #' devtools::install_github("powellgenomicslab/Nebulosa")
 uplot_gene3  = function(scRNA,
                         marker,
-                        slot = "counts",
+                        slot_use = "counts",
                         reduction_use = "umap",
                         size = 0.8,
                         nameplot = "name"){
@@ -343,7 +345,7 @@ uplot_gene3  = function(scRNA,
   color = c(alpha('lightgrey',0.1),'#330066','#336699','#66CC66','#FFCC33',"red")
   plot = plot_density(scRNA,
                       features = marker,
-                      slot = slot,
+                      slot = slot_use,
                       reduction = reduction_use,
                       pal = 'magma',
                       raster = TRUE,
@@ -356,13 +358,13 @@ uplot_gene3  = function(scRNA,
             legend.key.height= unit(0.8,"cm"),
             legend.title = element_text(color = 'black', face = "bold", size = 8)
       )
-    pdf(file = paste0(name,"_",marker,"_Density_black_background.pdf"),width = 6.5,height = 6)
+    pdf(file = paste0(nameplot,"_",marker,"_Density_black_background.pdf"),width = 6.5,height = 6)
     print(plot)
     dev.off()
 
     plot2 = plot_density(scRNA,
                          features = marker,
-                         slot = slot,
+                         slot = slot_use,
                          reduction = reduction_use,
                          pal = 'magma',
                          raster = TRUE,
@@ -374,7 +376,7 @@ uplot_gene3  = function(scRNA,
             legend.key.height= unit(0.8,"cm"),
             legend.title = element_text(color = 'black', face = "bold", size=8)
       )
-    pdf(file = paste0(name,"_",marker,"_Density.pdf"),width = 6.5,height = 6)
+    pdf(file = paste0(nameplot,"_",marker,"_Density.pdf"),width = 6.5,height = 6)
     print(plot2)
     dev.off()
   }
