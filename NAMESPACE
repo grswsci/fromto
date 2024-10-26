@@ -106,8 +106,8 @@ export(sc_run_harmony)
 export(sc_run_umap_tsne)
 export(sc_run_DoubletFinder)
 export(sc_run_clustree)
-
-
-
+export(sc_run_AUCell)
+export(sc_run_UCell)
+export(sc_run_AddModuleScore)
 
 
