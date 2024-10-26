@@ -106,7 +106,9 @@ uplot_gene1  = function(scRNA,
                         dim = "umap",
                         size = 0.8,
                         slot_use = "counts",
-                        ncol = NULL){
+                        nrow = 1,
+                        height = 6,
+                        width = 13){
   require(ggplot2)
   require(ggrastr)
   require(Seurat)
@@ -157,6 +159,9 @@ uplot_gene1  = function(scRNA,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank()
       )
+    pdf(file=paste0("sc_",marker,"_uplot.pdf"),height = 6, width = 6.5)
+    print(p)
+    dev.off()
     return(p)
   }else{
     gene_list = list()
@@ -201,7 +206,11 @@ uplot_gene1  = function(scRNA,
         )
       plot_list[[i]] <- p
     }
-    wrap_plots(plots = plot_list, ncol = ncol)
+    p_all = wrap_plots(plots = plot_list, nrow = nrow)
+    pdf(file=paste0("sc_merge_uplot.pdf"),height = height, width = width)
+    print(p_all)
+    dev.off()
+    return(p_all)
   }
 }
 
@@ -218,7 +227,9 @@ uplot_gene2  = function(scRNA,
                         dim = "umap",
                         slot_use = "counts",
                         size = 0.8,
-                        ncol = NULL){
+                        nrow = 1,
+                        height = 6,
+                        width = 13){
   require(ggplot2)
   require(ggrastr)
   require(Seurat)
@@ -272,6 +283,9 @@ uplot_gene2  = function(scRNA,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank()
       )
+    pdf(file=paste0("sc_",marker,"_uplot.pdf"),height = 6, width = 6.5)
+    print(p)
+    dev.off()
     return(p)
   }else{
     gene_list = list()
@@ -319,7 +333,11 @@ uplot_gene2  = function(scRNA,
         )
       plot_list[[i]] <- p
     }
-    Seurat::CombinePlots(plot_list, ncol = ncol)
+    p_all = wrap_plots(plots = plot_list, nrow = nrow)
+    pdf(file = paste0("sc_merge_uplot.pdf"),height = height, width = width)
+    print(p_all)
+    dev.off()
+    return(p_all)
   }
 }
 

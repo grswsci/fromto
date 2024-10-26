@@ -10,7 +10,9 @@ uplot_gene2(
   dim = "umap",
   slot_use = "counts",
   size = 0.8,
-  ncol = NULL
+  nrow = 1,
+  height = 6,
+  width = 13
 )
 }
 \arguments{
