@@ -4,7 +4,14 @@
 \alias{uplot_gene2}
 \title{uplot_gene2}
 \usage{
-uplot_gene2(scRNA, marker, dim = "umap", size = 0.8, ncol = NULL)
+uplot_gene2(
+  scRNA,
+  marker,
+  dim = "umap",
+  slot_use = "counts",
+  size = 0.8,
+  ncol = NULL
+)
 }
 \arguments{
 \item{scRNA}{Seurat object}

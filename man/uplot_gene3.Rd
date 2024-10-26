@@ -7,7 +7,7 @@
 uplot_gene3(
   scRNA,
   marker,
-  slot = "counts",
+  slot_use = "counts",
   reduction_use = "umap",
   size = 0.8,
   nameplot = "name"
@@ -18,9 +18,9 @@ uplot_gene3(
 
 \item{marker}{one gene}
 
-\item{slot}{counts or data}
-
 \item{reduction_use}{umap or tsne}
+
+\item{slot}{counts or data}
 
 \item{ncol}{Multiple genes are arranged in columns and how many columns u want}
 }
