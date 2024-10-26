@@ -525,3 +525,78 @@ sc_run_clustree = function(scRNA,
   dev.off()
   return(scRNA)
 }
+#' @title sc_call_back
+#' @description sc call back
+#' @param scRNA Seurat Object with main label
+#' @param scRNA_subset Subset Seurat Object with fine label
+#' @param label default = "celltype"
+sc_call_back = function(scRNA,
+                        scRNA_subset,
+                        label = "celltype"){
+  scRNA@meta.data[,label][match(colnames(scRNA_subset),colnames(scRNA))] =  scRNA_subset@meta.data[,label]
+  return(scRNA)
+}
+
+#' @title sc_name_cell_with_gene
+#' @description name cell with gene
+#' @param scRNA Seurat Object with main label
+#' @param slot default = "counts", or use "data"
+#' @param gene_use gene symbol
+#' @param cell_use cell name
+#' @param label_use label in colnames(scRNA@meta.data)
+#' @param label_new label_new in colnames(scRNA@meta.data)
+#' @param method_use default =  "pn", means positive and negative. or use "med", means median
+sc_name_cell_with_gene = function(scRNA,
+                                  slot = "counts",
+                                  gene_use,
+                                  cell_use,
+                                  label_use = "celltype",
+                                  label_new = "CellType_New",
+                                  method_use = "pn"){
+  library(tidyverse)
+  GeneData = GetAssayData(object = scRNA, assay = "RNA",slot = slot) %>% .[c(gene_use),] %>%
+    as.matrix() %>%
+    as.data.frame()
+
+  if(method_use == "pn"){
+    GeneData$GeneType = ifelse(GeneData$V1 > 0,"Positive","Negative")
+    colnames(GeneData)[1] = gene_use
+
+    scRNA@meta.data = merge_row(scRNA@meta.data,GeneData)
+    scRNA@meta.data[,label_new] = scRNA@meta.data[,label_use]
+    scRNA@meta.data[,label_new] = ifelse(scRNA@meta.data[,label_new] == cell_use &
+                                            scRNA@meta.data$GeneType == "Positive",
+                                         paste0(gene_use,"+ ",cell_use),scRNA@meta.data[,label_new])
+    scRNA@meta.data[,label_new] = ifelse(scRNA@meta.data[,label_new] == cell_use &
+                                           scRNA@meta.data$GeneType == "Negative",
+                                         paste0(gene_use,"- ",cell_use),scRNA@meta.data[,label_new])
+  }else if(method_use == "med"){
+    if(median(GeneData$V1) == 0){
+      message("median value is 0, use pn param automaticly")
+      GeneData$GeneType = ifelse(GeneData$V1 > 0,"Positive","Negative")
+      colnames(GeneData)[1] = gene_use
+
+      scRNA@meta.data = merge_row(scRNA@meta.data,GeneData)
+      scRNA@meta.data[,label_new] = scRNA@meta.data[,label_use]
+      scRNA@meta.data[,label_new] = ifelse(scRNA@meta.data[,label_new] == cell_use &
+                                             scRNA@meta.data$GeneType == "Positive",
+                                           paste0(gene_use,"+ ",cell_use),scRNA@meta.data[,label_new])
+      scRNA@meta.data[,label_new] = ifelse(scRNA@meta.data[,label_new] == cell_use &
+                                             scRNA@meta.data$GeneType == "Negative",
+                                           paste0(gene_use,"- ",cell_use),scRNA@meta.data[,label_new])
+    }else{
+      GeneData$GeneType = ifelse(GeneData$V1 > median(GeneData$V1),"High","Low")
+      colnames(GeneData)[1] = gene_use
+
+      scRNA@meta.data = merge_row(scRNA@meta.data,GeneData)
+      scRNA@meta.data[,label_new] = scRNA@meta.data[,label_use]
+      scRNA@meta.data[,label_new] = ifelse(scRNA@meta.data[,label_new] == cell_use &
+                                             scRNA@meta.data$GeneType == "High",
+                                           paste0(gene_use,"+ ",cell_use),scRNA@meta.data[,label_new])
+      scRNA@meta.data[,label_new] = ifelse(scRNA@meta.data[,label_new] == cell_use &
+                                             scRNA@meta.data$GeneType == "Low",
+                                           paste0(gene_use,"- ",cell_use),scRNA@meta.data[,label_new])
+    }
+  }
+  return(scRNA)
+}

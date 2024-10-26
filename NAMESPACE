@@ -109,5 +109,5 @@ export(sc_run_clustree)
 export(sc_run_AUCell)
 export(sc_run_UCell)
 export(sc_run_AddModuleScore)
-
+export(sc_run_cellchat)
 

@@ -233,6 +233,7 @@ uplot_gene2  = function(scRNA,
   require(ggplot2)
   require(ggrastr)
   require(Seurat)
+  require(patchwork)
 
   cold = colorRampPalette(c('#f7fcf0','#41b6c4','#253494'))
   warm = colorRampPalette(c('#ffffb2','#fecc5c','#e31a1c'))
