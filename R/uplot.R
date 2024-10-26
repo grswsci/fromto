@@ -92,3 +92,290 @@ uplot_cell = function(scRNA, plotname = "CellType", reduction = "umap", label = 
   ggsave(paste0(plotname,".pdf"), plot = p, width = 6, height = 6)
   return(p)
 }
+
+#' @title uplot_gene1
+#' @description umap or tsne
+#' @param scRNA Seurat object
+#' @param marker one gene or many genes
+#' @param dim umap or tsne visualization
+#' @param size dot size
+#' @param ncol Multiple genes are arranged in columns and how many columns u want
+#' @return ggplot object
+uplot_gene1  = function(scRNA,
+                        marker,
+                        dim = "umap",
+                        size = 0.8,
+                        ncol = NULL){
+  require(ggplot2)
+  require(ggrastr)
+  require(Seurat)
+
+  cold = colorRampPalette(c('#f7fcf0','#41b6c4','#253494'))
+  warm = colorRampPalette(c('#ffffb2','#fecc5c','#e31a1c'))
+  mypalette = c(rev(cold(11)), warm(10))
+  mypalette = c('lightgrey','#330066','#336699','#66CC66','#FFCC33',"red")
+
+  if(dim == "tsne"){
+    xtitle = "tSNE1"
+    ytitle = "tSNE2"
+  }
+
+  if(dim == "umap"){
+    xtitle = "UMAP1"
+    ytitle = "UMAP2"
+  }
+
+  if(length(marker) == 1){
+    plot = FeaturePlot(scRNA, features = marker,slot = "count",raster=FALSE)
+    data = plot$data
+
+    if(dim=="umap"){
+      colnames(data) = c("x","y","ident","gene")
+    }
+
+    if(dim == "tsne"){
+      colnames(data) = c("x","y","ident","gene")
+    }
+
+    p = ggplot(data, aes(x, y)) +
+      geom_point_rast(shape = 21, stroke = 0.25,
+                      aes(colour = gene,
+                          fill = gene), size = size) +
+      scale_fill_gradientn(colours = mypalette)+
+      scale_colour_gradientn(colours = mypalette)+
+      theme_bw() +
+      ggtitle(marker) +
+      labs(x= xtitle, y= ytitle)+
+      theme(
+        plot.title = element_text(size=12, face="bold.italic", hjust = 0),
+        axis.text = element_text(size=8, colour = "black"),
+        axis.title = element_text(size=12),
+        legend.text = element_text(size =10),
+        legend.title = element_blank(),
+        aspect.ratio = 1,
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+      )
+    return(p)
+  }else{
+    gene_list = list()
+    for (i in 1:length(marker)) {
+      plot = FeaturePlot(scRNA, features = marker[i])
+      data = plot$data
+
+      if(dim == "tsne"){
+        colnames(data) = c("x","y","ident","gene")
+      }
+
+      if(dim == "umap"){
+        colnames(data) = c("x","y","ident","gene")
+      }
+
+      gene_list[[i]] = data
+      names(gene_list) = marker[i]
+    }
+
+    plot_list = list()
+
+    for (i in 1:length(marker)) {
+
+      p = ggplot(gene_list[[i]], aes(x, y)) +
+        geom_point_rast(shape = 21, stroke=0.25,
+                        aes(colour = gene,
+                            fill = gene), size = size) +
+        scale_fill_gradientn(colours = mypalette)+
+        scale_colour_gradientn(colours = mypalette)+
+        theme_bw() +
+        ggtitle(marker[i]) +
+        labs(x = xtitle, y = ytitle) +
+        theme(
+          plot.title = element_text(size=12, face="bold.italic", hjust = 0),
+          axis.text = element_text(size=8, colour = "black"),
+          axis.title = element_text(size=12),
+          legend.text = element_text(size =10),
+          legend.title = element_blank(),
+          aspect.ratio = 1,
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank()
+        )
+      plot_list[[i]] <- p
+    }
+    Seurat::CombinePlots(plot_list, ncol = ncol)
+  }
+}
+
+#' @title uplot_gene2
+#' @description umap or tsne
+#' @param scRNA Seurat object
+#' @param marker one gene or many genes
+#' @param dim umap or tsne visualization
+#' @param size dot size
+#' @param ncol Multiple genes are arranged in columns and how many columns u want
+#' @return ggplot object
+uplot_gene2  = function(scRNA,
+                        marker,
+                        dim = "umap",
+                        size = 0.8,
+                        ncol = NULL){
+  require(ggplot2)
+  require(ggrastr)
+  require(Seurat)
+
+  cold = colorRampPalette(c('#f7fcf0','#41b6c4','#253494'))
+  warm = colorRampPalette(c('#ffffb2','#fecc5c','#e31a1c'))
+  mypalette = c(rev(cold(11)), warm(10))
+  mypalette = c('lightgrey','#330066','#336699','#66CC66','#FFCC33',"red")
+
+  if(dim == "tsne"){
+    xtitle = "tSNE1"
+    ytitle = "tSNE2"
+  }
+
+  if(dim == "umap"){
+    xtitle = "UMAP1"
+    ytitle = "UMAP2"
+  }
+
+  if(length(marker) == 1){
+    plot = FeaturePlot(scRNA, features = marker,slot = "count",raster=FALSE)
+    data = plot$data
+
+    if(dim=="tsne"){
+      colnames(data) = c("x","y","ident","gene")
+    }
+
+    if(dim=="umap"){
+      colnames(data) = c("x","y","ident","gene")
+    }
+
+    p = ggplot(data, aes(x, y)) +
+      geom_point_rast(shape = 21, stroke = 0.25,
+                      aes(colour = gene,
+                          fill = gene), size = size) +
+      geom_density_2d(data = data[data$gene > 0,],
+                      aes(x = x, y = y),
+                      bins = 5, colour="black") +
+      scale_fill_gradientn(colours = mypalette)+
+      scale_colour_gradientn(colours = mypalette)+
+      theme_bw() +
+      ggtitle(marker) +
+      labs(x= xtitle, y= ytitle)+
+      theme(
+        plot.title = element_text(size=12, face="bold.italic", hjust = 0),
+        axis.text = element_text(size=8, colour = "black"),
+        axis.title = element_text(size=12),
+        legend.text = element_text(size =10),
+        legend.title = element_blank(),
+        aspect.ratio = 1,
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+      )
+    return(p)
+  }else{
+    gene_list = list()
+    for (i in 1:length(marker)) {
+      plot = FeaturePlot(scRNA, features = marker[i])
+      data = plot$data
+
+      if(dim == "tsne"){
+        colnames(data) = c("x","y","ident","gene")
+      }
+
+      if(dim == "umap"){
+        colnames(data) = c("x","y","ident","gene")
+      }
+
+      gene_list[[i]] = data
+      names(gene_list) = marker[i]
+    }
+
+    plot_list = list()
+
+    for (i in 1:length(marker)) {
+
+      p = ggplot(gene_list[[i]], aes(x, y)) +
+        geom_point_rast(shape = 21, stroke=0.25,
+                        aes(colour = gene,
+                            fill = gene), size = size) +
+        geom_density_2d(data = data[data$gene > 0,],
+                        aes(x = x, y = y),
+                        bins = 5, colour="black") +
+        scale_fill_gradientn(colours = mypalette)+
+        scale_colour_gradientn(colours = mypalette)+
+        theme_bw() +
+        ggtitle(marker[i]) +
+        labs(x = xtitle, y = ytitle) +
+        theme(
+          plot.title = element_text(size=12, face="bold.italic", hjust = 0),
+          axis.text = element_text(size=8, colour = "black"),
+          axis.title = element_text(size=12),
+          legend.text = element_text(size =10),
+          legend.title = element_blank(),
+          aspect.ratio = 1,
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank()
+        )
+      plot_list[[i]] <- p
+    }
+    Seurat::CombinePlots(plot_list, ncol = ncol)
+  }
+}
+
+#' @title uplot_gene3
+#' @description umap or tsne
+#' @param scRNA Seurat object
+#' @param marker one gene
+#' @param slot counts or data
+#' @param reduction_use umap or tsne
+#' @param ncol Multiple genes are arranged in columns and how many columns u want
+#' @return ggplot object
+#' devtools::install_github("powellgenomicslab/Nebulosa")
+uplot_gene3  = function(scRNA,
+                        marker,
+                        slot = "counts",
+                        reduction_use = "umap",
+                        size = 0.8,
+                        nameplot = "name"){
+  library(Seurat)
+  library(ggplot2)
+  library(Nebulosa)
+  library(ggnetwork)
+  color = c(alpha('lightgrey',0.1),'#330066','#336699','#66CC66','#FFCC33',"red")
+  plot = plot_density(scRNA,
+                      features = marker,
+                      slot = slot,
+                      reduction = reduction_use,
+                      pal = 'magma',
+                      raster = TRUE,
+                      size = size) +
+      theme_blank() +
+      theme(panel.background = element_rect(fill = "black"))&
+      theme(legend.frame = element_rect(colour = "black"),
+            legend.ticks = element_line(colour = "black", linewidth  = 0),
+            legend.key.width = unit(0.3, "cm"),
+            legend.key.height= unit(0.8,"cm"),
+            legend.title = element_text(color = 'black', face = "bold", size = 8)
+      )
+    pdf(file = paste0(name,"_",marker,"_Density_black_background.pdf"),width = 6.5,height = 6)
+    print(plot)
+    dev.off()
+
+    plot2 = plot_density(scRNA,
+                         features = marker,
+                         slot = slot,
+                         reduction = reduction_use,
+                         pal = 'magma',
+                         raster = TRUE,
+                         size = size) +
+      theme_blank() +
+      theme(legend.frame = element_rect(colour = "black"),
+            legend.ticks = element_line(colour = "black", linewidth  = 0),
+            legend.key.width = unit(0.3, "cm"),
+            legend.key.height= unit(0.8,"cm"),
+            legend.title = element_text(color = 'black', face = "bold", size=8)
+      )
+    pdf(file = paste0(name,"_",marker,"_Density.pdf"),width = 6.5,height = 6)
+    print(plot2)
+    dev.off()
+  }
+
