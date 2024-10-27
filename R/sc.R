@@ -196,8 +196,8 @@ sc_qc_human = function(scRNA,
                                    "#e377c2",  "#b5bd61",  "#17becf","#aec7e8")){
   library(ggplot2)
   library(patchwork)
-  scRNA[["percent.MT"]] = PercentageFeatureSet(scRNA, pattern = "^mt-")
-  scRNA[["percent.RB"]] = PercentageFeatureSet(scRNA, pattern = "^Rp[sl]")
+  scRNA[["percent.MT"]] = PercentageFeatureSet(scRNA, pattern = "^MT-")
+  scRNA[["percent.RB"]] = PercentageFeatureSet(scRNA, pattern = "^RP[SL]")
 
   plots_qc = list()
   for(i in seq_along(plot_featrures)){
