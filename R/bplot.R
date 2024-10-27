@@ -253,7 +253,7 @@ bplot_scmarkers = function(scRNA,
     SMC_rep = ""
   }else{
     SMC = c(intersect(row.names(scRNA),SMCs))
-    SMC_rep = rep("Meso",length(SMC))
+    SMC_rep = rep("SMC",length(SMC))
   }
 
   if(length(intersect(row.names(scRNA),Epithelials)) == 0){
