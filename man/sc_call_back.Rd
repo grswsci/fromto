@@ -4,14 +4,19 @@
 \alias{sc_call_back}
 \title{sc_call_back}
 \usage{
-sc_call_back(scRNA, scRNA_subset, label = "celltype")
+sc_call_back(
+  scRNA,
+  scRNA_subset,
+  label_scRNA = "CellType_FineLabel",
+  label_scRNA_subset = "CellType"
+)
 }
 \arguments{
 \item{scRNA}{Seurat Object with main label}
 
 \item{scRNA_subset}{Subset Seurat Object with fine label}
 
-\item{label}{default = "celltype"}
+\item{label_scRNA}{default = "CellType"}
 }
 \description{
 sc call back

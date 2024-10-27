@@ -533,11 +533,13 @@ sc_run_clustree = function(scRNA,
 #' @description sc call back
 #' @param scRNA Seurat Object with main label
 #' @param scRNA_subset Subset Seurat Object with fine label
-#' @param label default = "celltype"
+#' @param label_scRNA default = "CellType_FineLabel"
+#' @param label_scRNA default = "CellType"
 sc_call_back = function(scRNA,
                         scRNA_subset,
-                        label = "celltype"){
-  scRNA@meta.data[,label][match(colnames(scRNA_subset),colnames(scRNA))] =  scRNA_subset@meta.data[,label]
+                        label_scRNA = "CellType_FineLabel",
+                        label_scRNA_subset = "CellType") {
+  scRNA@meta.data[,label_scRNA][match(colnames(scRNA_subset), colnames(scRNA))] = scRNA_subset@meta.data[,label_scRNA_subset]
   return(scRNA)
 }
 
@@ -603,4 +605,27 @@ sc_name_cell_with_gene = function(scRNA,
     }
   }
   return(scRNA)
+}
+#' @title sc_tisch2_reanalysis
+#' @description name cell with gene
+#' @param scRNA Seurat Object with main label
+#' @param nfeatures default = 100
+#' @param cell_use cell name
+#' @param label_use label in colnames(scRNA@meta.data)
+#' @param resolution_use default = 1
+#' @param reduction_use default = "pca"
+sc_tisch2_reanalysis = function(scRNA,
+                                nfeatures = 100,
+                                cell_use,
+                                label_use = "CellType_FineLabel",
+                                resolution_use = 1,
+                                reduction_use = "pca"){
+  scRNA_subset = scRNA[,scRNA@meta.data[,label_use] %in% cell_use]
+  scRNA_subset[["RNA"]] = as(scRNA_subset[["RNA"]], "Assay")
+  scRNA_subset = FindVariableFeatures(object = scRNA_subset, selection.method = "vst", nfeatures = nfeatures)
+  scRNA_subset = ScaleData(scRNA_subset)
+  scRNA_subset = sc_select_pc(scRNA = scRNA_subset,npcs = 30,width = 12,height = 3)
+  scRNA_subset = sc_run_clustree(scRNA_subset,reduction_use = reduction_use)
+  scRNA_subset = sc_run_umap_tsne(scRNA = scRNA_subset, reduction_use = reduction_use, resolution = resolution_use)
+  return(scRNA_subset)
 }
