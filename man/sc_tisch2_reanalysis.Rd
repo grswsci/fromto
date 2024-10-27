@@ -6,7 +6,7 @@
 \usage{
 sc_tisch2_reanalysis(
   scRNA,
-  nfeatures = 100,
+  nfeatures = 2000,
   cell_use,
   label_use = "CellType_FineLabel",
   resolution_use = 1,
@@ -16,7 +16,7 @@ sc_tisch2_reanalysis(
 \arguments{
 \item{scRNA}{Seurat Object with main label}
 
-\item{nfeatures}{default = 100}
+\item{nfeatures}{default = 2000}
 
 \item{cell_use}{cell name}
 

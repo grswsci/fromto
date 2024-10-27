@@ -111,6 +111,7 @@ export(sc_run_AUCell)
 export(sc_run_UCell)
 export(sc_run_AddModuleScore)
 export(sc_run_cellchat)
+export(sc_run_nmf)
 export(sc_tisch2_reanalysis)
 export(run_download)
 

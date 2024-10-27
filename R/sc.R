@@ -609,13 +609,13 @@ sc_name_cell_with_gene = function(scRNA,
 #' @title sc_tisch2_reanalysis
 #' @description name cell with gene
 #' @param scRNA Seurat Object with main label
-#' @param nfeatures default = 100
+#' @param nfeatures default = 2000
 #' @param cell_use cell name
 #' @param label_use label in colnames(scRNA@meta.data)
 #' @param resolution_use default = 1
 #' @param reduction_use default = "pca"
 sc_tisch2_reanalysis = function(scRNA,
-                                nfeatures = 100,
+                                nfeatures = 2000,
                                 cell_use,
                                 label_use = "CellType_FineLabel",
                                 resolution_use = 1,
@@ -628,4 +628,38 @@ sc_tisch2_reanalysis = function(scRNA,
   scRNA_subset = sc_run_clustree(scRNA_subset,reduction_use = reduction_use)
   scRNA_subset = sc_run_umap_tsne(scRNA = scRNA_subset, reduction_use = reduction_use, resolution = resolution_use)
   return(scRNA_subset)
+}
+
+#' @title sc_run_nmf
+#' @description sc_run_nmf
+#' @param scRNA Seurat Object with main label
+sc_run_nmf = function(scRNA, nfeatures = 2000,rank_use = 12){
+  library(Seurat)
+  library(NMF)
+  library(tidyverse)
+  scRNA = FindVariableFeatures(object = scRNA, selection.method = "vst", nfeatures = nfeatures)
+  scRNA = ScaleData(scRNA,do.center = FALSE)
+  vm = scRNA@assays$RNA$scale.data
+  res = nmf(vm,rank_use,method = "snmf/r")
+
+  fs = extractFeatures(res, 30L)
+  fs = lapply(fs, function(x) rownames(res)[x])
+  fs = do.call("rbind", fs)
+
+  rownames(fs) = paste0("cluster",1:rank_use)
+  write.csv(t(fs), "c_NMF_TopGenes.csv")
+  DT::datatable(t(fs))
+  scRNA = RunPCA(scRNA,verbose = F)
+  scRNA@reductions$nmf = scRNA@reductions$pca
+  scRNA@reductions$nmf@cell.embeddings = t(coef(res))
+  scRNA@reductions$nmf@feature.loadings = basis(res)
+  scRNA = RunUMAP(pbmc,reduction='nmf', dims = 1:rank_use)
+
+  ## 基于NMF降维矩阵的聚类
+  scRNA = FindNeighbors(scRNA, reduction='nmf', dims = 1:rank_use) %>% FindClusters()
+
+  ## 基于因子最大载荷分类
+  scRNA$nmf_cluster = apply(NMF::coefficients(res)[1:rank_use,], 2, which.max)
+
+  return(scRNA)
 }
