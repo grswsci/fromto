@@ -58,7 +58,11 @@ sc_10x_seurat = function(path,
     colnames(sce) = paste0(samples,"_",colnames(sce))
     return(sce)
   })
+  if(length(samples) > 1){
   scRNA = merge(scRNAlist[[1]], scRNAlist[2:length(scRNAlist)])
+  }else{
+    scRNA = scRNAlist[[1]]
+  }
   if(if_join == FALSE){
     return(scRNA)
   }else{
