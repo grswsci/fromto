@@ -40,6 +40,7 @@ is_in = function(x,ys){
 }
 #' @title is_ins
 #' @description Is it ins
+#' @param df data.frame
 #' @param xs characters
 #' @param ys characters
 #' @return TRUE or FALSE
@@ -55,15 +56,14 @@ is_in = function(x,ys){
 #'       "replaced nby ID",
 #'       "replaced by ID")
 #' )
-#' is_ins(xs = df$x,ys = df$y)
-is_ins = function(xs,ys){
-  result = mapply(function(x,y) is_in(x,y), xs, ys)
-  return(result)
-}
-is_ins = function(xs,ys){
+#' is_ins(df,xs = df$x,ys = df$y)
+is_ins = function(df,xs,ys){
   result = c()
   for (variable in 1:length(xs)) {
     res = grepl(xs[variable],ys[variable])
     result = c(result,res)
   }
+  result_df = df[result,]
+  return(result_df)
 }
+

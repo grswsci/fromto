@@ -4,9 +4,11 @@
 \alias{is_ins}
 \title{is_ins}
 \usage{
-is_ins(xs, ys)
+is_ins(df, xs, ys)
 }
 \arguments{
+\item{df}{data.frame}
+
 \item{xs}{characters}
 
 \item{ys}{characters}
@@ -29,5 +31,5 @@ x = c("replaced by ID",
       "replaced nby ID",
       "replaced by ID")
 )
-is_ins(xs = df$x,ys = df$y)
+is_ins(df,xs = df$x,ys = df$y)
 }
