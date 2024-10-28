@@ -24,19 +24,25 @@ bplot_scmarkers = function(scRNA,
                              CD4s = c('CD4'),
                              CD8s = c('CD8A','CD8B'),
                              Texs = c('LAG3','TIGIT','PDCD1','HAVCR2'),
-                            Tregs = c('FOXP3'),
+                            Tregs = c('FOXP3','CTLA4'),
                               Tns = c('TCF7','SELL','LEF1','CCR7'),
                             Teffs = c('IL2','GZMA','GNLY','PRF1','GZMB','GZMK','IFNG','NKG7'),
+                             Tsts = c('HSPA1A','HSPA1B','HSPH1'),
                               NKs = c('KLRD1','KLRC3','NCAM1'),
                         Monocytes = c('CD14','FCGR3A'),
                       Macrophages = c('LYZ',"CD68"),
+                              M1s = c('NOS2'),
+                              M2s = c('MCR1','ARG1'),
                    Cardiomyocytes = c('ACTC1','MYH7','TNNT2','TNNI3','TTN','ACTN2','MYH6'),
                       Fibroblasts = c('DCN','COL1A1','COL1A2','THY1'),
                      Endothelials = c('TEK','PECAM1','FLT1','VWF'),
                      Mesothelials = c('MSLN','UPK3B','CALB2','WT1'),
-                             SMCs = c('ACTA2','TAGLN'),
+                             SMCs = c('ACTA2','MYH11'),
                       Epithelials = c('EPCAM','KRT19','CDH1','KRT18'),
                           Prolifs = c('MKI67'),
+                        Mal_PNETs = c('SYP','CHGA'),
+                             Mals = NA,
+                         name_use = "name_use",
                    mycolor = c("#BC3C29FF","#0072B5FF","#E18727FF",
                                "#20854EFF","#7876B1FF","#6F99ADFF",
                                "#FFDC91FF","#EE4C97FF","#E64B35FF",
@@ -192,6 +198,14 @@ bplot_scmarkers = function(scRNA,
     Teff_rep = rep("Teff",length(Teff))
   }
 
+ if(length(intersect(row.names(scRNA),Tsts)) == 0){
+   Tst = ""
+   Tst_rep = ""
+ }else{
+   Tst = c(intersect(row.names(scRNA),Tsts))
+   Tst_rep = rep("Tst",length(Tst))
+ }
+
   if(length(intersect(row.names(scRNA),NKs)) == 0){
     NK = ""
     NK_rep = ""
@@ -214,6 +228,22 @@ bplot_scmarkers = function(scRNA,
   }else{
     Macrophage = c(intersect(row.names(scRNA),Macrophages))
     Macrophage_rep = rep("Macro",length(Macrophage))
+  }
+
+  if(length(intersect(row.names(scRNA),M1s)) == 0){
+    M1 = ""
+    M1_rep = ""
+  }else{
+    M1 = c(intersect(row.names(scRNA),M1s))
+    M1_rep = rep("M1",length(M1))
+  }
+
+  if(length(intersect(row.names(scRNA),M2s)) == 0){
+    M2 = ""
+    M2_rep = ""
+  }else{
+    M2 = c(intersect(row.names(scRNA),M2s))
+    M2_rep = rep("M2",length(M2))
   }
 
   if(length(intersect(row.names(scRNA),Cardiomyocytes)) == 0){
@@ -261,7 +291,7 @@ bplot_scmarkers = function(scRNA,
     Epithelial_rep = ""
   }else{
     Epithelial = c(intersect(row.names(scRNA),Epithelials))
-    Epithelial_rep = rep("Epi",length(Epithelial))
+    Epithelial_rep = rep("Epith",length(Epithelial))
   }
 
  if(length(intersect(row.names(scRNA),Prolifs)) == 0){
@@ -270,6 +300,22 @@ bplot_scmarkers = function(scRNA,
  }else{
    Prolif = c(intersect(row.names(scRNA),Prolifs))
    Prolif_rep = rep("Prolif",length(Prolif))
+ }
+
+ if(length(intersect(row.names(scRNA),Mal_PNETs)) == 0){
+   Mal_PNET = ""
+   Mal_PNET_rep = ""
+ }else{
+   Mal_PNET = c(intersect(row.names(scRNA),Mal_PNETs))
+   Mal_PNET_rep = rep("PNET",length(Mal_PNET))
+ }
+
+ if(length(intersect(row.names(scRNA),Mals)) == 0){
+   Mal = ""
+   Mal_rep = ""
+ }else{
+   Mal = c(intersect(row.names(scRNA),Mals))
+   Mal_rep = rep("Mal",length(Mal))
  }
 
   selected_markers = c(Neutrophil,
@@ -289,16 +335,21 @@ bplot_scmarkers = function(scRNA,
                        Treg,
                        Tn,
                        Teff,
+                       Tst,
                        NK,
                        Monocyte,
                        Macrophage,
+                       M1,
+                       M2,
                        Cardiomyocyte,
                        Fibroblast,
                        Endothelial,
                        Mesothelial,
                        SMC,
                        Epithelial,
-                       Prolif
+                       Prolif,
+                       Mal_PNET,
+                       Mal
   )
 
   selected_labels = c(Neutrophil_rep,
@@ -318,16 +369,21 @@ bplot_scmarkers = function(scRNA,
                    Treg_rep,
                    Tn_rep,
                    Teff_rep,
+                   Tst_rep,
                    NK_rep,
                    Monocyte_rep,
                    Macrophage_rep,
+                   M1_rep,
+                   M2_rep,
                    Cardiomyocyte_rep,
                    Fibroblast_rep,
                    Endothelial_rep,
                    Mesothelial_rep,
                    SMC_rep,
                    Epithelial_rep,
-                   Prolif_rep
+                   Prolif_rep,
+                   Mal_PNET_rep,
+                   Mal_rep
   )
 
   selected_markers = selected_markers[selected_markers != ""]
@@ -386,9 +442,12 @@ bplot_scmarkers = function(scRNA,
     g$grobs[[strips[i]]]$grobs[[1]]$children[[k]]$gp$fill = cols[i]
     }
   plot(g)
-  ggsave(g, file="Markers.pdf",width = width, height = height)
+  ggsave(g, file = paste0(name_use,"_Markers.pdf"),width = width, height = height)
   return(g)
 }
+
+
+
 #' @title bplot_scmarkers_mouse
 #' @description bplot_scmarkers_mouse
 #' @param scRNA Seurat object
@@ -430,6 +489,7 @@ bplot_scmarkers_mouse = function(scRNA,
                            SMCs = c('ACTA2','TAGLN'),
                            Epithelials = c('EPCAM','KRT19','CDH1','KRT18'),
                            Prolifs = c('MKI67'),
+                           name_use = "name_use",
                            mycolor = c("#BC3C29FF","#0072B5FF","#E18727FF",
                                        "#20854EFF","#7876B1FF","#6F99ADFF",
                                        "#FFDC91FF","#EE4C97FF","#E64B35FF",
@@ -799,6 +859,6 @@ bplot_scmarkers_mouse = function(scRNA,
     g$grobs[[strips[i]]]$grobs[[1]]$children[[k]]$gp$fill = cols[i]
   }
   plot(g)
-  ggsave(g, file="Markers.pdf",width = width, height = height)
+  ggsave(g, file = paste0(name_use,"_Markers.pdf"), width = width, height = height)
   return(g)
 }

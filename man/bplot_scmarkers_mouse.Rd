@@ -38,6 +38,7 @@ bplot_scmarkers_mouse(
   SMCs = c("ACTA2", "TAGLN"),
   Epithelials = c("EPCAM", "KRT19", "CDH1", "KRT18"),
   Prolifs = c("MKI67"),
+  name_use = "name_use",
   mycolor = c("#BC3C29FF", "#0072B5FF", "#E18727FF", "#20854EFF", "#7876B1FF",
     "#6F99ADFF", "#FFDC91FF", "#EE4C97FF", "#E64B35FF", "#4DBBD5FF", "#00A087FF",
     "#3C5488FF", "#F39B7FFF", "#8491B4FF", "#91D1C2FF", "#DC0000FF", "#7E6148FF",

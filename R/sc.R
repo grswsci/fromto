@@ -653,7 +653,7 @@ sc_run_nmf = function(scRNA, nfeatures = 2000,rank_use = 12){
   scRNA@reductions$nmf = scRNA@reductions$pca
   scRNA@reductions$nmf@cell.embeddings = t(coef(res))
   scRNA@reductions$nmf@feature.loadings = basis(res)
-  scRNA = RunUMAP(scRNA,reduction = 'nmf', dims = 1:rank_use)
+  scRNA = RunUMAP(scRNA, reduction = 'nmf', dims = 1:rank_use)
 
   ## 基于NMF降维矩阵的聚类
   scRNA = FindNeighbors(scRNA, reduction='nmf', dims = 1:rank_use) %>% FindClusters()
