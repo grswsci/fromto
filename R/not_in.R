@@ -66,4 +66,20 @@ is_ins = function(df,xs,ys){
   result_df = df[result,]
   return(result_df)
 }
-
+#' @title is_same
+#' @description Is it same
+#' @param df data.frame
+#' @param var1 characters
+#' @param var2 characters
+#' @return df
+is_same = function(df,var1,var2){
+  vector = 1:nrow(df)
+  df_output = data.frame()
+  for (variable in vector) {
+    df_subset = df[variable,]
+    if(df_subset[,var1] != df_subset[,var2]){
+      df_output = rbind(df_output,df_subset)
+    }
+  }
+  return(df_output)
+}
