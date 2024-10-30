@@ -286,10 +286,12 @@ sc_cellcycle_adjust = function(scRNA,
                            s.features = mouse.s.genes)
   plot_S.Score = VlnPlot(scRNA,
                          features = c("S.Score"),
+                         pt.size = 0,
                          cols = alpha(mycolor,alphas)
                          ) + NoLegend()
   plot_G2M.Score = VlnPlot(scRNA,
                            features = c("G2M.Score"),
+                           pt.size = 0,
                            cols = alpha(mycolor,alphas)
                            ) + NoLegend()
 
