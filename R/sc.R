@@ -6,7 +6,7 @@
 #' @param str What to divide it by
 #' @return 10x three files
 sc_10x = function(path,
-                  dir_name_idx = 2,
+                  dir_name_idx = 1,
                   sc_10x_name_idx = 4,
                   str = "_"){
   setwd(path)
@@ -19,7 +19,7 @@ sc_10x = function(path,
     dir.create(sample_name, recursive = TRUE, showWarnings = TRUE)
     }
   for (variable in list_files) {
-    dir_include = strsplit_fromto(variable,str,2)
+    dir_include = strsplit_fromto(variable,str, dir_name_idx)
     file.copy(from = variable,
               to = paste0(dir_include,"/",variable))
   }
@@ -459,7 +459,9 @@ sc_run_harmony = function(scRNA,
   plot_Dim = DimPlot(object = scRNA,
                      reduction = "harmony",
                      cols = alpha(mycolor,alphas)) + NoLegend()
-  plot_Elbow = ElbowPlot(scRNA, reduction = "harmony",ndims = ncol(scRNA_use@reductions[["pca"]]@cell.embeddings))
+  plot_Elbow = ElbowPlot(scRNA,
+                         reduction = "harmony",
+                         ndims = ncol(scRNA@reductions[["pca"]]@cell.embeddings))
   plot_RunHarmony = wrap_plots(plots = list(plot_Dim,plot_Elbow), nrow = 1)
   pdf(file = "sc_RunHarmony.pdf", width = width, height = height)
   print(plot_RunHarmony)
