@@ -4,7 +4,7 @@
 \alias{sc_10x}
 \title{sc_10x}
 \usage{
-sc_10x(path, dir_name_idx = 2, sc_10x_name_idx = 4, str = "_")
+sc_10x(path, dir_name_idx = 1, sc_10x_name_idx = 4, str = "_")
 }
 \arguments{
 \item{path}{working directory}
