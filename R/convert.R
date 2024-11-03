@@ -11,14 +11,14 @@
 #' rownames(counts_matrix) = c("PDCD1","CD274","MKI67")
 #' result = convert_to_numeric_by_column(counts_matrix)
 #' print(result)
-convert_to_factor_by_column = function(data_frame, columns = NULL) {
-  if (is.null(column)) {
+convert_to_factor_by_column = function(data_frame, column = NULL) {
+  if(is.null(column)){
     columns = 1:ncol(data_frame)
-    for (col in columns) {
+    for(col in column){
       data_frame[[col]] = factor(data_frame[[col]])
     }
   }else{
-    for (col in columns) {
+    for(col in column){
       data_frame[[col]] = factor(data_frame[[col]])
     }
   }
