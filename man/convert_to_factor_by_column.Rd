@@ -4,7 +4,7 @@
 \alias{convert_to_factor_by_column}
 \title{convert_to_factor_by_column}
 \usage{
-convert_to_factor_by_column(data_frame, columns = NULL)
+convert_to_factor_by_column(data_frame, column = NULL)
 }
 \arguments{
 \item{data_frame}{data frame}

@@ -4,12 +4,14 @@
 \alias{withPath}
 \title{withPath}
 \usage{
-withPath(expr, path, env = environment())
+withPath(expr, path, mkdir = T, env = environment())
 }
 \arguments{
 \item{expr}{raw expression}
 
 \item{path}{new working directory}
+
+\item{mkdir}{whether to make dir when dir doesn't exist}
 
 \item{env}{caller environment}
 }
@@ -20,4 +22,5 @@ First change the working directory to a new path, then change it back.
 dir.create('tmp')
 withPath(write.csv(iris, 'iris.csv'), 'tmp')
 list.files('tmp') # iris.csv
+
 }
