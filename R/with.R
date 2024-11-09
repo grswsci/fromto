@@ -22,9 +22,32 @@
 #' }
 #' fun() # 3
 #' withNull(a+b) # 7
+#'
+#' @export
 withNull = function(expr, env = environment()) {
 
-  eval(expr, envir = env)
+  invisible(eval(expr, envir = env))
+
+}
+
+#' withSleep
+#'
+#' @description
+#' First change the working directory to a new path, then change it back.
+#'
+#' @param expr raw expression
+#' @param maxSec max sleep time(in seconds)
+#' @param env caller environment
+#'
+#' @export
+withSleep = function(expr, maxSec = 10, env = environment()) {
+
+  Sys.sleep(runif(1) * maxSec)
+  cat('Ready! \n')
+  on.exit(cat('Finished! \n'))
+
+  invisible(eval(expr, envir = env))
+
 
 }
 
@@ -35,22 +58,40 @@ withNull = function(expr, env = environment()) {
 #'
 #' @param expr raw expression
 #' @param path new working directory
+#' @param mkdir whether to make dir when dir doesn't exist
 #' @param env caller environment
 #'
 #' @examples
 #' dir.create('tmp')
 #' withPath(write.csv(iris, 'iris.csv'), 'tmp')
 #' list.files('tmp') # iris.csv
-withPath = function(expr, path, env = environment()) {
+#'
+#' @export
+withPath = function(expr, path, mkdir = T, env = environment()) {
 
+  create = F
   path_old = getwd()
-  path_new = path
+  path_new = normalizePath(path, '/', F)
+
+  if (mkdir & !dir.exists(path_new)) {
+    dir.create(path_new, recursive = T)
+    create = T
+  }
+
+  if (!dir.exists(path_new)) {
+    stop('Path ', path_new, ' doesn\'t exist, consider using `mkdir = T`')
+  }
 
   setwd(path_new)
-  eval(expr, envir = env)
-  setwd(path_old)
+  on.exit({
+    setwd(path_old)
+    if (length(list.files(path_new)) == 0 & create) unlink(path_new, recursive = T)
+  })
+
+  invisible(eval(expr, envir = env))
 
 }
+
 
 #' withSessions
 #'
@@ -60,19 +101,19 @@ withPath = function(expr, path, env = environment()) {
 #' @param expr raw expression
 #' @param nWorker n of sessions
 #' @param env caller environment
+#'
+#' @export
 withSessions = function(expr, nWorker = 4, env = environment()) {
 
   if (future::nbrOfWorkers() > 1) plan('sequential')
 
   future::plan('multisession', workers = nWorker)
-  res = eval(expr, envir = env)
-  future::plan('sequential')
-
-  return(res)
+  on.exit(future::plan('sequential'))
+  invisible(eval(expr, envir = env))
 
 }
 
-#' withMessge
+#' withMessage
 #'
 #' @description
 #' Prompt message after the expression is executed.
@@ -80,9 +121,67 @@ withSessions = function(expr, nWorker = 4, env = environment()) {
 #' @param expr raw expression
 #' @param text message
 #' @param env caller environment
-withMessge = function(expr, text, env = environment()) {
+#'
+#' @export
+withMessage = function(expr, ..., sep = ' ', coloredCat = cat, env = environment()) {
 
-  eval(expr, envir = env)
-  cat(text)
+  on.exit(coloredCat(..., sep = sep))
+  invisible(eval(expr, envir = env))
+
+
+}
+
+#' withAssume
+#'
+#' @description
+#' Print message after judging the expression exit status.
+#'
+#' @param expr raw expression
+#' @param env caller environment
+#'
+#' @export
+withAssume = function(expr, env = environment()) {
+
+  message = ''
+  coloredCat = cat_green
+  exit_status = 'Success'
+
+  on.exit({
+    if (exit_status == 'Success') {
+      coloredCat(exit_status, '\n')
+    } else {
+      coloredCat(exit_status + ', message: \n' + message, '\n')
+    }
+  })
+
+  tryCatch(
+    invisible(eval(expr, envir = env)),
+    error = \(e) {
+      message <<- e$message
+      coloredCat <<- cat_red
+      exit_status <<- 'Error'
+      stop()
+    }
+  )
+
+}
+
+#' withBackground
+#'
+#' @description
+#' Execute the expression in the background.
+#'
+#' @param expr raw expression
+#' @param env caller environment
+#'
+#' @export
+withBackground = function(expr) {
+
+  invisible(
+    callr::r_bg(
+      \(code) eval(parse(text = code)), args = list(code = deparse(substitute(expr))),
+      user_profile = T
+    )
+  )
 
 }
