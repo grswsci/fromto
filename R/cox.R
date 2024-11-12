@@ -40,3 +40,27 @@ survival_multicox = function(data){
   multicoxTable = as.data.frame(multicoxTable)
   return(multicoxTable)
 }
+
+survival_logrank = function(data,
+                   minprop = 0.3,
+                   GeneName,
+                   CancerType,
+                   Timeunit = "year"){
+  suppressPackageStartupMessages(library(survival))
+  suppressPackageStartupMessages(library(survminer))
+  suppressPackageStartupMessages(library(dplyr))
+
+  bestcut = surv_cutpoint(data,
+                          time = colnames(data)[1],
+                          event = colnames(data)[2],
+                          variables = GeneName,
+                          minprop = minprop)
+  cutoff = bestcut$cutpoint[1,1]
+
+  data$group = factor(ifelse(data[,GeneName] > cutoff, "High","Low"), levels = c("High","Low"))
+
+  survdiff_formula1 = as.formula(paste0("Surv(",colnames(data)[1],",",colnames(data)[2],")","~","group"))
+  diff = survdiff(survdiff_formula1,data = data, na.action = na.exclude)
+  pValue = 1 - pchisq(diff$chisq, length(diff$n) - 1)
+  return(pValue)
+}
