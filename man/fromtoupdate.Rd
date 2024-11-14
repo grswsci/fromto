@@ -4,10 +4,12 @@
 \alias{fromtoupdate}
 \title{fromtoupdate}
 \usage{
-fromtoupdate(gene_matrix)
+fromtoupdate(gene_matrix, avereps_use = TRUE)
 }
 \arguments{
 \item{gene_matrix}{gene_matrix}
+
+\item{avereps_use}{= TRUE or use FALSE}
 }
 \value{
 data frame

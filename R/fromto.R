@@ -81,6 +81,7 @@ fromto2 <- function(genes,from,to){
 #' @title fromtoupdate
 #' @description Update gene names
 #' @param gene_matrix gene_matrix
+#' @param avereps_use = TRUE or use FALSE
 #' @return data frame
 #' @examples
 #' # examples
@@ -91,7 +92,7 @@ fromto2 <- function(genes,from,to){
 #' Newname_matrix = fromtoupdate(Oldname_matrix)
 #' print(Newname_matrix)
 
-fromtoupdate <- function(gene_matrix) {
+fromtoupdate = function(gene_matrix,avereps_use = TRUE) {
   data_file = system.file("data", "trans2gene_unique.RDS", package = "fromto")
   synonyms_df = readRDS(data_file)
   synonyms_df$Synonyms_GeneID = as.character(synonyms_df$Synonyms_GeneID)
@@ -104,13 +105,13 @@ fromtoupdate <- function(gene_matrix) {
     if(gene_id %in% synonyms_df$Symbol){
       new_rownames[i] = gene_id
     }else{
-    # 尝试在synonyms_df中找到匹配项
-    match_idx = match(gene_id, synonyms_df$Synonyms_GeneID)
-    if (!is.na(match_idx)) {
-      # 如果找到匹配项，则更新行名
-      new_rownames[i] = synonyms_df$Symbol[match_idx]
-      updated_indices = c(updated_indices, i)  # 记录已更新的索引（可选）
-    }
+      # 尝试在synonyms_df中找到匹配项
+      match_idx = match(gene_id, synonyms_df$Synonyms_GeneID)
+      if (!is.na(match_idx)) {
+        # 如果找到匹配项，则更新行名
+        new_rownames[i] = synonyms_df$Symbol[match_idx]
+        updated_indices = c(updated_indices, i)  # 记录已更新的索引（可选）
+      }
     }
     # 注意：这里没有处理未找到匹配项的情况
   }
@@ -118,7 +119,15 @@ fromtoupdate <- function(gene_matrix) {
   gene_matrix = as.matrix(gene_matrix)
   rownames(gene_matrix) = new_rownames
 
-  return(gene_matrix)
+  if(avereps_use){
+    library(limma)
+    gene_matrix = as.matrix(gene_matrix)
+    class(gene_matrix) = "numeric"
+    gene_matrix = limma::avereps(gene_matrix)
+    return(gene_matrix)
+  }else{
+    return(gene_matrix)
+  }
 }
 
 
