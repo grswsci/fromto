@@ -44,4 +44,15 @@ convert_to_numeric_by_column = function(data_frame,column = NULL) {
   }
   return(data_frame)
 }
-
+#' @title convert_to_capitalize_first_letter
+#' @description capital the first letter, lowercase the rest of the letters
+#' @param str character string
+#' @return character string
+#' @examples
+#' # examples
+#' str = c("aaa","bBB","CcC","dDd")
+#' str = convert_to_capitalize_first_letter(str)
+#' print(str)
+convert_to_capitalize_first_letter = function(str) {
+  return(paste0(toupper(substr(str, 1, 1)), tolower(substr(str, 2, nchar(str)))))
+}
