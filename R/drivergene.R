@@ -230,6 +230,7 @@ drivergene2 = function(GeneNames){
   library(htmlwidgets)
   output_all_multigenes = data.frame()
   for (GeneName in GeneNames) {
+    message("we are getting ",GeneName,"...")
     data_file = system.file("data", "trans2gene.RDS", package = "fromto")
     GeneID_data = readRDS(data_file)
     GeneID_data = GeneID_data[which(GeneID_data$Symbol == GeneName),]
