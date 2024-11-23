@@ -40,6 +40,7 @@ cplot1 = function(data,
   p2
   ggsave(paste0(GeneName1,"_",GeneName2,"_",DatasetName,"_Scatter_diagram.pdf"), p2,width = 5.5, height = 5.5)
 }
+
 #' @title cplot2
 #' @description expression correlation analysis
 #' @param GeneName1 GeneName1
@@ -130,5 +131,48 @@ cplot2 = function(data,
        border = F)
   text(my_xleft + 0.5,my_ybottom + 0.5,input_matrix, cex = 1.3)
   invisible(dev.off())
+}
+#' @title cplot3
+#' @description expression correlation analysis
+#' @param GeneName1 GeneName1
+#' @param GeneName2 GeneName2
+#' @param DatasetName DatasetName
+#' @param method pearson or spearman
+#' @return pdf plot
+cplot3 = function(data,
+                  GeneName1,
+                  GeneName2,
+                  DatasetName,
+                  method = 'pearson'){
+  write.csv(data,paste0(GeneName1,"_",GeneName2,"_",DatasetName,"_plotdata_Cor2genes.csv"),row.names=T)
+  suppressPackageStartupMessages(library(ggplot2))
+  suppressPackageStartupMessages(library(ggpointdensity))
+  p1 = ggplot(data, aes(x = data[,GeneName1],
+                        y = data[,GeneName2])
+  ) +
+    xlab(GeneName1) +
+    ylab(GeneName2) +
+    ggrastr::rasterise(ggpointdensity::geom_pointdensity(size = 0.5),dpi = 600)+
+    geom_smooth(method = "lm",
+                formula = y~x,
+                color = "#6b76ae",
+                fill = "#e5a323",
+                size = 0.5,
+                alpha = 0.2)+
+    theme_bw() +
+    theme(aspect.ratio = 1,
+          legend.margin = margin(l=-8),
+          axis.title = element_text(face="italic",size=12)
+    ) +
+    guides(color = guide_colorbar(
+      frame.colour = "black",
+      frame.linewidth = 0.5,
+      ticks.colour = "black",
+      title = "Density")
+    ) +
+    scale_color_viridis_c()+
+    ggpubr::stat_cor(method = method)
+  print(p1)
+  ggsave(paste0(GeneName1,"_",GeneName2,"_",DatasetName,"_Scatter_Density.pdf"), p1,width = 5.5, height = 5.5)
 }
 
