@@ -478,7 +478,7 @@ sc_run_harmony = function(scRNA,
 sc_run_umap_tsne = function(scRNA,
                             reduction_use = "harmony",
                             resolution = 0.8) {
-  scRNA = FindNeighbors(object = scRNA, reduction.use = reduction_use)
+  scRNA = FindNeighbors(object = scRNA, reduction = reduction_use)
   scRNA = FindClusters(object = scRNA, resolution = resolution)
   scRNA = RunUMAP(object = scRNA, dims = 1:ncol(scRNA@reductions[[reduction_use]]),reduction = reduction_use)
   scRNA = RunTSNE(object = scRNA, reduction = reduction_use)
