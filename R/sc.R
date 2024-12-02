@@ -305,10 +305,12 @@ sc_cellcycle_adjust = function(scRNA,
                              s.features = cc.genes$s.genes)
     plot_S.Score = VlnPlot(scRNA,
                            features = c("S.Score"),
+                           pt.size = 0,
                            cols = alpha(mycolor,alphas)
     ) + NoLegend()
     plot_G2M.Score = VlnPlot(scRNA,
                              features = c("G2M.Score"),
+                             pt.size = 0,
                              cols = alpha(mycolor,alphas)
     ) + NoLegend()
     violin_cellcycle = wrap_plots(plots = list(plot_S.Score,plot_G2M.Score), nrow = 1)
@@ -478,7 +480,7 @@ sc_run_harmony = function(scRNA,
 sc_run_umap_tsne = function(scRNA,
                             reduction_use = "harmony",
                             resolution = 0.8) {
-  scRNA = FindNeighbors(object = scRNA, reduction = reduction_use)
+  scRNA = FindNeighbors(object = scRNA, reduction = reduction_use,dims = 1:ncol(scRNA@reductions[[reduction_use]]))
   scRNA = FindClusters(object = scRNA, resolution = resolution)
   scRNA = RunUMAP(object = scRNA, dims = 1:ncol(scRNA@reductions[[reduction_use]]),reduction = reduction_use)
   scRNA = RunTSNE(object = scRNA, reduction = reduction_use)
@@ -525,7 +527,9 @@ sc_run_clustree = function(scRNA,
                            height = 15,
                            width = 10) {
   library(clustree)
-  scRNA = FindNeighbors(scRNA, reduction = reduction_use,dims = 1:ncol(scRNA@reductions[[reduction_use]]))
+  scRNA = FindNeighbors(scRNA,
+                        reduction = reduction_use,
+                        dims = 1:ncol(scRNA@reductions[[reduction_use]]))
   scRNA = FindClusters(object = scRNA,resolution = c(seq(from,to,seqs)))
   plot_clustree = clustree(scRNA@meta.data,prefix = "RNA_snn_res.")
   pdf(file="sc_clustree.pdf",height = height, width = width)
