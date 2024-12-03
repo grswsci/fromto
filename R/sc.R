@@ -497,7 +497,7 @@ sc_run_DoubletFinder = function(scRNA,if_sct = FALSE){
   sweep.stats[order(sweep.stats$BCreal),]
   bcmvn = find.pK(sweep.stats)
   pK_bcmvn = as.numeric(as.vector(bcmvn$pK[which.max(bcmvn$BCmetric)]))
-  DoubletRate = ncol(scRNA)*8*1e-6
+  DoubletRate = 0.075
   homotypic.prop = modelHomotypic(scRNA$seurat_clusters)
   nExp_poi = round(DoubletRate*nrow(scRNA@meta.data))
   nExp_poi.adj = round(nExp_poi*(1-homotypic.prop))
