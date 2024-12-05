@@ -3,7 +3,7 @@ gpl = read_fromto("/fromto/GPL23159-184565.txt",row_names = FALSE)
 gpl = gpl[,c(1,10)]
 gpl$hgnc_id = stringr::str_extract(gpl$SPOT_ID, "(?<=HGNC:)[0-9]+")
 Symbol = fromto(genes = gpl$hgnc_id, from = "HGNC_GeneID", to = "Symbol")
-rownames(Symbol) = Symbol[,1]
+
 add_line = c()
 for (variable in gpl$hgnc_id) {
   if(variable %in% Symbol$HGNC_GeneID){
