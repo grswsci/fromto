@@ -1,3 +1,12 @@
+#' @title geogpl
+#' @description which gpl
+#' @param GEO_ID GEO ID
+geogpl = function (GEO_ID){
+  clinicallines = readLines(paste0(GEO_ID, "_series_matrix.txt"))
+  clinicallines_filtered = clinicallines[substr(clinicallines, 1, 19) == "!Series_platform_id"]
+  platform_id = sub(".*?(GPL\\d+).*", "\\1", clinicallines_filtered)
+  return(platform_id)
+}
 #' @title geoann
 #' @description The probe name was annotated as gene name.
 #' @param GPL_ID GPL ID
