@@ -1,3 +1,30 @@
+#' @title merge_col_add
+#' @description Merge add line from another data frame
+#' @param data1 data frame
+#' @param data2 data frame
+#' @param data1_var data1_var
+#' @param data2_var_same_data1 data2_var_same_data1
+#' @param data2_var_add_data1 data2_var_add_data1
+merge_col_add = function(data1,
+                         data2,
+                         data1_var,
+                         data2_var_same_data1,
+                         data2_var_add_data1
+){
+  data1 = as.data.frame(data1)
+  data2 = as.data.frame(data2)
+  add_col = c()
+  for (variable in data1[,data1_var]) {
+    if(variable %in% data2[,data2_var_same_data1]){
+      data2_subset = data2[which(data2[,data2_var_same_data1] == variable),,drop = FALSE]
+      add_col = c(add_col,data2_subset[,data2_var_add_data1])
+    }else{
+      add_col = c(add_col,NA)
+    }
+  }
+  data1 = cbind(data1,add_col)
+  return(data1)
+}
 #' @title merge_row
 #' @description Merge by rownames
 #' @param data1 data frame
