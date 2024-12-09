@@ -53,7 +53,11 @@ geoann = function (GPL_ID,GEO_ID) {
 
   na_proportion = colSums(is.na(filtered_data)) / ncol(filtered_data)
   valid_rows = which(na_proportion <= 0.8)
-  final_data = filtered_data[valid_rows, , drop = FALSE]
+  if(valid_rows = 0){
+    final_data = filtered_data
+  }else{
+    final_data = filtered_data[valid_rows, , drop = FALSE]
+  }
 
   if(any(is.na(final_data))){
     print("impute NA...")
