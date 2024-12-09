@@ -61,6 +61,8 @@ geoann = function (GPL_ID,GEO_ID) {
     if(any(is.na(final_data))){
       imputed_data = impute.knn(final_data)
       imputed_data_final = imputed_data$data
+    }else{
+      imputed_data_final = final_data
     }
     message("impute NA completed!")
     message("Taking the average for duplicate gene names using avereps from the limma package!")
