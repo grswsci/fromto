@@ -58,8 +58,10 @@ geoann = function (GPL_ID,GEO_ID) {
     valid_rows = which(na_proportion <= 0.8)
     final_data = filtered_data[valid_rows, , drop = FALSE]
     message("impute NA ...")
-    imputed_data = impute.knn(final_data)
-    imputed_data_final = imputed_data$data
+    if(any(is.na(final_data))){
+      imputed_data = impute.knn(final_data)
+      imputed_data_final = imputed_data$data
+    }
     message("impute NA completed!")
     message("Taking the average for duplicate gene names using avereps from the limma package!")
     final_data_return = avereps(imputed_data_final)

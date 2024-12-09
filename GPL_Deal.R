@@ -1,8 +1,8 @@
 library(fromto)
-gpl = read_fromto("/fromto/GPL28426.txt",row_names = FALSE)
+gpl = read_fromto("/fromto/GPL10381.txt",row_names = FALSE)
 #colnames(gpl) = gpl[1,]
 #gpl = gpl[-1,]
-gpl = gpl[,c(1,4)]
+gpl = gpl[,c(1,3)]
 colnames(gpl) = c("ID","Gene Symbol")
 #gpl = GPL6254
 gpl = gpl[which(gpl$`Gene Symbol` != "LOC110806262"),]
@@ -24,5 +24,5 @@ gpl = gpl[which(is.na(as.numeric(gpl$`Gene Symbol`))),]
 gpl = gpl[-c(find_index("_",gpl$`Gene Symbol`)),]
 gpl$`Gene Symbol2` = strsplit_fromto(gpl$`Gene Symbol`,"|",1)
 unique(gpl$`Gene Symbol`)
-saveRDS(gpl,"/fromto/data/GPL28426.RDS")
+saveRDS(gpl,"/fromto/data/GPL10381.RDS")
 
