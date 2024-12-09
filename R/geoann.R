@@ -20,10 +20,10 @@ geogpl = function (GEO_ID){
 #' list.files() %>% grepl(".txt.gz$", ., fixed = FALSE) %>% which() %>% list.files()[.] %>% gunzip(., remove = FALSE, overwrite = TRUE)
 #' data = geoann(GPL_ID = "GPL570",GEO_ID = "GSE103668")
 #' print(data)
-
 geoann = function (GPL_ID,GEO_ID) {
   suppressPackageStartupMessages(library(tidyverse))
   suppressPackageStartupMessages(library(limma))
+  suppressPackageStartupMessages(library(impute))
   data_file = system.file("data", paste0(GPL_ID, ".RDS"), package = "fromto")
   GPL = readRDS(data_file)
   GPL = GPL[GPL$`Gene Symbol` != "", ]
@@ -46,7 +46,23 @@ geoann = function (GPL_ID,GEO_ID) {
   rownames(data) = sapply(strsplit(rownames(data), " /// "), function(x) c(x[1]))
   data = data[,-c(1:3)]
   class(data) = "numeric"
-  data = avereps(data)
 
-  return(data)
+  na_col_proportion = colSums(is.na(data)) / nrow(data)
+  valid_cols = which(na_col_proportion <= 0.8)
+  filtered_data = data[, valid_cols, drop = FALSE]
+
+  na_proportion = colSums(is.na(filtered_data)) / ncol(filtered_data)
+  valid_rows = which(na_proportion <= 0.8)
+  final_data = filtered_data[valid_rows, , drop = FALSE]
+
+  if(any(is.na(final_data))){
+    print("impute NA...")
+    imputed_data = impute.knn(final_data)
+    imputed_data_final = imputed_data$data
+    final_data_return = avereps(imputed_data_final)
+  }else{
+    final_data_return = avereps(final_data)
+  }
+  return(final_data_return)
 }
+
