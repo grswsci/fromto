@@ -3,11 +3,11 @@ GB_ACC = readRDS("/fromto/data/UCSC_GB_ACC_refGene.txt.gz.RDS")
 GB_ACC = GB_ACC[,c(2,13)]
 colnames(GB_ACC) = c("GB_ACC","Gene Symbol")
 GB_ACC = GB_ACC[!duplicated(GB_ACC$GB_ACC),]
-gpl = read_fromto("/fromto/GPL4133-12599.txt",row_names = FALSE)
-gpl = gpl[,c(1,10,8)]
+gpl = read_fromto("/fromto/GPL5188-122.txt",row_names = FALSE)
+gpl = gpl[,c(1,7,5)]
 gpl = gpl[which(gpl[,2] != ""),]
 gpl_new = gpl
-#gpl$GB_ACC_use = strsplit_fromto(gpl[,3],".",1)
+#gpl$GB_ACC_use = strsplit_fromto(gpl[,2],".",1)
 colnames(gpl)
 gpl_new = merge_col_add(data1 = gpl,
                         data2 = GB_ACC,
@@ -28,4 +28,4 @@ colnames(gpl_new) = c("ID","Gene Symbol")
 gpl_new = gpl_new[which(gpl_new$`Gene Symbol` != ""),]
 gpl_new = gpl_new[which(gpl_new$`Gene Symbol` != "-"),]
 gpl_new = gpl_new[which(is.na(as.numeric(gpl_new$`Gene Symbol`))),]
-saveRDS(gpl_new,"/fromto/data/GPL4133.RDS")
+saveRDS(gpl_new,"/fromto/data/GPL5188.RDS")
