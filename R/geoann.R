@@ -41,7 +41,7 @@ geoann = function (GPL_ID,GEO_ID) {
 
   SameProbes = intersect(rownames(GPL),rownames(data))
   data = cbind(GPL[SameProbes,],data[SameProbes,])
-  data = na.omit(data) %>% as.matrix()
+  data = as.matrix(data)
   rownames(data) = data[,2]
   rownames(data) = sapply(strsplit(rownames(data), " /// "), function(x) c(x[1]))
   data = data[,-c(1:3)]
