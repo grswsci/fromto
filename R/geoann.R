@@ -47,25 +47,25 @@ geoann = function (GPL_ID,GEO_ID) {
   data = data[,-c(1:3)]
   class(data) = "numeric"
 
-  na_col_proportion = colSums(is.na(data)) / nrow(data)
-  valid_cols = which(na_col_proportion <= 0.8)
-  filtered_data = data[, valid_cols, drop = FALSE]
-
-  na_proportion = colSums(is.na(filtered_data)) / ncol(filtered_data)
-  valid_rows = which(na_proportion <= 0.8)
-  if(length(valid_rows) == 0){
-    final_data = filtered_data
-  }else{
+  if(any(is.na(data))){
+    message("find NA...")
+    message("filter genes with NA > 80% ...")
+    na_col_proportion = colSums(is.na(data)) / nrow(data)
+    valid_cols = which(na_col_proportion <= 0.8)
+    filtered_data = data[, valid_cols, drop = FALSE]
+    message("filter samples with NA > 80% ...")
+    na_proportion = rowSums(is.na(filtered_data)) / ncol(filtered_data)
+    valid_rows = which(na_proportion <= 0.8)
     final_data = filtered_data[valid_rows, , drop = FALSE]
-  }
-
-  if(any(is.na(final_data))){
-    print("impute NA...")
+    message("impute NA ...")
     imputed_data = impute.knn(final_data)
     imputed_data_final = imputed_data$data
+    message("impute NA completed!")
+    message("Taking the average for duplicate gene names using avereps from the limma package!")
     final_data_return = avereps(imputed_data_final)
   }else{
-    final_data_return = avereps(final_data)
+    message("Taking the average for duplicate gene names using avereps from the limma package!")
+    final_data_return = avereps(data)
   }
   return(final_data_return)
 }
