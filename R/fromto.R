@@ -23,7 +23,7 @@
 #' print(df)
 #'
 fromto <- function(genes,from,to){
-  data_file = system.file("data", "trans2gene.RDS", package = "fromto")
+  data_file = system.file("NCBI", "trans2gene.RDS", package = "fromto")
   Gene_all = readRDS(data_file)
   Gene_all = data.frame(lapply(Gene_all, as.character))
   Gene_intersect = intersect(genes,as.vector(Gene_all[,from]))
@@ -60,7 +60,7 @@ fromto <- function(genes,from,to){
 #' print(df)
 
 fromto2 <- function(genes,from,to){
-  data_file = system.file("data", "trans2gene_unique.RDS", package = "fromto")
+  data_file = system.file("NCBI", "trans2gene_unique.RDS", package = "fromto")
   Gene_all = readRDS(data_file)
   Gene_all = data.frame(lapply(Gene_all, as.character))
   if(from == "Synonyms_GeneID"){
@@ -93,7 +93,7 @@ fromto2 <- function(genes,from,to){
 #' print(Newname_matrix)
 
 fromtoupdate = function(gene_matrix,avereps_use = TRUE) {
-  data_file = system.file("data", "trans2gene_unique.RDS", package = "fromto")
+  data_file = system.file("NCBI", "trans2gene_unique.RDS", package = "fromto")
   synonyms_df = readRDS(data_file)
   synonyms_df$Synonyms_GeneID = as.character(synonyms_df$Synonyms_GeneID)
 

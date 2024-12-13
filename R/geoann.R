@@ -24,7 +24,7 @@ geoann = function (GPL_ID,GEO_ID) {
   suppressPackageStartupMessages(library(tidyverse))
   suppressPackageStartupMessages(library(limma))
   suppressPackageStartupMessages(library(impute))
-  data_file = system.file("data", paste0(GPL_ID, ".RDS"), package = "fromto")
+  data_file = system.file("GPL", paste0(GPL_ID, ".RDS"), package = "fromto")
   GPL = readRDS(data_file)
   GPL = GPL[GPL$`Gene Symbol` != "", ]
   GPL$ID = paste0("GPL", GPL$ID)
