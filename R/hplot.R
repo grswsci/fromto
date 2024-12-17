@@ -56,6 +56,7 @@ hplot1 = function(hplot_input,
                   cellwidth_use = 1,
                   cellheight_use = 0.5,
                   fontsize_use = 10,
+                  round_use = 3,
                   topann_color_use = c("#BC3C29FF","#0072B5FF","#E18727FF",
                               "#20854EFF","#7876B1FF","#6F99ADFF",
                               "#FFDC91FF","#EE4C97FF","#E64B35FF",
@@ -77,7 +78,7 @@ hplot1 = function(hplot_input,
 ){
   hplot_input = fromto::convert_to_factor_by_column(hplot_input)
   right_annotation_use = sort(apply(hplot_input, 1, mean), decreasing = T)
-  right_annotation_use = round(right_annotation_use,3)
+  right_annotation_use = round(right_annotation_use,round_use)
   hplot_input = hplot_input[names(right_annotation_use), ]
   topann_color_use = setNames(topann_color_use[1:length(colnames(hplot_input))], colnames(hplot_input))
 
