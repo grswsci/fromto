@@ -1,5 +1,8 @@
 
-#' with
+# with --------------------------------------------------------------------
+
+
+#' with function cluster
 #'
 #' @description
 #' Similar to function decorators, but more flexible, the advantages are:
@@ -9,6 +12,43 @@
 #'
 #' @param expr raw expression
 #' @param env caller environment
+#' @param ... Temporary variable
+#'
+#' @return what expr returns
+#'
+#' @export
+withIn = function(expr, env = parent.frame(), ...) {
+
+  permission = tolower(getOption('allowWith'))
+  if (length(permission) == 0) permission = 'enable'
+
+  if (permission == 'enable') {
+
+    lst_param = list(...)
+    env_param = list2env(lst_param, parent = env)
+
+    invisible(eval(expr, envir = env_param))
+
+  } else if (permission == 'disable') {
+
+    invisible()
+
+  } else {
+
+    stop('Check `allowWith` option! ')
+
+  }
+
+}
+
+#' withNothing
+#'
+#' @description
+#' Do nothing, only used for testing the withIn function.
+#'
+#' @param expr raw expression
+#' @param env caller environment
+#' @param ... Temporary variable
 #'
 #' @return what expr returns
 #'
@@ -18,15 +58,18 @@
 #' fun = function() {
 #' a = 1
 #' b = 2
-#' withNull(a+b)
+#' withNothing(a+b)
 #' }
-#' fun() # 3
-#' withNull(a+b) # 7
+#' print(fun()) # 3
+#' print(withNothing(a + b)) # 7
+#' print(withNothing(a + b, a = 4, b = 5)) # 9
 #'
 #' @export
-withNull = function(expr, env = environment()) {
+withNothing = function(expr, env = parent.frame(), ...) {
 
-  invisible(eval(expr, envir = env))
+  expr = substitute(expr)
+
+  withIn(expr, env, ...)
 
 }
 
@@ -38,15 +81,18 @@ withNull = function(expr, env = environment()) {
 #' @param expr raw expression
 #' @param maxSec max sleep time(in seconds)
 #' @param env caller environment
+#' @param ... Temporary variable
 #'
 #' @export
-withSleep = function(expr, maxSec = 10, env = environment()) {
+withSleep = function(expr, maxSec = 10, env = parent.frame(), ...) {
+
+  expr = substitute(expr)
 
   Sys.sleep(runif(1) * maxSec)
   cat('Ready! \n')
   on.exit(cat('Finished! \n'))
 
-  invisible(eval(expr, envir = env))
+  withIn(expr, env, ...)
 
 
 }
@@ -60,6 +106,7 @@ withSleep = function(expr, maxSec = 10, env = environment()) {
 #' @param path new working directory
 #' @param mkdir whether to make dir when dir doesn't exist
 #' @param env caller environment
+#' @param ... Temporary variable
 #'
 #' @examples
 #' dir.create('tmp')
@@ -67,7 +114,9 @@ withSleep = function(expr, maxSec = 10, env = environment()) {
 #' list.files('tmp') # iris.csv
 #'
 #' @export
-withPath = function(expr, path, mkdir = T, env = environment()) {
+withPath = function(expr, path, mkdir = T, env = parent.frame(), ...) {
+
+  expr = substitute(expr)
 
   create = F
   path_old = getwd()
@@ -88,7 +137,7 @@ withPath = function(expr, path, mkdir = T, env = environment()) {
     if (length(list.files(path_new)) == 0 & create) unlink(path_new, recursive = T)
   })
 
-  invisible(eval(expr, envir = env))
+  withIn(expr, env, ...)
 
 }
 
@@ -101,15 +150,19 @@ withPath = function(expr, path, mkdir = T, env = environment()) {
 #' @param expr raw expression
 #' @param nWorker n of sessions
 #' @param env caller environment
+#' @param ... Temporary variable
 #'
 #' @export
-withSessions = function(expr, nWorker = 4, env = environment()) {
+withSessions = function(expr, nWorker = 4, env = parent.frame(), ...) {
+
+  expr = substitute(expr)
 
   if (future::nbrOfWorkers() > 1) plan('sequential')
 
   future::plan('multisession', workers = nWorker)
   on.exit(future::plan('sequential'))
-  invisible(eval(expr, envir = env))
+
+  withIn(expr, env, ...)
 
 }
 
@@ -121,13 +174,16 @@ withSessions = function(expr, nWorker = 4, env = environment()) {
 #' @param expr raw expression
 #' @param text message
 #' @param env caller environment
+#' @param ... Temporary variable
 #'
 #' @export
-withMessage = function(expr, ..., sep = ' ', coloredCat = cat, env = environment()) {
+withMessage = function(expr, text, coloredCat = cat, env = parent.frame(), ...) {
 
-  on.exit(coloredCat(..., sep = sep))
-  invisible(eval(expr, envir = env))
+  expr = substitute(expr)
 
+  on.exit(coloredCat(text, sep = '\n'))
+
+  withIn(expr, env, ...)
 
 }
 
@@ -138,31 +194,60 @@ withMessage = function(expr, ..., sep = ' ', coloredCat = cat, env = environment
 #'
 #' @param expr raw expression
 #' @param env caller environment
+#' @param ... Temporary variable
 #'
 #' @export
-withAssume = function(expr, env = environment()) {
+withAssume = function(expr, onPass = 'Success', onError = 'Error', env = parent.frame(), ...) {
+
+  expr = substitute(expr)
 
   message = ''
   coloredCat = cat_green
-  exit_status = 'Success'
+  exit_status = onPass
 
   on.exit({
-    if (exit_status == 'Success') {
+    if (exit_status == onPass) {
       coloredCat(exit_status, '\n')
     } else {
-      coloredCat(exit_status + ', message: \n' + message, '\n')
+      coloredCat(paste0(exit_status, ', message: \n', message), '\n')
     }
   })
 
   tryCatch(
-    invisible(eval(expr, envir = env)),
+    withIn(expr, env, ...),
     error = \(e) {
       message <<- e$message
       coloredCat <<- cat_red
-      exit_status <<- 'Error'
+      exit_status <<- onError
       stop()
     }
   )
+
+}
+
+#' withOption
+#'
+#' @description
+#' First change the options when excuting expression, then change it back.
+#'
+#' @param expr raw expression
+#' @param options a list. options.
+#' @param env caller environment
+#' @param ... Temporary variable
+#'
+#' @export
+withOption = function(expr, options, env = parent.frame(), ...) {
+
+  expr = substitute(expr)
+
+  options_raw = setNames(lapply(names(options), getOption), names(options))
+  do.call(base::options, options)
+  on.exit(do.call(base::options, options_raw))
+
+  lst_param = list(...)
+  env_param = list2env(lst_param, parent = env)
+
+  invisible(eval(expr, envir = env_param))
 
 }
 
