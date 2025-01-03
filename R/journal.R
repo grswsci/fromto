@@ -185,3 +185,93 @@ for (variable in extracted_text) {
 write.table(extracted_text_new,"journal_table_jpg1.txt",quote = F,row.names = F)
 write.table(fa_add_new,"journal_table_jpg2.txt",quote = F,row.names = F)
 }
+#' @title journal_editor
+#' @description journal_editor
+#' @param editor Editor-
+#' @param section Cell Death Research
+#' @param email email
+#' @param institution institution
+#' @param focus focus
+#' @param chief TRUE/FALSE
+#' @return txt html
+journal_editor = function(editor,section,email,institution,focus,chief = TRUE){
+  data = unlist(strsplit(editor,"\n"))
+  for (variable in data) {
+    variable = gsub(" ","-",variable)
+    editorweb = paste0("{% extends 'myjournal/base.html' %}
+{% block main-content %}
+<div class='p-3' style='background-color: #f9f9f9; padding: 20px; border-radius: 8px; font-family: Arial, sans-serif; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);'>
+    <div style='font-size: 1.5rem; font-weight: bold; color: #333; margin-bottom: 15px; border-bottom: 2px solid #ddd; padding-bottom: 5px;'>",ifelse(chief,"Editor-in-Chief","Editor")," of the ",section," Section</div>
+
+    <div style='display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;'>
+        <div>
+            <h5>",strsplit_fromto(data,"-",2),"</h5>
+            <ul style='list-style-type: disc; margin-left: 20px; color: #555;'>
+                <li>M.D./Ph.D.</li>
+                <li> </li>
+                <li><a href='mailto:",email,"' style='color: #0a58ca; text-decoration: none; font-size: 1rem;'>",email,"</a></li>
+                <li>",institution,"</li>
+            </ul>
+        </div>
+        <img src='/static/Editors_id_photo/",editor,".jpg' alt='",strsplit_fromto(data,"-",2),"' style='width: auto; height: 120px; border-radius: 50%;'>
+    </div>
+
+    <div style='margin-bottom: 20px;'>
+        <h5>Research Field</h5>
+        <ul style='list-style-type: disc; margin-left: 20px; color: #555;'>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+
+    <div style='margin-bottom: 20px;'>
+        <h5>Biography</h5>
+        <ul style='list-style-type: disc; margin-left: 20px; color: #555;'>
+            <p>
+
+            </p>
+        </ul>
+    </div>
+
+    <div style='border-top: 2px solid #ddd; padding-top: 20px;'>
+        <h5>Selected Publications</h5>
+        <ol style='list-style-type: decimal; margin-left: 20px; color: #555; line-height: 1.6;'>
+            <li>Wei Wang, et al. Machine Learning-Driven Identification of Critical Gene Programs and Key Transcription Factors in Migraine, <em>Journal of Headache and Pain.</em> 2024.</li>
+        </ol>
+    </div>
+</div>
+{% endblock %}")
+    write.table(editorweb,paste0(variable,".html"))
+  }
+
+  data2 = paste0("def ",gsub("-","_",data),"(request): \n    ","return render(request, 'myjournal/Editors/",gsub(" ","-",data),".html')")
+  #write.table(data2,paste0("views.py.txt"),quote = FALSE,row.names = FALSE)
+
+  data3 = paste0("    path('",gsub(" ","-",data),"/', views.",gsub("-","_",data),",name='",gsub(" ","-",data),"'),")
+  #write.table(data3,paste0("urls.py.txt"),quote = FALSE,row.names = FALSE)
+  ##############主编##############
+  if(chief){
+    data4 = paste0("<hr><!--",section,"--><table class='tableframe'><tr><td><div class='img-shadow'><img src='https://www.lifeconflux.com/static/Editors_id_photo/",data,".jpg' alt='",strsplit_fromto(data,"-",2),"'  width=100></div></td><td></td><td></td><td><strong><a href='https://www.lifeconflux.com/",editor,"/' style='color: #336699; text-decoration: none; font-weight: bold; transition: color 0.3s, border-bottom 0.3s;' target='_blank' rel='noopener noreferrer'>",strsplit_fromto(data,"-",2),"</a></strong><br>Degree: M.D./Ph.D.<br>Institution: ",institution,"<br>Email: ",email,"<br>Focus: ",focus,"<br><strong>Section: <a href='https://www.lifeconflux.com/",gsub(" ","-",section),"/' style='color: #336699; text-decoration: none; font-weight: bold; transition: color 0.3s, border-bottom 0.3s;' target='_blank' rel='noopener noreferrer'>",section,"</a></strong><br><button onclick=",'"',"toggleVisibility('",gsub(" ","-",section),"ers')",'"'," style='display: inline-block; background-color: #4CAF50; color: white; border: none; padding: 4px 8px; /* 减小了填充 */ font-size: 0.75em; /* 减小了字体大小 */ font-family: Arial, sans-serif; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); font-weight: 500; letter-spacing: 0.5px; outline: none; line-height: 1.2;' onmouseover=",'"',"this.style.backgroundColor='#45a049'; this.style.boxShadow='0 3px 6px rgba(0, 0, 0, 0.2)'; this.style.transform='translateY(-1px)';",'"'," onmouseout=",'"',"this.style.backgroundColor='#4CAF50'; this.style.boxShadow='0 2px 4px rgba(0, 0, 0, 0.1)'; this.style.transform='translateY(0px)';",'"'," onfocus=",'"',"this.style.outline='2px solid #45a049'; this.style.outlineOffset='4px';",'"'," onblur=",'"',"this.style.outline='none';",'"'," onmousedown=",'"',"this.style.backgroundColor='#3e8e41'; this.style.boxShadow='0 1px 3px rgba(0, 0, 0, 0.2)'; this.style.transform='translateY(1px)';",'"'," onmouseup=",'"',"this.style.backgroundColor='#45a049'; this.style.boxShadow='0 3px 6px rgba(0, 0, 0, 0.2)'; this.style.transform='translateY(-1px)';",'"',">Members</button><br></td></tr></table>
+                    <div id='",gsub(" ","-",section),"ers' class='collapsible-content'>
+                    </div>")
+
+    #write.table(data4,paste0("Editor.Chief.txt"),quote = FALSE,row.names = FALSE)
+  }else{
+    data4 = paste0("<hr><table class='tableframe' ><tr><td><div class='img-shadow'><img src='https://www.lifeconflux.com/static/Editors_id_photo/",data,".jpg' alt='",strsplit_fromto(data,"-",2),"'  width=100></div></td><td></td><td></td><td><strong><a href='https://www.lifeconflux.com/",editor,"/' style='color: #336699; text-decoration: none; font-weight: bold; transition: color 0.3s, border-bottom 0.3s;' target='_blank' rel='noopener noreferrer'>",strsplit_fromto(data,"-",2),"</a></strong><br>Degree: M.D./Ph.D.<br>Institution: ",institution,"<br>Email: ",email,"<br>Focus: ",focus,"<br><strong>Section: <a href='https://www.lifeconflux.com/",gsub(" ","-",section),"/' style='color: #336699; text-decoration: none; font-weight: bold; transition: color 0.3s, border-bottom 0.3s;' target='_blank' rel='noopener noreferrer'>",section,"</a></strong><br></td></tr></table>")
+  }
+
+  data5 = paste0("<a href='https://www.lifeconflux.com/",data,"/' style='text-decoration: none; color: inherit; flex: 1 1 calc(33.333% - 40px); max-width: calc(33.333% - 40px);'><div style='height: 320px; background-color: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);'><img src='/static/Editors_id_photo/",data,".jpg' alt='",strsplit_fromto(data,"-",2),"' style='width: auto; height: 120px; border-radius: 50%; margin-bottom: 15px; display: block; margin-left: auto; margin-right: auto;'><h6 style='margin: 0 0 10px; text-align: center;'>",strsplit_fromto(data,"-",2),"</h6><p style='margin: 0 0 10px; text-align: center;'>",ifelse(chief,"Editor-in-Chief","Editor"),"</p><p style='margin: 0 0 10px; text-align: center;'>",institution,"</p></div></a>")
+
+  data_all = paste0(data,"\n","\n",
+                    data2,"\n","\n",
+                    data3,"\n","\n",
+                    data4,"\n","\n",
+                    data5)
+  if(chief){
+    write.table(data_all,paste0("Editor.Chief.txt"),quote = FALSE,row.names = FALSE)
+  }else{
+    write.table(data_all,paste0("Editor.txt"),quote = FALSE,row.names = FALSE)
+  }
+}
+
