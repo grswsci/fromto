@@ -107,7 +107,6 @@ driverpubmed <- function(...,
   if (length(result$ids) == 0) stop('No relevant results found, search terms are: \n', term)
   # 更合适的步长
   n = 100
-  while (length(result$ids) < n) n = n/10
 
   steps = makeSteps(length(result$ids), n)
   res = c()
@@ -263,11 +262,8 @@ driverpubmed2 <- function(...,
 
   if (length(result$ids) == 0) stop('No relevant results found, search terms are: \n', term)
   if (length(result$ids) < nMax) nMax = length(result$ids)
-  # 更合适的步长
-  n = 100
-  while (nMax < n) n = n/10
 
-  steps = makeSteps(nMax, n)
+  steps = makeSteps(nMax, 100)
   res = c()
   for (i in seq_along(steps)) {
 
@@ -359,6 +355,7 @@ driverpubmed2 <- function(...,
 
   } else {
 
+    res[['DataBase']] = createLink(paste0("https://grswsci.top/"),"光热生物数据库\n微信：bioinformaticsboy")
     res = na.omit(res)
     y = DT::datatable(res,escape = F,rownames=F)
     DT::saveWidget(y,paste0("output_paper.html"),selfcontained = TRUE)
