@@ -526,8 +526,8 @@ dplot5 = function(data,
   }
 
   if(length(unique(data[,"Type"])) == 2){
-    p_wilcox = wilcox.test(data[which(data$Type == unique(data[,"Type"])[1]),"expression"],
-                           data[which(data$Type == unique(data[,"Type"])[2]),"expression"])$p.value
+    p_wilcox = wilcox.test(data[which(data$Type == levels(data[,"Type"])[1]),"expression"],
+                           data[which(data$Type == levels(data[,"Type"])[2]),"expression"])$p.value
     p_wilcox = ifelse(p_wilcox < 0.001,"p<0.001",round(p_wilcox,3))
 
     data_summary = data %>% group_by(Type) %>%
@@ -537,8 +537,8 @@ dplot5 = function(data,
         n = n()
       )
 
-    p_wilcox_df = data.frame(Group1 = unique(data[,"Type"])[1],
-                             Group2 = unique(data[,"Type"])[2],
+    p_wilcox_df = data.frame(Group1 = levels(data[,"Type"])[1],
+                             Group2 = levels(data[,"Type"])[2],
                              p_value = c(p_wilcox))
     p_wilcox_df$x_mid1 = c(1)
     p_wilcox_df$x_mid2 = c(2)
@@ -573,16 +573,16 @@ dplot5 = function(data,
     dev.off()
 
   }else if(length(unique(data[,"Type"])) == 3){
-    p_wilcox_1v2 = wilcox.test(data[which(data$Type == unique(data[,"Type"])[1]),"expression"],
-                               data[which(data$Type == unique(data[,"Type"])[2]),"expression"])$p.value
+    p_wilcox_1v2 = wilcox.test(data[which(data$Type == levels(data[,"Type"])[1]),"expression"],
+                               data[which(data$Type == levels(data[,"Type"])[2]),"expression"])$p.value
     p_wilcox_1v2 = ifelse(p_wilcox_1v2 < 0.001,"p<0.001",round(p_wilcox_1v2,3))
 
-    p_wilcox_1v3 = wilcox.test(data[which(data$Type == unique(data[,"Type"])[1]),"expression"],
-                               data[which(data$Type == unique(data[,"Type"])[3]),"expression"])$p.value
+    p_wilcox_1v3 = wilcox.test(data[which(data$Type == levels(data[,"Type"])[1]),"expression"],
+                               data[which(data$Type == levels(data[,"Type"])[3]),"expression"])$p.value
     p_wilcox_1v3 = ifelse(p_wilcox_1v3 < 0.001,"p<0.001",round(p_wilcox_1v3,3))
 
-    p_wilcox_2v3 = wilcox.test(data[which(data$Type == unique(data[,"Type"])[2]),"expression"],
-                               data[which(data$Type == unique(data[,"Type"])[3]),"expression"])$p.value
+    p_wilcox_2v3 = wilcox.test(data[which(data$Type == levels(data[,"Type"])[2]),"expression"],
+                               data[which(data$Type == levels(data[,"Type"])[3]),"expression"])$p.value
     p_wilcox_2v3 = ifelse(p_wilcox_2v3 < 0.001,"p<0.001",round(p_wilcox_2v3,3))
 
     data_summary = data %>%
@@ -591,8 +591,8 @@ dplot5 = function(data,
                 se_expression = sd(expression, na.rm = TRUE) / sqrt(n()),
                 n = n())
 
-    p_wilcox_df = data.frame(Group1 = c(unique(data[,"Type"])[1],unique(data[,"Type"])[1],unique(data[,"Type"])[2]),
-                             Group2 = c(unique(data[,"Type"])[2],unique(data[,"Type"])[3],unique(data[,"Type"])[3]),
+    p_wilcox_df = data.frame(Group1 = c(levels(data[,"Type"])[1],levels(data[,"Type"])[1],levels(data[,"Type"])[2]),
+                             Group2 = c(levels(data[,"Type"])[2],levels(data[,"Type"])[3],levels(data[,"Type"])[3]),
                              p_value = c(p_wilcox_1v2,p_wilcox_1v3,p_wilcox_2v3))
     p_wilcox_df$x_mid1 = c(1,1,2)
     p_wilcox_df$x_mid2 = c(2,3,3)
