@@ -554,7 +554,7 @@ dplot5 = function(data,
                         ymax = mean_expression + se_expression),
                     width = 0.2,
                     position = position_dodge(width = 0.9)) +
-      ylim(0,max(data_summary$mean_expression) * 1.1) +
+      ylim(0,max(data_summary$mean_expression + data_summary$se_expression) * 1.35) +
       xlab(DatasetName) +
       ylab(paste0(variable," Mean Expression")) +
       labs(fill = "Group") +
@@ -607,7 +607,7 @@ dplot5 = function(data,
                         ymax = mean_expression + se_expression),
                     width = 0.2,
                     position = position_dodge(width = 0.9)) +
-      ylim(0, max(data_summary$mean_expression) * 1.35) +
+      ylim(0, max(data_summary$mean_expression + data_summary$se_expression) * 1.35) +
       xlab(DatasetName) +
       ylab(paste0(variable," Mean Expression")) +
       labs(fill = "Group") +
@@ -642,7 +642,7 @@ dplot5 = function(data,
                         ymax = mean_expression + se_expression),
                     width = 0.2,
                     position = position_dodge(width = 0.9)) +
-      ylim(0, max(data_summary$mean_expression) * 1.1) +
+      ylim(0, max(data_summary$mean_expression + data_summary$se_expression) * 1.35) +
       xlab(DatasetName) +
       ylab(paste0(variable," Mean Expression")) +
       labs(fill = "Group") +
