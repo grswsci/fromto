@@ -454,7 +454,10 @@ dplot4 <- function(data,
           ylab = variable,
           xlab = "",
           col = "transparent",
-          boxwex = 0,
+          border = "transparent",
+          medcol = "black",     # 中位数线颜色
+          medlwd = 1.5,         # 中位数线宽度
+          #boxwex = 0.8,
           staplewex = 0.5,
           main = paste0(ifelse(test.methods == "wilcox.test","Wilcoxon Rank Sum Test ",
                                ifelse(test.methods == "kruskal.test","Kruskal-Wallis Rank Sum Test ","t test ")),
