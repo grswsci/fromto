@@ -199,8 +199,8 @@ dplot2 <- function(data,
     coord_flip() +
     labs(title = title,
          subtitle = paste0(ifelse(test.methods == "wilcox.test","Wilcoxon Rank Sum Test ",
-                                  "Kruskal-Wallis Rank Sum Test "),
-                           "P Value ",ifelse(p<0.001, "< 0.001",
+                                     ifelse(test.methods == "kruskal.test","Kruskal-Wallis Rank Sum Test ","t test ")),
+                                           "P Value ",ifelse(p<0.001, "< 0.001",
                                              paste0("= ",round(p,3))
                                              )
                            )
@@ -453,8 +453,10 @@ dplot4 <- function(data,
           data = data,
           ylab = variable,
           xlab = "",
+          col = "white",
           main = paste0(ifelse(test.methods == "wilcox.test","Wilcoxon Rank Sum Test ",
-                               "Kruskal-Wallis Rank Sum Test "), "(p = ",pval,")"),
+                               ifelse(test.methods == "kruskal.test","Kruskal-Wallis Rank Sum Test ","t test")),
+                        "(p = ",pval,")"),
           cex.main = 1,
           cex.lab = 1,
           cex.axis = 1,
