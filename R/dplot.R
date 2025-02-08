@@ -64,6 +64,8 @@ dplot1 <- function(data,
     p = wilcox.test(expression ~ Type, data = data)$p.value
   }else if(test.methods == "kruskal.test"){
     p = kruskal.test(expression ~ Type, data = data)$p.value
+  }else if(test.methods == "t.test"){
+    p = t.test(expression ~ Type, data = data)$p.value
   }
 
   if(is.null(levels)){
@@ -170,6 +172,8 @@ dplot2 <- function(data,
     p = wilcox.test(expression ~ Type, data = data)$p.value
   }else if(test.methods == "kruskal.test"){
     p = kruskal.test(expression ~ Type, data = data)$p.value
+  }else if(test.methods == "t.test"){
+    p = t.test(expression ~ Type, data = data)$p.value
   }
 
   if(is.null(levels)){
@@ -282,6 +286,8 @@ dplot3 <- function(data,
     p.val = wilcox.test(expression ~ Type, data = data)
   }else if(test.methods == "kruskal.test"){
     p.val = kruskal.test(expression ~ Type, data = data)
+  }else if(test.methods == "t.test"){
+    p = t.test(expression ~ Type, data = data)$p.value
   }
   p.lab = paste0("P",ifelse(p.val$p.value < 0.001,
                             " < 0.001",paste0(" = ",round(p.val$p.value, 3))
@@ -420,6 +426,8 @@ dplot4 <- function(data,
     p = wilcox.test(expression ~ Type, data = data)$p.value
   }else if(test.methods == "kruskal.test"){
     p = kruskal.test(expression ~ Type, data = data)$p.value
+  }else if(test.methods == "t.test"){
+    p = t.test(expression ~ Type, data = data)$p.value
   }
 
   if(p < 0.001){
