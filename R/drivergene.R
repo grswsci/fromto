@@ -231,12 +231,13 @@ drivergene2 = function(GeneNames){
   output_all_multigenes = data.frame()
   for (GeneName in GeneNames) {
     message("we are getting ",GeneName,"...")
-    data_file = system.file("data", "trans2gene.RDS", package = "fromto")
+    data_file = system.file("NCBI", "trans2gene.RDS", package = "fromto")
     GeneID_data = readRDS(data_file)
     GeneID_data = GeneID_data[which(GeneID_data$Symbol == GeneName),]
     GeneID_NCBI = GeneID_data$NCBI_GeneID[1]
     url = paste0("https://www.ncbi.nlm.nih.gov/gene?db=gene&report=generif&term=",GeneID_NCBI)
-    webpage = read_html(url)
+    #webpage = read_html(url)
+    webpage = read_html(httr::GET(url, httr::user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3")))
     href_element = webpage %>% html_nodes(xpath = "//a[@data-page]") %>% html_attr("href")
     if(length(href_element) == 0){
       tbody_td_element_text = webpage %>%
