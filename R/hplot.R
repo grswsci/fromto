@@ -48,7 +48,18 @@ hplot = function(hplot_input,
           }
   )
 }
-
+#' @title hplot1
+#' @description heatmap plot
+#' @param hplot_input data frame, x is variables, y is groups
+#' @param bar_color_usedata default is steelblue
+#' @param legend_heatmap_use legend_heatmap_use
+#' @param legend_topann_use legend_topann_use
+#' @param cellwidth_use cellwidth_use
+#' @param cellheight_use cellheight_use
+#' @param round_use round_use
+#' @param topann_color_use topann_color_use
+#' @param heatmap_name_use heatmap_name_use
+#' @return pdf
 hplot1 = function(hplot_input,
                   bar_color_use = "steelblue",
                   legend_heatmap_use ,
@@ -77,7 +88,7 @@ hplot1 = function(hplot_input,
                   heatmap_name_use = "heatmap_name_use"
 ){
   hplot_input = fromto::convert_to_factor_by_column(hplot_input)
-  right_annotation_use = sort(apply(hplot_input, 1, mean), decreasing = T)
+  right_annotation_use = sort(apply(hplot_input, 1, function(x) mean(x, na.rm = TRUE)), decreasing = TRUE)
   right_annotation_use = round(right_annotation_use,round_use)
   hplot_input = hplot_input[names(right_annotation_use), ]
   topann_color_use = setNames(topann_color_use[1:length(colnames(hplot_input))], colnames(hplot_input))

@@ -4,10 +4,26 @@
 \alias{journal_editor}
 \title{journal_editor}
 \usage{
-journal_editor(editor, section, email, institution, focus, chief = TRUE)
+journal_editor(
+  editor,
+  Research_Field1,
+  Research_Field2,
+  Research_Field3,
+  section,
+  email,
+  institution,
+  Biography,
+  chief = TRUE
+)
 }
 \arguments{
 \item{editor}{Editor-}
+
+\item{Research_Field1}{Research_Field1}
+
+\item{Research_Field2}{Research_Field2}
+
+\item{Research_Field3}{Research_Field3}
 
 \item{section}{Cell Death Research}
 
@@ -15,7 +31,7 @@ journal_editor(editor, section, email, institution, focus, chief = TRUE)
 
 \item{institution}{institution}
 
-\item{focus}{focus}
+\item{Biography}{Biography}
 
 \item{chief}{TRUE/FALSE}
 }

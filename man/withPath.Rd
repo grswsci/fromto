@@ -4,7 +4,7 @@
 \alias{withPath}
 \title{withPath}
 \usage{
-withPath(expr, path, mkdir = T, env = environment())
+withPath(expr, path, mkdir = T, env = parent.frame(), ...)
 }
 \arguments{
 \item{expr}{raw expression}
@@ -14,6 +14,8 @@ withPath(expr, path, mkdir = T, env = environment())
 \item{mkdir}{whether to make dir when dir doesn't exist}
 
 \item{env}{caller environment}
+
+\item{...}{Temporary variable}
 }
 \description{
 First change the working directory to a new path, then change it back.

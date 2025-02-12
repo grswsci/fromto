@@ -4,14 +4,16 @@
 \alias{withMessage}
 \title{withMessage}
 \usage{
-withMessage(expr, ..., sep = " ", coloredCat = cat, env = environment())
+withMessage(expr, text, coloredCat = cat, env = parent.frame(), ...)
 }
 \arguments{
 \item{expr}{raw expression}
 
+\item{text}{message}
+
 \item{env}{caller environment}
 
-\item{text}{message}
+\item{...}{Temporary variable}
 }
 \description{
 Prompt message after the expression is executed.

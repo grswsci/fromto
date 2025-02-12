@@ -51,9 +51,10 @@ extracted_text2 = paste(extracted_text2, collapse = " ")
 extracted_text2 = unlist(str_split(extracted_text2, "\n"))
 
 extracted_text2 = ifelse(nchar(extracted_text2) <= 40,
-                         paste0("</div><h1 id='",gsub(" ","",extracted_text2),"'>",extracted_text2,"</h1><div class='Introduction ab-p'>"),
-                         ifelse(nchar(extracted_text2) > 40 & nchar(extracted_text2)<= 100,
-                                paste0("<h4>",extracted_text2,"</h4>"),paste0("<p class='ab-p'>",extracted_text2,"</p>")))
+                         paste0("<h1 id='",gsub(" ","",extracted_text2),"'>",extracted_text2,"</h1>"),
+                            ifelse(nchar(extracted_text2) > 40 & nchar(extracted_text2) <= 100,
+                                paste0("<h4>",extracted_text2,"</h4>"),
+                                   paste0("<p class='ab-p'>",extracted_text2,"</p>")))
 
 write.table(extracted_text2,"正文.txt",quote = F,row.names = F)
 write.table(extracted_text2,"正文.html",quote = F,row.names = F)

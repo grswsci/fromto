@@ -4,7 +4,7 @@
 \alias{withSleep}
 \title{withSleep}
 \usage{
-withSleep(expr, maxSec = 10, env = environment())
+withSleep(expr, maxSec = 10, env = parent.frame(), ...)
 }
 \arguments{
 \item{expr}{raw expression}
@@ -12,6 +12,8 @@ withSleep(expr, maxSec = 10, env = environment())
 \item{maxSec}{max sleep time(in seconds)}
 
 \item{env}{caller environment}
+
+\item{...}{Temporary variable}
 }
 \description{
 First change the working directory to a new path, then change it back.

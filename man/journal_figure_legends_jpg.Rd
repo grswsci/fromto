@@ -4,7 +4,7 @@
 \alias{journal_figure_legends_jpg}
 \title{journal_figure_legends_jpg}
 \usage{
-journal_figure_legends_jpg(divname, docx = "journal_figure_legends_jpg.docx")
+journal_figure_legends_jpg(docx = "journal_figure_legends_jpg.docx")
 }
 \arguments{
 \item{docx}{journal_figure_legends_jpg.docx}
