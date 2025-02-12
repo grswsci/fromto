@@ -24,9 +24,9 @@ hplot = function(hplot_input,
                                             numbers_gp = gpar(fontsize = fontsize_use, col = "white"),
                                             width = unit(3, "cm")),
                          show_annotation_name = F)
-
   Heatmap(as.matrix(hplot_input),
           name = legend_heatmap_use,
+          na_col = ggplot2::alpha("grey",0.05),  # 设置 NA 值为透明
           right_annotation = row_ha,
           top_annotation = col_ha,
           col = c("#1CB8B2", "#FFFFFF", "#EEB849"), # 黄绿配色
