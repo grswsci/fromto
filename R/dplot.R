@@ -860,4 +860,80 @@ dplot6 = function(data,
     dev.off()
   }
 }
+#' @title dplot7
+#' @description Differentially expression analysis
+#' @param data data frame
+#' @param Type data group
+#' @param variable Variables or gene names analyzed
+#' @param levels The order of arrangement in grouping visualization
+#' @param test.methods The method of difference analysis "wilcox.test" or "kruskal.test"
+#' @param DatasetName The Dataset Name of the data
+#' @param width Width of pdf plot
+#' @param height height of pdf plot
+#' @param alphas Transparency of color matching
+#' @param mycolor my color
+#' @return pdf plot
+dplot7 = function(data,
+                   Type = "Type",
+                   variable,
+                   levels = NULL,
+                   test.methods = "wilcox.test",
+                   DatasetName = "DatasetName",
+                   width = 4.5,
+                   height = 4,
+                   alphas = 0.5,
+                   mycolor = c("#BC3C29FF","#0072B5FF","#E18727FF",
+                               "#20854EFF","#7876B1FF","#6F99ADFF",
+                               "#FFDC91FF","#EE4C97FF","#E64B35FF",
+                               "#4DBBD5FF","#00A087FF","#3C5488FF",
+                               "#F39B7FFF","#8491B4FF","#91D1C2FF",
+                               "#DC0000FF","#7E6148FF","#B09C85FF",
+                               "#3B4992FF","#EE0000FF","#008B45FF",
+                               "#631879FF","#008280FF","#BB0021FF",
+                               "#5F559BFF","#A20056FF","#808180FF",
+                               "#00468BFF","#ED0000FF","#42B540FF",
+                               "#0099B4FF","#925E9FFF","#FDAF91FF",
+                               "#AD002AFF","#ADB6B6FF","#374E55FF",
+                               "#DF8F44FF","#00A1D5FF","#B24745FF",
+                               "#79AF97FF","#6A6599FF","#80796BFF",
+                               "#1f77b4",  "#ff7f0e",  "#279e68",
+                               "#d62728",  "#aa40fc",  "#8c564b",
+                               "#e377c2",  "#b5bd61",  "#17becf","#aec7e8")
+){
+  suppressPackageStartupMessages(library(ggplot2,quietly = TRUE))
+  suppressPackageStartupMessages(library(ggpubr,quietly = TRUE))
+  options(warn = -1)
+  data[,variable] = unlist(as.numeric(data[,variable]))
+  data[,"expression"] = data[,variable]
+  colnames(data)[colnames(data) == Type] = "Type"
 
+  if(test.methods == "wilcox.test"){
+    p = wilcox.test(expression ~ Type, data = data)$p.value
+  }else if(test.methods == "kruskal.test"){
+    p = kruskal.test(expression ~ Type, data = data)$p.value
+  }else if(test.methods == "t.test"){
+    p = t.test(expression ~ Type, data = data)$p.value
+  }
+
+  if(is.null(levels)){
+    data[,"Type"] = factor(data[,"Type"], levels = unique(data[,"Type"]))
+  }else{
+    data[,"Type"] = factor(data[,"Type"], levels = levels)
+  }
+  type = levels(factor(data$Type))
+  comp = combn(type, 2)
+  my_comparisons = list()
+  for(i in 1:ncol(comp)){my_comparisons[[i]] = comp[,i]}
+  boxplot = ggboxplot(data,
+                      x = "Type",
+                      y = "expression",
+                      fill = "Type",
+                      xlab = DatasetName,
+                      ylab = variable,
+                      legend.title = "Type",
+                      palette = alpha(mycolor,alphas)) +
+    stat_compare_means(comparisons = my_comparisons,method = test.methods)
+  pdf(file = paste0(DatasetName,"_",variable, "_ggboxplot.pdf"), width = width, height = height)
+  print(boxplot)
+  dev.off()
+}
