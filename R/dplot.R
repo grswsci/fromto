@@ -287,7 +287,7 @@ dplot3 <- function(data,
   }else if(test.methods == "kruskal.test"){
     p.val = kruskal.test(expression ~ Type, data = data)
   }else if(test.methods == "t.test"){
-    p = t.test(expression ~ Type, data = data)$p.value
+    p.val = t.test(expression ~ Type, data = data)$p.value
   }
   p.lab = paste0("P",ifelse(p.val$p.value < 0.001,
                             " < 0.001",paste0(" = ",round(p.val$p.value, 3))
@@ -933,7 +933,7 @@ dplot7 = function(data,
                       legend.title = "Type",
                       palette = alpha(mycolor,alphas)) +
     stat_compare_means(comparisons = my_comparisons,method = test.methods)
-  pdf(file = paste0(DatasetName,"_",variable, "_ggboxplot.pdf"), width = width, height = height)
+  pdf(file = paste0(DatasetName,"_",variable, "_",Type,"_ggboxplot.pdf"), width = width, height = height)
   print(boxplot)
   dev.off()
 }
