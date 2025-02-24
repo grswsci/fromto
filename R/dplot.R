@@ -287,7 +287,7 @@ dplot3 <- function(data,
   }else if(test.methods == "kruskal.test"){
     p.val = kruskal.test(expression ~ Type, data = data)
   }else if(test.methods == "t.test"){
-    p.val = t.test(expression ~ Type, data = data)$p.value
+    p.val = t.test(expression ~ Type, data = data)
   }
   p.lab = paste0("P",ifelse(p.val$p.value < 0.001,
                             " < 0.001",paste0(" = ",round(p.val$p.value, 3))
