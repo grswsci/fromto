@@ -12,8 +12,8 @@ extracted_text = ifelse(nchar(extracted_text) <= 40,
                         paste0("<p class='ab-p'><b>",extracted_text,"</b></p><p style='clear:both;'></p>")
                         )
 
-write.table(extracted_text,"abstract.txt",quote = F,row.names = F)
-write.table(extracted_text,"abstract.html",quote = F,row.names = F)
+write.table(extracted_text,"abstract.txt",quote = F,row.names = F,col.names = F)
+write.table(extracted_text,"abstract.html",quote = F,row.names = F,col.names = F)
 }
 #' @title journal_text
 #' @description journal text
@@ -56,8 +56,8 @@ extracted_text2 = ifelse(nchar(extracted_text2) <= 40,
                                 paste0("<h4>",extracted_text2,"</h4>"),
                                    paste0("<p class='ab-p'>",extracted_text2,"</p>")))
 
-write.table(extracted_text2,"正文.txt",quote = F,row.names = F)
-write.table(extracted_text2,"正文.html",quote = F,row.names = F)
+write.table(extracted_text2,"正文.txt",quote = F,row.names = F,col.names = F)
+write.table(extracted_text2,"正文.html",quote = F,row.names = F,col.names = F)
 }
 #' @title journal_reference_numbers_no
 #' @description journal reference
@@ -76,8 +76,8 @@ for (variable in extracted_text) {
                                   variable,"</p>")
   extracted_text_new = c(extracted_text_new, extracted_text_new_add)
 }
-write.table(extracted_text_new,"参考文献.txt",quote = F,row.names = F)
-write.table(extracted_text_new,"参考文献.html",quote = F,row.names = F)
+write.table(extracted_text_new,"参考文献.txt",quote = F,row.names = F,col.names = F)
+write.table(extracted_text_new,"参考文献.html",quote = F,row.names = F,col.names = F)
 }
 #' @title journal_reference_numbers_yes
 #' @description journal reference
@@ -96,62 +96,93 @@ for (variable in extracted_text) {
                                   variable,"</p>")
   extracted_text_new = c(extracted_text_new, extracted_text_new_add)
 }
-write.table(extracted_text_new,"参考文献.txt",quote = F,row.names = F)
-write.table(extracted_text_new,"参考文献.html",quote = F,row.names = F)
+write.table(extracted_text_new,"参考文献.txt",quote = F,row.names = F,col.names = F)
+write.table(extracted_text_new,"参考文献.html",quote = F,row.names = F,col.names = F)
 }
 #' @title journal_figure_legends_jpg
 #' @description journal figure legends jpg
 #' @param docx journal_figure_legends_jpg.docx
+#' @param year = 2025
+#' @param volume = 1
+#' @param issue = 1
+#' @param numeber = 1
 #' @return txt html
-journal_figure_legends_jpg = function(docx = "journal_figure_legends_jpg.docx"){
+journal_figure_legends_jpg = function(year = 2025,
+                                      volume = 1,
+                                      issue = 1,
+                                      numeber = 1,
+                                      docx = "journal_figure_legends_jpg.docx"){
 library(readtext)
 library(stringr)
 doc_data = readtext(docx)
 extracted_text = unlist(str_split(doc_data$text, "\n"))
 extracted_text_new = c()
+extracted_text_new2 = c()
 i = 0
 fa_add_new = c()
 for (variable in extracted_text) {
   i = i+1
   fa_add = paste0("<a href='#F",i,"'>Figure ",i,"</a>")
   fa_add_new = c(fa_add_new, fa_add)
-  extracted_text_new_add = paste0("<div class='figure' id='F",i,"'><span class='figure-title'>&nbsp;Figure ",i,
-                                  "</span>&nbsp;<p class='ab-p'>",
+  extracted_text_new_add = paste0("<div class='figure' id='F",i,"'><p class='ab-p'>",
                                   variable,"</p>",
-                                  "<img  class='dispnewfig' src='/static/Papers/2025_Volume1_Issue1/1/",
-                                  "Figure",i,".jpg' alt='' onclick = openPopupFig('/static/Papers/2025_Volume1_Issue1/1/",
+                                  "<img  class='dispnewfig' src='/static/Papers/",year,"_Volume",volume,"_Issue",issue,"/",numeber,"/",
+                                  "Figure",i,".jpg' alt='' onclick = openPopupFig('/static/Papers/",year,"_Volume",volume,"_Issue",issue,"/",numeber,"/",
+                                  "Figure",i,".jpg'); style='width: 200px; margin-top: 10px;'> </div>")
+  extracted_text_new_add2 = paste0("<div class='figure' id='F",i,"'><p class='ab-p'>",
+                                  variable,"</p>",
+                                  "<img  class='dispnewfig' src='/static/Papers/",year,"_Volume",volume,"_Issue",issue,"/",numeber,"/",
+                                  "Figure",i,".jpg' alt='' onclick = openPopupFig('/static/Papers/",year,"_Volume",volume,"_Issue",issue,"/",numeber,"/",
                                   "Figure",i,".jpg'); style='width: 200px; margin-top: 10px;'> </div>")
   extracted_text_new = c(extracted_text_new, extracted_text_new_add)
+  extracted_text_new2 = c(extracted_text_new2, extracted_text_new_add2)
 }
-write.table(extracted_text_new,"Figure_Legends_jpg1.txt",quote = F,row.names = F)
-write.table(fa_add_new,"Figure_Legends_jpg2.txt",quote = F,row.names = F)
+write.table(extracted_text_new,"Figure_Legends_jpg1.txt",quote = F,row.names = F,col.names = F)
+write.table(extracted_text_new2,"Figure_Legends_jpg3.txt",quote = F,row.names = F,col.names = F)
+write.table(fa_add_new,"Figure_Legends_jpg2.txt",quote = F,row.names = F,col.names = F)
+
 }
 #' @title journal_figure_legends_png
 #' @description journal figure legends png
+#' @param year = 2025
+#' @param volume = 1
+#' @param issue = 1
+#' @param numeber = 1
 #' @param docx journal_figure_legends_png.docx
 #' @return txt html
-journal_figure_legends_png = function(divname, docx = "journal_figure_legends_png.docx"){
+journal_figure_legends_png = function(year = 2025,
+                                      volume = 1,
+                                      issue = 1,
+                                      numeber = 1,
+                                      docx = "journal_figure_legends_png.docx"){
   library(readtext)
   library(stringr)
   doc_data = readtext(docx)
   extracted_text = unlist(str_split(doc_data$text, "\n"))
   extracted_text_new = c()
+  extracted_text_new2 = c()
   i = 0
   fa_add_new = c()
   for (variable in extracted_text) {
     i = i+1
     fa_add = paste0("<a href='#F",i,"'>Figure ",i,"</a>")
     fa_add_new = c(fa_add_new, fa_add)
-    extracted_text_new_add = paste0("<div class='figure' id='F",i,"'><span class='figure-title'>&nbsp;Figure ",i,
-                                    "</span>&nbsp;<p class='ab-p'>",
+    extracted_text_new_add = paste0("<div class='figure' id='F",i,"'><p class='ab-p'>",
                                     variable,"</p>",
-                                    "<img  class='dispnewfig' src='/static/Papers/2025_Volume1_Issue1/1/",
-                                    "Figure",i,".jpg' alt='' onclick = openPopupFig('/static/Papers/2025_Volume1_Issue1/1/",
-                                    "Figure",i,".jpg'); style='width: 200px; margin-top: 10px;'> </div>")
+                                    "<img  class='dispnewfig' src='/static/Papers/",year,"_Volume",volume,"_Issue",issue,"/",numeber,"/",
+                                    "Figure",i,".png' alt='' onclick = openPopupFig('/static/Papers/",year,"_Volume",volume,"_Issue",issue,"/",numeber,"/",
+                                    "Figure",i,".png'); style='width: 200px; margin-top: 10px;'> </div>")
     extracted_text_new = c(extracted_text_new, extracted_text_new_add)
+    extracted_text_new_add2 = paste0("<div id='F",i,"'><p class='ab-p'>",
+                                    variable,"</p>",
+                                    "<img  class='dispnewfig' src='/static/Papers/",year,"_Volume",volume,"_Issue",issue,"/",numeber,"/",
+                                    "Figure",i,".png' alt='' onclick = openPopupFig('/static/Papers/",year,"_Volume",volume,"_Issue",issue,"/",numeber,"/",
+                                    "Figure",i,".png'); style='width: 200px; margin-top: 10px;'> </div>")
+    extracted_text_new2 = c(extracted_text_new2, extracted_text_new_add2)
   }
-  write.table(extracted_text_new,"Figure_Legends_png1.txt",quote = F,row.names = F)
-  write.table(fa_add_new,"Figure_Legends_png2.txt",quote = F,row.names = F)
+  write.table(extracted_text_new,"Figure_Legends_png1.txt",quote = F,row.names = F,col.names = F)
+  write.table(extracted_text_new2,"Figure_Legends_png3.txt",quote = F,row.names = F,col.names = F)
+  write.table(fa_add_new,"Figure_Legends_png2.txt",quote = F,row.names = F,col.names = F)
 }
 #' @title journal_table_jpg
 #' @description journal_table_jpg
@@ -179,8 +210,8 @@ for (variable in extracted_text) {
                                   i,".jpg'); alt=''> </div>")
   extracted_text_new = c(extracted_text_new, extracted_text_new_add)
 }
-write.table(extracted_text_new,"journal_table_jpg1.txt",quote = F,row.names = F)
-write.table(fa_add_new,"journal_table_jpg2.txt",quote = F,row.names = F)
+write.table(extracted_text_new,"journal_table_jpg1.txt",quote = F,row.names = F,col.names = F)
+write.table(fa_add_new,"journal_table_jpg2.txt",quote = F,row.names = F,col.names = F)
 }
 #' @title journal_editor
 #' @description journal_editor
@@ -239,7 +270,7 @@ journal_editor = function(editor,Research_Field1,Research_Field2,Research_Field3
     </div>
 </div>
 {% endblock %}")
-    write.table(editorweb,paste0(variable,".html"),quote = FALSE,row.names = FALSE)
+    write.table(editorweb,paste0(variable,".html"),quote = FALSE,row.names = FALSE,col.names = F)
   }
 
   data2 = paste0("def ",gsub("-","_",data),"(request): \n    ","return render(request, 'myjournal/Editors/",gsub(" ","-",data),".html')")
@@ -266,9 +297,9 @@ journal_editor = function(editor,Research_Field1,Research_Field2,Research_Field3
                     data4,"\n","\n",
                     data5)
   if(chief){
-    write.table(data_all,paste0("Editor.Chief.txt"),quote = FALSE,row.names = FALSE)
+    write.table(data_all,paste0("Editor.Chief.txt"),quote = FALSE,row.names = FALSE,col.names = F)
   }else{
-    write.table(data_all,paste0("Editor.txt"),quote = FALSE,row.names = FALSE)
+    write.table(data_all,paste0("Editor.txt"),quote = FALSE,row.names = FALSE,col.names = F)
   }
 }
 

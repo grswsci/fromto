@@ -351,11 +351,13 @@ drivergene2 = function(GeneNames){
                    stringsAsFactors = F)
   res = na.omit(res)
   y = DT::datatable(res, escape = F, rownames = F)
-  DT::saveWidget(y, paste0("All_output_paper.html"),selfcontained = T)
-
+  DT::saveWidget(y, paste0(GeneName,"_output_paper.html"), selfcontained = T)
   cite = 1:nrow(output_all_multigenes)
-  text_long_string = paste(paste0(output_all_multigenes$GeneRIF, "[",cite,"]"), collapse = " ")
-  write.table(text_long_string, paste0("All_text_long_string.txt"),quote = F, row.names = F)
+  text_long_string = paste(paste0(output_all_multigenes$GeneRIF,
+                                  "[", cite, "]"), collapse = " ")
+  write.table(text_long_string, paste0(GeneName,"_text_long_string.txt"),
+              quote = F, row.names = F,col.names = F)
   cite_link = paste0("[", cite, "] ", output_all_multigenes$Links)
-  write.table(cite_link, paste0("All_text_long_cite.txt"),quote = F, row.names = F)
+  write.table(cite_link, paste0(GeneName,"_text_long_cite.txt"),
+              quote = F, row.names = F,col.names = F)
 }

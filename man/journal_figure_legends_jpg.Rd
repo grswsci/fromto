@@ -4,9 +4,23 @@
 \alias{journal_figure_legends_jpg}
 \title{journal_figure_legends_jpg}
 \usage{
-journal_figure_legends_jpg(docx = "journal_figure_legends_jpg.docx")
+journal_figure_legends_jpg(
+  year = 2025,
+  volume = 1,
+  issue = 1,
+  numeber = 1,
+  docx = "journal_figure_legends_jpg.docx"
+)
 }
 \arguments{
+\item{year}{= 2025}
+
+\item{volume}{= 1}
+
+\item{issue}{= 1}
+
+\item{numeber}{= 1}
+
 \item{docx}{journal_figure_legends_jpg.docx}
 }
 \value{
