@@ -137,4 +137,4 @@ export(call_for_papers)
 export(call_for_papers_SI)
 export(hplot)
 export(hplot1)
-
+export(istart,igo,ichat_deepseek,isleep,iclick,iclick2,iinput,iinput2,iview,iview_down,iswitch,iback,idelete,idelete2,ipage,ipage_links,ipage_texts,ipage_texts2,ipage_nodes,ipage_nodes_change)

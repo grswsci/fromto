@@ -6,6 +6,7 @@
 #' @param height pdfheight
 #' @param mycolor mycolor
 #' @return pdf and ggplot object
+#' @export
 bplot_scmarkers = function(scRNA,
                            label = "seurat_clusters",
                             width = 20,
@@ -21,16 +22,26 @@ bplot_scmarkers = function(scRNA,
                           Plasmas = c('IGHG1',"MZB1","TNFRSF17","SLAMF7","XBP1"),
                                Bs = c('CD79A','CD79B'),
                                Ts = c('CD3D','CD3E','CD3G'),
+                            MAITs = c("TRAV1-2", "KLRB1", "ZBTB16"),
+                             gdTs = c("TRDC", "TRGC") ,
                              CD4s = c('CD4'),
+                          CD4Tfhs = c("CXCR5", "ICOS", "BCL6"),
+                          CD4Th1s = c("TBX21"),#"IFNG", "CXCR3"
+                          CD4Th2s = c("GATA3", "IL4", "IL5", "IL13"),
+                          CD4Th9s = c("SPI1", "IL9"),
+                         CD4Th17s = c("RORC", "IL17A", "IL17F", "IL23R"),
+                          CD4Tr1s = c("IL10"),
                              CD8s = c('CD8A','CD8B'),
                              Texs = c('LAG3','TIGIT','PDCD1','HAVCR2'),
-                            Tregs = c('FOXP3','CTLA4'),
+                            Tregs = c('FOXP3','CTLA4','IL2RA'),
                               Tns = c('TCF7','SELL','LEF1','CCR7'),
-                            Teffs = c('IL2','GZMA','GNLY','PRF1','GZMB','GZMK','IFNG','NKG7'),
+                            Teffs = c("KLRG1","NKG7", "GNLY","GZMB","PRF1","IFNG"),
                              Tsts = c('HSPA1A','HSPA1B','HSPH1'),
-                              NKs = c('KLRD1','KLRC3','NCAM1'),
-                        Monocytes = c('CD14','FCGR3A'),
-                      Macrophages = c('LYZ',"CD68"),
+                             Tcms = c('FAS','CXCR3'),
+                             Tems = NA,
+                              NKs = c("NCR1","KLRC1","KIR2DL4","XCL1","XCL2","IL18R1",'KLRD1','NCAM1'),
+                        Monocytes = c('CD14','FCGR3A','S100A12','CD300E','FCN1'),
+                      Macrophages = c('LYZ',"CD68","C1QC","CSF1R",'AIF1','ALB'),
                               M1s = c('NOS2'),
                               M2s = c('MCR1','ARG1'),
                    Cardiomyocytes = c('ACTC1','MYH7','TNNT2','TNNI3','TTN','ACTN2','MYH6'),
@@ -42,7 +53,7 @@ bplot_scmarkers = function(scRNA,
                           Prolifs = c('MKI67'),
                         Mal_PNETs = c('SYP','CHGA'),
                              Mals = NA,
-                         name_use = "name_use",
+                         name_use = "Cell",
                    mycolor = c("#BC3C29FF","#0072B5FF","#E18727FF",
                                "#20854EFF","#7876B1FF","#6F99ADFF",
                                "#FFDC91FF","#EE4C97FF","#E64B35FF",
@@ -318,6 +329,78 @@ bplot_scmarkers = function(scRNA,
    Mal_rep = rep("Mal",length(Mal))
  }
 
+ if(length(intersect(row.names(scRNA),MAITs)) == 0){
+   MAIT = ""
+   MAIT_rep = ""
+ }else{
+   MAIT = c(intersect(row.names(scRNA),MAITs))
+   MAIT_rep = rep("MAIT",length(MAIT))
+ }
+
+ if(length(intersect(row.names(scRNA),gdTs)) == 0){
+   gdT = ""
+   gdT_rep = ""
+ }else{
+   gdT = c(intersect(row.names(scRNA),gdTs))
+   gdT_rep = rep("gdT",length(gdT))
+ }
+ if(length(intersect(row.names(scRNA),CD4Tfhs)) == 0){
+   CD4Tfh = ""
+   CD4Tfh_rep = ""
+ }else{
+   CD4Tfh = c(intersect(row.names(scRNA),CD4Tfhs))
+   CD4Tfh_rep = rep("CD4Tfh",length(CD4Tfh))
+ }
+ if(length(intersect(row.names(scRNA),CD4Th1s)) == 0){
+   CD4Th1 = ""
+   CD4Th1_rep = ""
+ }else{
+   CD4Th1 = c(intersect(row.names(scRNA),CD4Th1s))
+   CD4Th1_rep = rep("CD4Th1",length(CD4Th1))
+ }
+ if(length(intersect(row.names(scRNA),CD4Th2s)) == 0){
+   CD4Th2 = ""
+   CD4Th2_rep = ""
+ }else{
+   CD4Th2 = c(intersect(row.names(scRNA),CD4Th2s))
+   CD4Th2_rep = rep("CD4Th2",length(CD4Th2))
+ }
+ if(length(intersect(row.names(scRNA),CD4Th9s)) == 0){
+   CD4Th9 = ""
+   CD4Th9_rep = ""
+ }else{
+   CD4Th9 = c(intersect(row.names(scRNA),CD4Th9s))
+   CD4Th9_rep = rep("CD4Th9",length(CD4Th9))
+ }
+ if(length(intersect(row.names(scRNA),CD4Th17s)) == 0){
+   CD4Th17 = ""
+   CD4Th17_rep = ""
+ }else{
+   CD4Th17 = c(intersect(row.names(scRNA),CD4Th17s))
+   CD4Th17_rep = rep("CD4Th17",length(CD4Th17))
+ }
+ if(length(intersect(row.names(scRNA),CD4Tr1s)) == 0){
+   CD4Tr1 = ""
+   CD4Tr1_rep = ""
+ }else{
+   CD4Tr1 = c(intersect(row.names(scRNA),CD4Tr1s))
+   CD4Tr1_rep = rep("CD4Tr1",length(CD4Tr1))
+ }
+ if(length(intersect(row.names(scRNA),Tcms)) == 0){
+   Tcm = ""
+   Tcm_rep = ""
+ }else{
+   Tcm = c(intersect(row.names(scRNA),Tcms))
+   Tcm_rep = rep("Tcm",length(Tcm))
+ }
+ if(length(intersect(row.names(scRNA),Tems)) == 0){
+   Tem = ""
+   Tem_rep = ""
+ }else{
+   Tem = c(intersect(row.names(scRNA),Tems))
+   Tem_rep = rep("Tem",length(Tem))
+ }
+
   selected_markers = c(Neutrophil,
                        Basophil,
                        Eosinophil,
@@ -329,13 +412,23 @@ bplot_scmarkers = function(scRNA,
                        Plasma,
                        B,
                        T,
+                       MAIT,
+                       gdT,
                        CD4,
+                       CD4Tfh,
+                       CD4Th1,
+                       CD4Th2,
+                       CD4Th9,
+                       CD4Th17,
+                       CD4Tr1,
                        CD8,
                        Tex,
                        Treg,
                        Tn,
                        Teff,
                        Tst,
+                       Tcm,
+                       Tem,
                        NK,
                        Monocyte,
                        Macrophage,
@@ -363,13 +456,23 @@ bplot_scmarkers = function(scRNA,
                    Plasma_rep,
                    B_rep,
                    T_rep,
+                   MAIT_rep,
+                   gdT_rep,
                    CD4_rep,
+                   CD4Tfh_rep,
+                   CD4Th1_rep,
+                   CD4Th2_rep,
+                   CD4Th9_rep,
+                   CD4Th17_rep,
+                   CD4Tr1_rep,
                    CD8_rep,
                    Tex_rep,
                    Treg_rep,
                    Tn_rep,
                    Teff_rep,
                    Tst_rep,
+                   Tcm_rep,
+                   Tem_rep,
                    NK_rep,
                    Monocyte_rep,
                    Macrophage_rep,
@@ -456,6 +559,7 @@ bplot_scmarkers = function(scRNA,
 #' @param height pdfheight
 #' @param mycolor mycolor
 #' @return pdf and ggplot object
+#' @export
 bplot_scmarkers_mouse = function(scRNA,
                            label = "seurat_clusters",
                            width = 20,

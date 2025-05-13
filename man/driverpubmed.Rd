@@ -19,7 +19,3 @@ html and text
 \description{
 publications find
 }
-\examples{
-# examples
-driverpubmed('Melanoma', 'TCGA', 'Signature')
-}

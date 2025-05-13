@@ -2,6 +2,7 @@
 #' @description journal abstract
 #' @param docx journal_abstract.docx
 #' @return txt html
+#' @export
 journal_abstract = function(docx = "journal_abstract.docx"){
 library(readtext)
 library(stringr)
@@ -19,6 +20,7 @@ write.table(extracted_text,"abstract.html",quote = F,row.names = F,col.names = F
 #' @description journal text
 #' @param docx journal_text.docx
 #' @return txt html
+#' @export
 journal_text = function(docx = "journal_text.docx"){
 library(readtext)
 library(stringr)
@@ -63,6 +65,7 @@ write.table(extracted_text2,"正文.html",quote = F,row.names = F,col.names = F)
 #' @description journal reference
 #' @param docx journal_reference_numbers_no.docx
 #' @return txt html
+#' @export
 journal_reference_numbers_no = function(docx = "journal_reference_numbers_no.docx"){
 library(readtext)
 library(stringr)
@@ -83,6 +86,7 @@ write.table(extracted_text_new,"参考文献.html",quote = F,row.names = F,col.n
 #' @description journal reference
 #' @param docx journal_reference_numbers_yes.docx
 #' @return txt html
+#' @export
 journal_reference_numbers_yes = function(docx = "journal_reference_numbers_yes.docx"){
 library(readtext)
 library(stringr)
@@ -107,6 +111,7 @@ write.table(extracted_text_new,"参考文献.html",quote = F,row.names = F,col.n
 #' @param issue = 1
 #' @param numeber = 1
 #' @return txt html
+#' @export
 journal_figure_legends_jpg = function(year = 2025,
                                       volume = 1,
                                       issue = 1,
@@ -150,6 +155,7 @@ write.table(fa_add_new,"Figure_Legends_jpg2.txt",quote = F,row.names = F,col.nam
 #' @param numeber = 1
 #' @param docx journal_figure_legends_png.docx
 #' @return txt html
+#' @export
 journal_figure_legends_png = function(year = 2025,
                                       volume = 1,
                                       issue = 1,
@@ -188,6 +194,7 @@ journal_figure_legends_png = function(year = 2025,
 #' @description journal_table_jpg
 #' @param docx journal_table_jpg.docx
 #' @return txt html
+#' @export
 journal_table_jpg = function(divname, docx = "journal_table_jpg.docx"){
 library(readtext)
 library(stringr)
@@ -225,6 +232,7 @@ write.table(fa_add_new,"journal_table_jpg2.txt",quote = F,row.names = F,col.name
 #' @param Biography Biography
 #' @param chief TRUE/FALSE
 #' @return txt html
+#' @export
 journal_editor = function(editor,Research_Field1,Research_Field2,Research_Field3,section,email,institution,Biography,chief = TRUE){
   data = unlist(strsplit(editor,"\n"))
   for (variable in data) {

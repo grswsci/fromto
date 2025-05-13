@@ -4,7 +4,7 @@
 #' @param myport port
 #' @param neverAsk.saveToDisk just for fun
 #' @return html
-#' @examples
+#' @export
 #'if(.Platform$OS.type == "windows"){
 #'username <- Sys.getenv("USERNAME")
 #'}else{
@@ -360,4 +360,188 @@ drivergene2 = function(GeneNames){
   cite_link = paste0("[", cite, "] ", output_all_multigenes$Links)
   write.table(cite_link, paste0(GeneName,"_text_long_cite.txt"),
               quote = F, row.names = F,col.names = F)
+}
+drivergene2_update = function(path_use,GeneNames){
+  #path_use = "C:\\Users\\85885\\Desktop\\Rpy\\2.NCBI_Gene_Add\\GeneReview"
+  #GeneNames = "APOE"
+  data = scan(paste0(path_use,"\\string\\",GeneNames,"_text_long_string.txt"), what = "character")
+  cite_old = read.table(paste0(path_use,"\\cite\\",GeneNames,"_text_long_cite.txt"))
+  cite_old = paste0(cite_old$V1," ",cite_old$V2)
+  text = paste(data,collapse=" ")
+  split_text = strsplit(text, "\\[\\d+\\]\\s*")[[1]]# 使用正则表达式分割字符串，每次遇到 [] 就分割
+  createLink = function(base, val) {
+    sprintf("<a href=\"%s\" class=\"btn btn-link\" target=\"_blank\" >%s</a>",
+            base, val)
+  }
+  suppressPackageStartupMessages(library(rvest))
+  suppressPackageStartupMessages(library(fromto))
+  suppressPackageStartupMessages(library(DT))
+  suppressPackageStartupMessages(library(htmlwidgets))
+  output_all_multigenes = data.frame()
+  for (GeneName in GeneNames) {
+    message("we are getting ",GeneName,"...")
+    data_file = system.file("NCBI", "trans2gene.RDS", package = "fromto")
+    GeneID_data = readRDS(data_file)
+    GeneID_data = GeneID_data[which(GeneID_data$Symbol == GeneName),]
+    GeneID_NCBI = GeneID_data$NCBI_GeneID[1]
+    url = paste0("https://www.ncbi.nlm.nih.gov/gene?db=gene&report=generif&term=",GeneID_NCBI)
+    #webpage = read_html(url)
+    webpage = read_html(httr::GET(url, httr::user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3")))
+    href_element = webpage %>% html_nodes(xpath = "//a[@data-page]") %>% html_attr("href")
+    if(length(href_element) == 0){
+      tbody_td_element_text = webpage %>%
+        html_nodes(xpath = "//tbody") %>%
+        html_nodes(xpath = "//td") %>% html_text() %>% .[!is_in("firstprevious page",.)] %>%
+        unlist(strsplit(.,".",fixed = TRUE))
+      tbody_td_element_href = webpage %>%
+        html_nodes(xpath = "//tbody") %>%
+        html_nodes(xpath = ".//td") %>%
+        lapply(function(td) {
+          a_node = html_element(td, xpath = ".//a")
+          if (!is.na(a_node)) {
+            html_attr(a_node, "href")
+          } else {
+            NA
+          }
+        }) %>%
+        unlist() %>% .[!is.na(.)]
+      seq_1_to_n = seq(from = 1, to = length(tbody_td_element_text), by = 3)
+      output_all = data.frame()
+      for(variable in seq_1_to_n) {
+        trText_split1 = tbody_td_element_text[variable]
+        trText_split2 = tbody_td_element_text[variable+1]
+        trText_split3 = tbody_td_element_text[variable+2]
+        output_pre = data.frame(trText_split1, trText_split2,
+                                trText_split3)
+        output_all = rbind(output_all, output_pre)
+      }
+      output_all = cbind(output_all,tbody_td_element_href)
+      colnames(output_all) = c("GeneRIF","PubMed Title","Date","Links")
+      if(split_text[1] %in% output_all$GeneRIF){
+        if(match(split_text[1],output_all$GeneRIF) == 1){
+          output_all = output_all[1,]
+        }else{
+          index_new = match(split_text[1],output_all$GeneRIF)
+          output_all = output_all[1:index_new,]
+        }
+      }
+    }else{
+      number_of_elements = as.numeric(substr(href_element[2],nchar(paste0("https://www.ncbi.nlm.nih.gov/gene/?db=gene&term=",GeneID_NCBI, "&report=generif&page="))+1,nchar(href_element[2])))
+      if(number_of_elements > 50){
+        number_of_elements = 50
+      }
+      output_all = data.frame()
+      for (pages in (1:number_of_elements)){
+        if(pages == 1){
+          Sys.sleep(5)
+          tbody_td_element_text = webpage %>%
+            html_nodes(xpath = "//tbody") %>%
+            html_nodes(xpath = "//td") %>% html_text() %>% .[!is_in("firstprevious page",.)] %>%
+            unlist(strsplit(.,".",fixed = TRUE))
+          tbody_td_element_href = webpage %>%
+            html_nodes(xpath = "//tbody") %>%
+            html_nodes(xpath = ".//td") %>%
+            lapply(function(td) {
+              a_node = html_element(td, xpath = ".//a")
+              if (!is.na(a_node)) {
+                html_attr(a_node, "href")
+              } else {
+                NA
+              }
+            }) %>%
+            unlist() %>% .[!is.na(.)]
+          seq_1_to_n = seq(from = 1, to = length(tbody_td_element_text), by = 3)
+          output_all_1 = data.frame()
+          for(variable in seq_1_to_n) {
+            trText_split1 = tbody_td_element_text[variable]
+            trText_split2 = tbody_td_element_text[variable+1]
+            trText_split3 = tbody_td_element_text[variable+2]
+            output_pre = data.frame(trText_split1, trText_split2,trText_split3)
+            output_all_1 = rbind(output_all_1, output_pre)
+          }
+          output_all_1 = cbind(output_all_1,tbody_td_element_href)
+          colnames(output_all_1) = c("GeneRIF","PubMed Title","Date","Links")
+          output_all = rbind(output_all,output_all_1)
+          if(split_text[1] %in% output_all$GeneRIF){
+            if(match(split_text[1],output_all$GeneRIF) == 1){
+              output_all = output_all[1,]
+            }else{
+              index_new = match(split_text[1],output_all$GeneRIF)
+              output_all = output_all[1:index_new,]
+            }
+          }
+        }else if(!split_text[1] %in% output_all$GeneRIF){
+          Sys.sleep(5)
+          webpage = read_html(paste0("https://www.ncbi.nlm.nih.gov/gene/?db=gene&term=",GeneID_NCBI, "&report=generif&page=", pages))
+          tbody_td_element_text = webpage %>%
+            html_nodes(xpath = "//tbody") %>%
+            html_nodes(xpath = "//td") %>% html_text() %>% .[!is_in("firstprevious page",.)] %>%
+            unlist(strsplit(.,".",fixed = TRUE))
+          tbody_td_element_href = webpage %>%
+            html_nodes(xpath = "//tbody") %>%
+            html_nodes(xpath = ".//td") %>%
+            lapply(function(td) {
+              a_node = html_element(td, xpath = ".//a")
+              if (!is.na(a_node)) {
+                html_attr(a_node, "href")
+              } else {
+                NA
+              }
+            }) %>%
+            unlist() %>% .[!is.na(.)]
+          seq_1_to_n = seq(from = 1, to = length(tbody_td_element_text), by = 3)
+          output_all_others = data.frame()
+          for(variable in seq_1_to_n) {
+            trText_split1 = tbody_td_element_text[variable]
+            trText_split2 = tbody_td_element_text[variable+1]
+            trText_split3 = tbody_td_element_text[variable+2]
+            output_pre = data.frame(trText_split1, trText_split2,trText_split3)
+            output_all_others = rbind(output_all_others, output_pre)
+          }
+          output_all_others = cbind(output_all_others,tbody_td_element_href)
+          colnames(output_all_others) = c("GeneRIF","PubMed Title","Date","Links")
+          if(split_text[1] %in% output_all_others$GeneRIF){
+            if(match(split_text[1],output_all_others$GeneRIF) == 1){
+              output_all_others = output_all_others[1,]
+            }else{
+              index_new = match(split_text[1],output_all_others$GeneRIF)
+              output_all_others = output_all_others[1:index_new,]
+            }
+          }
+          output_all = rbind(output_all,output_all_others)
+        }
+      }
+    }
+    output_all = output_all[which(output_all$Links != "#"),]
+    output_all$Links = paste0("https://pubmed.ncbi.nlm.nih.gov",output_all$Links)
+    output_all_multigenes = rbind(output_all_multigenes,output_all)
+  }
+  if(nrow(output_all_multigenes) > 1){
+    res = data.frame(PubMed_Title = createLink(output_all_multigenes$Links, output_all_multigenes$`PubMed Title`),
+                     GeneRIF = output_all_multigenes$GeneRIF,
+                     PubDate = output_all_multigenes$Date,
+                     DataBase = createLink(paste0("https://grswsci.top/"),"Sparkle"),
+                     Wechat = "bioinformaticsboy",
+                     stringsAsFactors = F)
+    res = na.omit(res)
+    y = DT::datatable(res, escape = F, rownames = F)
+    DT::saveWidget(y, paste0(GeneName,"_output_paper.html"), selfcontained = T)
+
+    cite = 1:(nrow(output_all_multigenes)-1)
+    text_long_string = paste(paste0(output_all_multigenes$GeneRIF[1:(length(output_all_multigenes$Links)-1)],
+                                    "[V2_", cite, "]"), collapse = " ")
+    text_long_string = paste0(text_long_string," ",text)
+    write.table(text_long_string, paste0(GeneName,"_text_long_string.txt"),
+                quote = F, row.names = F,col.names = F)
+    cite_link = paste0("[V2_", cite, "] ",
+                       output_all_multigenes$Links[1:(length(output_all_multigenes$Links)-1)])
+    cite_link = c(cite_link,cite_old)
+    write.table(cite_link, paste0(GeneName,"_text_long_cite.txt"),
+                quote = F, row.names = F,col.names = F)
+  }else{
+    write.table(text, paste0(GeneName,"_text_long_string.txt"),
+                quote = F, row.names = F,col.names = F)
+    write.table(cite_old, paste0(GeneName,"_text_long_cite.txt"),
+                quote = F, row.names = F,col.names = F)
+  }
 }
