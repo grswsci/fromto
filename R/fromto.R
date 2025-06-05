@@ -78,7 +78,7 @@ fromto2 <- function(genes,from,to){
   return(Gene_output)
 }
 
-#' @title fromtoupdate
+#' @title fromto_update_matrix
 #' @description Update gene names
 #' @param gene_matrix gene_matrix
 #' @param avereps_use = TRUE or use FALSE
@@ -89,10 +89,10 @@ fromto2 <- function(genes,from,to){
 #' Oldname_matrix = matrix(rpois(500, lambda = 10), nrow = 3, ncol = 50)
 #' colnames(Oldname_matrix) = paste0("sample", 1:ncol(Oldname_matrix))
 #' rownames(Oldname_matrix) = c("hPD-1","PDL1","MIB-1")
-#' Newname_matrix = fromtoupdate(Oldname_matrix)
+#' Newname_matrix = fromto_update_matrix(Oldname_matrix)
 #' print(Newname_matrix)
 
-fromtoupdate = function(gene_matrix,avereps_use = TRUE) {
+fromto_update_matrix = function(gene_matrix,avereps_use = TRUE) {
   data_file = system.file("NCBI", "trans2gene_unique.RDS", package = "fromto")
   synonyms_df = readRDS(data_file)
   synonyms_df$Synonyms_GeneID = as.character(synonyms_df$Synonyms_GeneID)
@@ -130,4 +130,29 @@ fromtoupdate = function(gene_matrix,avereps_use = TRUE) {
   }
 }
 
+fromto_update_vector = function(gene_vector) {
+  data_file = system.file("NCBI", "trans2gene_unique.RDS", package = "fromto")
+  synonyms_df = readRDS(data_file)
+  synonyms_df$Synonyms_GeneID = as.character(synonyms_df$Synonyms_GeneID)
 
+  new_rownames = gene_vector
+  updated_indices = integer(0)  # 用于存储已更新行名的索引
+  # 遍历gene_matrix的行名
+  for (i in seq_along(new_rownames)) {
+    gene_id = new_rownames[i]
+    if(gene_id %in% synonyms_df$Symbol){
+      new_rownames[i] = gene_id
+    }else{
+      # 尝试在synonyms_df中找到匹配项
+      match_idx = match(gene_id, synonyms_df$Synonyms_GeneID)
+      if (!is.na(match_idx)) {
+        # 如果找到匹配项，则更新行名
+        new_rownames[i] = synonyms_df$Symbol[match_idx]
+        updated_indices = c(updated_indices, i)  # 记录已更新的索引（可选）
+      }
+    }
+    # 注意：这里没有处理未找到匹配项的情况
+  }
+  # 更新gene_matrix的行名
+  return(new_rownames)
+}
