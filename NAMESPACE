@@ -1,5 +1,7 @@
 exportPattern("^[[:alpha:]]+")
 export(.onLoad)
+export(diff_anova_test,diff_ks_test,diff_mood_median_test,diff_permutation_test,diff_rank_sum_test,diff_t_test)
+export(plot_diff_histogram,plot_diff_boxplot)
 export(fromto,freq_count,save_txt,save_qs,ann_smart,subset_smart,subset_smart_v1,as_chr)
 export(fromto2)
 export(fromto_update_matrix,fromto_update_vector)
