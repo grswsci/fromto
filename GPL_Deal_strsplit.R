@@ -1,10 +1,13 @@
 #devtools::install_github("grswsci/fromto")
+data = readRDS("D:\\fromto\\inst\\GPL/GPL22166.RDS")
 library(fromto)
-gpl = read_fromto("/fromto/GPL21563-39743.txt",row_names = FALSE)
-gpl = gpl[,c(1,13)]
+gpl = read_fromto("GPL6246-18741.txt",row_names = FALSE)
+gpl = gpl[,c(1,10)]
 gpl$GeneName = strsplit_fromto(gpl[,2]," // ",2)
+gpl = gpl[which(!is.na(gpl$GeneName)),]
 #gpl$hgnc_id = stringr::str_extract(gpl[,2], "(?<=HGNC:)[0-9]+")
 gpl$Ensembl_GeneID = stringr::str_extract(gpl[,2], "(?<=ENSG)[0-9]+")
+gpl$Ensembl_GeneID = stringr::str_extract(gpl[,2], "(?<=ENSMU)[0-9]+")
 gpl$Ensembl_GeneID = paste0("ENSG",gpl$Ensembl_GeneID)
 colnames(gpl)
 
@@ -26,4 +29,4 @@ gpl_new = gpl_new[which(gpl_new$`Gene Symbol` != "---"),]
 gpl_new = gpl_new[which(gpl_new$`Gene Symbol` != "UCSC Genes"),]
 gpl_new$`Gene Symbol` = strsplit_fromto(gpl_new$`Gene Symbol`,"///",1)
 rownames(gpl_new) = NULL
-saveRDS(gpl_new,"/fromto/data/GPL21563.RDS")
+saveRDS(gpl_new,"D:\\fromto\\inst\\GPL/GPL6246.RDS")

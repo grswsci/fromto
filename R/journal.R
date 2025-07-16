@@ -1,3 +1,41 @@
+journal_editorial_board = function(journal = "brainconflux",
+                                   name = "Editor-WeiWang-0000-0003-2302-6273",
+                                   name_simple = "Wei Wang",
+                                   degree = "M.D./Ph.D.",
+                                   title1 = "Special Assistant Research Fellow",
+                                   title2 = "Neurologist/Neuroscientist",
+                                   institution = "Zhejiang University",
+                                   email1 = "weiwang336776@zju.edu.cn",
+                                   email2 = NULL,
+                                   research1 = "Clinical and basic study of headache and other neurological disorders",
+                                   research2 = "Multimodal neuroimaging study of neurological disorders",
+                                   research3 = "Neuroelectrophysiology and brain-computer interface in episodic neurological diseases",
+                                   editor = "Editor",
+                                   biography = "Wei Wang, M.D./Ph.D of Neurology. Postdoc of Clinical Medicine. He is a neurologist, headache specialist of Sir Run Run Shaw Hospital, School of Medicine, Zhejiang University. He serves on the editorial boards of journals, including The Journal of Headache and Pain; Pain and Therapy; Advances in Therapy, SN Comprehensive Clinical Medicine, Life Conflux, Medicine Advances et.al. He is a international partner of COST (EUROPEAN COOPERATIONIN SCIENCE & TECHNOLOGY). He holds multiple authorized patents and has contributed to three national guidelines in the Headache of the Chinese Medical Association, as well as several international monographs. He is a reviewer for several SCI journals, including Journal of Headache and Pain, Headache, NeuroImage, and Acta Radiologica et.al., and has reviewed over 70 articles to date. His research primarily focuses on applying multimodal neuroimaging techniques to explore the neural mechanisms of primary headaches, neuroelectrophysiological mechanisms in human and animal models, and multiomics mechanisms of primary headaches."
+){
+  name_gsub = gsub(" ","_",name)
+  name_gsub = gsub("-","_",name)
+  res1 = paste0("<table class='dl' ><tr><td><div class='img-shadow'><img src='https://www.",journal,".com/static/Editors_id_photo/",name,".jpg' alt='",name_simple,"' width=130></div></td><td></td><td></td><td><strong><a href='https://www.",journal,".com/", name_gsub,"/' style='color: #336699; text-decoration: none; font-weight: bold; transition: color 0.3s, border-bottom 0.3s;' target='_blank' rel='noopener noreferrer'>",name_simple,"</a></strong><br><strong>Degree</strong>: ",degree,"<br><!--strong>Job Title</strong>: ",title1,"<br--><strong>Institution</strong>: ",institution,"<br><strong>email</strong>: <a href='mailto:",email1,"' style='color: #3F8FC0; text-decoration: none; '>",email1,"</a>",ifelse(is.null(email2),"",paste0("/<a href='mailto:",email2,"' style='color: #3F8FC0; text-decoration: none;'>",email2,"</a>")),"<br><strong>Research Field</strong>: <ul style='list-style-type: disc; margin-left: 20px; color: #555;'><li>",research1,"</li><li>",research2,"</li><li>",research3,"</li></ul><br></td></tr></table>")
+
+  res2 = paste0("{% extends 'myjournal/base.html' %}
+{% block head-content %}
+<title>",name_simple," | ",editor,"</title>
+    <meta name='description' content='",name_simple," | ",editor,"'>
+{% endblock %}
+{% block main-content %}
+<div style='max-width: 800px; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);'><div class='wt' style='font-weight: bold; color: #333; margin-bottom: 15px; border-bottom: 2px solid #ddd; padding-bottom: 5px;'>",editor,"</div><div class='dl' style='display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;'><div><p class='wt' style='font-weight: bold;'>",name_simple,"</p><ul style='list-style-type: disc; margin-left: 20px; color: #555;'><li class='dl'>",degree,"</li><li class='dl'>",title2,"</li><li class='dl'><a class='dl' href='mailto:",email1,"' style='color: #0a58ca; text-decoration: none;'>",email1,"</a>",ifelse(is.null(email2),"",paste0("/<a class='dl' href='mailto:",email2,"' style='color: #0a58ca; text-decoration: none;'>",email2,"</a>")),"</li><li class='dl'>",title1,"</li></ul></div><img src='/static/Editors_id_photo/",name,".jpg' alt='",name_simple,"' style='width: auto; height: 120px; border-top-left-radius: 50% 50%; border-top-right-radius: 50% 50%; border-bottom-left-radius: 50% 50%; border-bottom-right-radius: 50% 50%;'></div><div style='margin-bottom: 20px;'><p class='wt'  style='font-weight: bold;'>Research Field</p><ul class='dl' style='list-style-type: disc; margin-left: 20px; color: #555;'><li class='dl'>",research1,"</li><li class='dl'>",research2,"</li><li class='dl'>",research3,"</li></ul></div><div style='margin-bottom: 20px;'><p class='wt' style='font-weight: bold;'>Biography</p><ul style='list-style-type: disc; margin-left: 20px; color: #555;'><p class='dl'>",biography,"</p></ul></div></div>
+{% endblock %}")
+  write.table(res2, paste0(name_gsub,".html"),sep = "\t", quote = FALSE,row.names = F,col.names = F)
+
+  view = paste0("def ",name_gsub,"(request):
+    return render(request, 'myjournal/Editors/",name_gsub,".html')")
+
+  url = paste0("path('",name_gsub,"/', views.",name_gsub,",name='",name_gsub,"'),")
+
+  res = paste0(view,"\n\n",url,"\n\n",res1)
+  fromto::save_txt(res,"journal_editorial_board")
+}
+
 #' @title journal_abstract
 #' @description journal abstract
 #' @param docx journal_abstract.docx

@@ -1,5 +1,6 @@
 library(fromto)
-gpl = read_fromto("/fromto/GPL22166.txt",row_names = FALSE)
+setwd("D:\\fromto")
+gpl = read_fromto("GPL6246-18741.txt",row_names = FALSE)
 #colnames(gpl) = gpl[1,]
 #gpl = gpl[-1,]
 gpl = gpl[,c(1,2,3)]
